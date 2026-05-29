@@ -4,11 +4,11 @@ import { getEmoji } from "../../utils/emojis.ts";
 import { isDeveloper } from "../../utils/utils.ts";
 
 export default {
-  category: "info",
+  category: "core",
   data: {
     options: [],
-    name: 'ping',
-    description: 'Pong!',
+    name: 'restart',
+    description: 'Restart the bot server',
     type: 1
   },
   async execute(interaction: any, client: Client) {
