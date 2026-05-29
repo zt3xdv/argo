@@ -24,7 +24,13 @@ export default {
       });
     
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
-      reload(client);
+      await reload(client);
+      
+      const text = new TextDisplay({
+        content: `${getEmoji("clock")} Bot reloaded.`,
+      });
+    
+      await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
     } else {
       const text = new TextDisplay({
         content: `${getEmoji("wrong")} You do not have permissions to do this.`,
