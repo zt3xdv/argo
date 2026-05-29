@@ -1,7 +1,7 @@
 import { Client, MessageFlags, SeparatorSpacingSize } from "discord.js";
 import { TextDisplay, Separator } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
-import { isDeveloper } from "../../utils/utils.ts";
+import { isDeveloper, reload } from "../../utils/utils.ts";
 
 export default {
   category: "core",
@@ -24,6 +24,7 @@ export default {
       });
     
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+      reload(client);
     } else {
       const text = new TextDisplay({
         content: `${getEmoji("wrong")} You do not have permissions to do this.`,

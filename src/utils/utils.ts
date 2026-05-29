@@ -1,5 +1,6 @@
 import { SnowflakeUtil, type Message, type Client } from 'discord.js';
 import { importFiles } from "./file.ts";
+import { join } from "path";
 
 export const ReadableFileSizeUnits = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
@@ -64,7 +65,7 @@ export function isDeveloper(id: string) {
   return process.env.DEVELOPERS_IDS.split(",").includes(id);
 }
 
-export function reloadBot(client: Client) {
+export function reload(client: Client) {
   client.events.forEach((event: any) => {
     client.off(event.eventName, (e) => event.execute(client, e));
   });
