@@ -58,3 +58,7 @@ export async function Reference(message: Message) {
 export function Commas(num: number | string) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+export function isDeveloper(id: string) {
+  return process.env.DEVELOPERS_IDS.split(",").includes(id);
+}
