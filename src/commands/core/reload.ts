@@ -15,7 +15,7 @@ export default {
     await interaction.deferReply();
     
     if (isDeveloper(interaction.user.id)) {
-      const text = new TextDisplay({
+      let text = new TextDisplay({
         content: `${getEmoji("clock")} Reloading bot...`,
       });
       const sep = new Separator({
@@ -26,7 +26,7 @@ export default {
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
       await reload(client);
       
-      const text = new TextDisplay({
+      text = new TextDisplay({
         content: `${getEmoji("clock")} Bot reloaded.`,
       });
     
