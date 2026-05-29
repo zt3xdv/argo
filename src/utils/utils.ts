@@ -67,7 +67,7 @@ export function isDeveloper(id: string) {
 
 export async function reload(client: Client) {
   client.events.forEach((event: any) => {
-    client.off(event.eventName, (e) => event.execute(client, e));
+    client.off(event.eventName, event.execute);
   });
   
   client.commands = await importFiles(join(import.meta.dirname, "..", "commands"));
@@ -75,9 +75,9 @@ export async function reload(client: Client) {
   
   client.events.forEach((event: any) => {
     if (event.once) {
-      client.once(event.eventName, (e) => event.execute(client, e));
+      client.once(event.eventName, event.execute);
     } else {
-      client.on(event.eventName, (e) => event.execute(client, e));
+      client.on(event.eventName, event.execute);
     }
   });
 }

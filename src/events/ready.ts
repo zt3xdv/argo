@@ -5,7 +5,7 @@ export default {
   eventName: Events.ClientReady,
   once: true,
   
-  async execute(client: Client, readyClient: any) {
+  async execute(readyClient: any) {
     console.log(`Bot ready! Logged in as ${readyClient.user.tag}`);
   }
 };

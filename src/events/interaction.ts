@@ -6,7 +6,8 @@ export default {
   name: 'interactionCreate',
   eventName: Events.InteractionCreate,
 
-  async execute(client: Client, interaction: any) {
+  async execute(interaction: any) {
+    const client = interaction.client;
     if (interaction.isChatInputCommand()) {
       const command = client.commands.filter(c => c.data.name == interaction.commandName)[0];
       if (!command) return;
