@@ -1,0 +1,35 @@
+{
+  "name": "nexa",
+  "version": "0.0.1",
+  "description": "A discord bot",
+  "keywords": [
+    "bot",
+    "discord"
+  ],
+  "license": "MIT",
+  "author": "zt3xdv",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "deploy": "ts-node src/main.ts",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-html": "^2.0.0",
+    "@rollup/plugin-image": "^3.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@types/node": "^25.9.1",
+    "preact": "^10.29.2",
+    "rollup": "^4.60.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "typescript": "^6.0.3",
+    "wouter-preact": "^3.10.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4",
+    "express": "^5.2.1"
+  }
+}

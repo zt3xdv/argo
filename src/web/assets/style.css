@@ -1,0 +1,250 @@
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-surface: #101010;
+  --text-primary: #fafafa;
+  --text-secondary: #dfdfdf;
+  --muted: #808080;
+  --accent-color: #dfdfdf;
+  --accent-hover: #afafaf;
+  --border-color: #808080;
+  --nav-height: 56px;
+  --transition-speed: 0.2s;
+}
+
+@font-face{
+    font-family:Whitney;
+    font-style:normal;
+    font-weight:300;
+    src:url(https://cdn.jsdelivr.net/gh/Overimagine1/old-discord-font/fonts/46933da896ba96126074286056614542.woff2) format("woff2")
+}
+@font-face{
+    font-family:Whitney;
+    font-style:normal;
+    font-weight:400;
+    src:url(https://cdn.jsdelivr.net/gh/Overimagine1/old-discord-font/fonts/24bda95d153a319704c33329f3ab84bb.woff2) format("woff2")
+}
+@font-face{
+    font-family:Whitney;
+    font-style:normal;
+    font-weight:500;
+    src:url(https://cdn.jsdelivr.net/gh/Overimagine1/old-discord-font/fonts/cf4a8a10bbdf9b775fad41e0b9921c84.woff2) format("woff2")
+}
+@font-face{
+    font-family:Whitney;
+    font-style:normal;
+    font-weight:600;
+    src:url(https://cdn.jsdelivr.net/gh/Overimagine1/old-discord-font/fonts/f9e7047f6447547781512ec4b977b2ab.woff2) format("woff2")
+}
+@font-face{
+    font-family:Whitney;
+    font-style:normal;
+    font-weight:700;
+    src:url(https://cdn.jsdelivr.net/gh/Overimagine1/old-discord-font/fonts/f9c8fcfa7dcc5d6a291a6ebbe3bb847e.woff2) format("woff2")
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Whitney", BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  height: var(--nav-height);
+  background-color: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-brand {
+  width: auto;
+  height: 60%;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  height: 100%;
+  align-items: center;
+}
+
+.nav-item {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--nav-height);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 4px solid transparent;
+  transition: all var(--transition-speed) ease;
+}
+
+.nav-item a:hover {
+  color: var(--accent-color);
+}
+
+.nav-item a.active {
+  color: var(--accent-color);
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.commands {
+  width: 100%;
+  height: auto;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.commands .header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.commands .commands-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.commands .commands-list .command-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: var(--bg-surface);
+  border-radius: 8px;
+  padding: 1em;
+  width: 100%;
+}
+
+.commands .commands-list .command-item p, .commands .commands-list .command-item .category {
+  color: var(--muted);
+}
+
+.home {
+  width: 100%;
+  min-height: 100%;
+  height: auto;
+}
+
+.home .hero {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  height: 600px;
+  padding: 1em 2em;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.home .hero h1 {
+  font-size: 3.5em;
+}
+
+.home .hero p {
+  color: var(--muted);
+}
+
+.home .hero .app {
+  align-items: center;
+  justify-content: center;
+  background-color: #5865f2;
+  color: #ffffff;
+  font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 0.9375rem;
+  padding: 0 13px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  height: 0.9375rem;
+  margin-left: 0.3rem;
+}
+
+.home .hero .buttons {
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  display: flex;
+  gap: 5px;
+  background-color: var(--bg-surface);
+  padding: 1em 1.5em;
+  border: none;
+  border-radius: 9px;
+  color: var(--text-primary);
+}
+
+button img {
+  width: auto;
+  height: 18px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.page-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.card {
+  background-color: var(--bg-surface);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+  
+  .nav-links {
+    gap: 0;
+  }
+  
+  .nav-item a {
+    padding: 0 0.75rem;
+    font-size: 0.9rem;
+  }
+}
