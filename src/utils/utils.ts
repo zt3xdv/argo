@@ -1,4 +1,5 @@
-import { SnowflakeUtil, type Message } from 'discord.js';
+import { SnowflakeUtil, type Message, type Client } from 'discord.js';
+import { importFiles } from "./file.ts";
 
 export const ReadableFileSizeUnits = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
@@ -61,4 +62,21 @@ export function Commas(num: number | string) {
 
 export function isDeveloper(id: string) {
   return process.env.DEVELOPERS_IDS.split(",").includes(id);
+}
+
+export function reloadBot(client: Client) {
+  client.events.forEach((event: any) => {
+    client.off(event.eventName, (e) => event.execute(client, e));
+  });
+  
+  client.commands = await importFiles(join(import.meta.dirname, "..", "commands"));
+  client.events = await importFiles(join(import.meta.dirname, "..", "events"));
+  
+  client.events.forEach((event: any) => {
+    if (event.once) {
+      client.once(event.eventName, (e) => event.execute(client, e));
+    } else {
+      client.on(event.eventName, (e) => event.execute(client, e));
+    }
+  });
 }
