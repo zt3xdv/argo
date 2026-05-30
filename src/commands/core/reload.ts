@@ -19,13 +19,14 @@ export default {
     await interaction.deferReply();
     const dir = join(import.meta.dirname, "..", "..", "..");
     
+    const sep = new Separator({
+      spacing: SeparatorSpacingSize.Large,
+      divider: true,
+    });
+    
     if (isDeveloper(interaction.user.id)) {
       let text = new TextDisplay({
-        content: `${getEmoji("clock")} Reloading bot...`,
-      });
-      const sep = new Separator({
-        spacing: SeparatorSpacingSize.Large,
-        divider: true,
+        content: `${getEmoji("loop")} Reloading bot...`,
       });
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
       
@@ -44,16 +45,12 @@ export default {
       
       const commit = await git.resolveRef({ fs, dir, ref: 'HEAD' });
       text = new TextDisplay({
-        content: `${getEmoji("clock")} Bot reloaded.\n-# Commit hash: ${commit}`,
+        content: `${getEmoji("correct")} Bot reloaded.\n-# Commit hash: ${commit}`,
       });
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
     } else {
       const text = new TextDisplay({
         content: `${getEmoji("wrong")} You do not have permissions to do this.`,
-      });
-      const sep = new Separator({
-        spacing: SeparatorSpacingSize.Large,
-        divider: true,
       });
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
     }
