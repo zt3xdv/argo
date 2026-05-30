@@ -29,7 +29,7 @@ export async function importFiles(absolutePath: string) {
 
   for (const filePath of allFiles) {
     // Needed in new node versions ig
-    const moduleUrl = `file://${filePath}`;
+    const moduleUrl = `file://${filePath}?v=${performance.now()}`;
     
     try {
       const imported = await import(moduleUrl);
