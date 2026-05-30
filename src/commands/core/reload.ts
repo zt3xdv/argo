@@ -26,7 +26,7 @@ export default {
     
     if (isDeveloper(interaction.user.id)) {
       let text = new TextDisplay({
-        content: `${getEmoji("loop")} Reloading bot...`,
+        content: `${getEmoji("loop")} Reloading...`,
       });
       await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
       
