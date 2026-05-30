@@ -16,7 +16,7 @@ export default function createServer(client) {
   });
   
   app.get("/invite", (req, res) => {
-    res.redirect(`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&scope=bot+applications.commands+identify&permissions=277092879424&integration_type=0`);
+    res.redirect(`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`);
   });
   
   app.get(/.*/, (req, res) => {

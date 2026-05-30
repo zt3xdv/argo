@@ -4,7 +4,7 @@ import { getEmoji } from "../../utils/emojis.ts";
 import { FormatTime } from "../../utils/utils.ts";
 
 export default {
-  category: "info",
+  category: "core",
   data: {
     options: [],
     name: 'stats',
@@ -21,7 +21,7 @@ export default {
     const guildCount = interaction.client?.guilds?.cache?.size ?? (interaction.guild ? 1 : 0);
     
     const text = new TextDisplay({
-      content: `${getEmoji("clock")} This bot has been online **${FormatTime(uptime)}**!\n-# Current memory usage: **${memoryUsage}mb**\n\n${getEmoji("generalinfo")} This bot is also on **${guildCount}** guilds and has been installed by **${installations}** users!`,
+      content: `${getEmoji("clock")} Uptime\n\`**${FormatTime(uptime)}**\`\n${getEmoji("box")} Current memory usage\n\`**${memoryUsage}mb**\`\n\n${getEmoji("generalinfo")} Guilds\n\`**${guildCount}**\`\n${getEmoji("person")} Users\n\`**${installations}**\``,
     });
     const sep = new Separator({
       spacing: SeparatorSpacingSize.Large,
