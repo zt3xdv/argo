@@ -11,7 +11,7 @@ export default function createServer(client) {
   });
   
   app.get("/api/commands", (req, res) => {
-    const cmds = client.commands.map(cmd => ({ name: cmd.data.name, description: cmd.data.description, category: cmd.category }));
+    const cmds = client.commands.filter(cmd => !cmd.dev).map(cmd => ({ name: cmd.data.name, description: cmd.data.description, category: cmd.category }));
     res.json(cmds);
   });
   

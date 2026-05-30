@@ -11,31 +11,20 @@ export default {
     description: 'Restart the bot server',
     type: 1
   },
+  dev: true,
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
     
-    if (isDeveloper(interaction.user.id)) {
-      const text = new TextDisplay({
-        content: `${getEmoji("clock")} Restarting bot...`,
-      });
-      const sep = new Separator({
-        spacing: SeparatorSpacingSize.Large,
-        divider: true,
-      });
+    const text = new TextDisplay({
+      content: `${getEmoji("loop")} Restarting bot...`,
+    });
+    const sep = new Separator({
+      spacing: SeparatorSpacingSize.Large,
+      divider: true,
+    });
     
-      await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
     
-      process.exit();
-    } else {
-      const text = new TextDisplay({
-        content: `${getEmoji("wrong")} You do not have permissions to do this.`,
-      });
-      const sep = new Separator({
-        spacing: SeparatorSpacingSize.Large,
-        divider: true,
-      });
-    
-      await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
-    }
+    process.exit();
   }
 };

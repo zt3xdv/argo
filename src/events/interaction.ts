@@ -8,24 +8,38 @@ export default {
 
   async execute(interaction: any) {
     const client = interaction.client;
+    const sep = new Separator({
+      spacing: SeparatorSpacingSize.Large,
+      divider: true,
+    });
+    
     if (interaction.isChatInputCommand()) {
       const command = client.commands.filter(c => c.data.name == interaction.commandName)[0];
       if (!command) return;
 
       try {
-        await command.execute(interaction, client);
+        if (command.dev && !isDeveloper(interaction.user.id)) {
+          const text = new TextDisplay({
+            content: `${getEmoji("wrong")} You do not have permissions to do this.`,
+          });
+    
+          await interaction.reply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+        } else {
+          await command.execute(interaction, client);
+        }
       } catch (cmdError) {
         console.error(cmdError);
         
         const text = new TextDisplay({
           content: `${getEmoji("wrong")} An error ocurred while processing command **/${interaction.commandName}**.`,
         });
-        const sep = new Separator({
-          spacing: SeparatorSpacingSize.Large,
-          divider: true,
-        });
-    
-        await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+        const args = { components: [text, sep], flags: MessageFlags.IsComponentsV2 };
+        
+        if (interaction.deferred) {
+          await interaction.editReply(args);
+        } else {
+          await interaction.reply(args);
+        }
       }
     }
   },

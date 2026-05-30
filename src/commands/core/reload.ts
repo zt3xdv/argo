@@ -15,6 +15,7 @@ export default {
     description: 'Reload the bot and pull from GitHub.',
     type: 1
   },
+  dev: true,
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
     const dir = join(import.meta.dirname, "..", "..", "..");
@@ -24,35 +25,28 @@ export default {
       divider: true,
     });
     
-    if (isDeveloper(interaction.user.id)) {
-      let text = new TextDisplay({
-        content: `${getEmoji("loop")} Reloading...`,
-      });
-      await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    let text = new TextDisplay({
+      content: `${getEmoji("loop")} Reloading...`,
+    });
+    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
       
-      await git.checkout({ fs, dir, ref: 'HEAD', force: true });
-      await git.pull({
-        fs,
-        http,
-        dir,
-        ref: 'main',
-        singleBranch: true,
-        fastForwardOnly: true,
-        author: { name: 'Auto-Update', email: 'auto@update.local' }
-      });
+    await git.checkout({ fs, dir, ref: 'HEAD', force: true });
+    await git.pull({
+      fs,
+      http,
+      dir,
+      ref: 'main',
+      singleBranch: true,
+      fastForwardOnly: true,
+      author: { name: 'Auto-Update', email: 'auto@update.local' }
+    });
       
-      await reload(client);
+    await reload(client);
       
-      const commit = await git.resolveRef({ fs, dir, ref: 'HEAD' });
-      text = new TextDisplay({
-        content: `${getEmoji("correct")} Bot reloaded.\n-# Commit hash: ${commit}`,
-      });
-      await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
-    } else {
-      const text = new TextDisplay({
-        content: `${getEmoji("wrong")} You do not have permissions to do this.`,
-      });
-      await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
-    }
+    const commit = await git.resolveRef({ fs, dir, ref: 'HEAD' });
+    text = new TextDisplay({
+      content: `${getEmoji("correct")} Bot reloaded.\n-# Commit hash: ${commit}`,
+    });
+    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
   }
 };
