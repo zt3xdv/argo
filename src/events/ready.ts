@@ -6,6 +6,6 @@ export default {
   once: true,
   
   async execute(readyClient: any) {
-    console.log(`Bot ready! Logged in as ${readyClient.user.tag}`);
+    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
   }
 };
