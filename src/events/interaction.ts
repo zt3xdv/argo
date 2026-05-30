@@ -1,6 +1,7 @@
 import { Client, Events, MessageFlags, SeparatorSpacingSize } from "discord.js";
 import { TextDisplay, Separator } from "../utils/component.ts";
 import { getEmoji } from "../utils/emojis.ts";
+import { isDeveloper } from "../utils/utils.ts";
 
 export default {
   name: 'interactionCreate',
