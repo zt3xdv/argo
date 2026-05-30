@@ -5,7 +5,7 @@ import { isDeveloper, reload } from "../../utils/utils.ts";
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import fs from 'fs';
-import path from 'path';
+import { join } from 'path';
 
 export default {
   category: "core",
