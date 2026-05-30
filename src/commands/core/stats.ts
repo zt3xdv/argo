@@ -21,7 +21,7 @@ export default {
     const guildCount = interaction.client?.guilds?.cache?.size ?? (interaction.guild ? 1 : 0);
     
     const text = new TextDisplay({
-      content: `${getEmoji("clock")} Uptime\n\`**${FormatTime(uptime)}**\`\n${getEmoji("box")} Current memory usage\n\`**${memoryUsage}mb**\`\n\n${getEmoji("generalinfo")} Guilds\n\`**${guildCount}**\`\n${getEmoji("person")} Users\n\`**${installations}**\``,
+      content: `${getEmoji("clock")} Uptime\n**\`${FormatTime(uptime)}\`**\n${getEmoji("box")} Current memory usage\n**\`${memoryUsage}mb\`**\n\n${getEmoji("generalinfo")} Guilds\n**\`${guildCount}\`**\n${getEmoji("person")} Users\n**\`${installations}\`**`,
     });
     const sep = new Separator({
       spacing: SeparatorSpacingSize.Large,
