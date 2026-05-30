@@ -95,7 +95,7 @@ export default {
       let runOrchestrator = true;
       let finalContent = "";
       let toolCalls = 0;
-      let model = "meta/llama-3.3-70b-instruct";
+      let model = "openai/gpt-oss-120b";
 
       while (runOrchestrator) {
         await interaction.editReply({ 
