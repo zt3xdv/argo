@@ -3,7 +3,7 @@ import { TextDisplay, Separator } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { isDeveloper, reload } from "../../utils/utils.ts";
 import git from 'isomorphic-git';
-import http from 'isomorphic-git/http/node/index.js';
+import http from 'isomorphic-git/http/node';
 import fs from 'fs';
 import path from 'path';
 
