@@ -1,4 +1,4 @@
-import { Client, MessageFlags } from "discord.js";
+import { Client, MessageFlags, MessageContextMenuCommandInteraction } from "discord.js";
 import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 
@@ -9,10 +9,14 @@ export default {
     name: "ai",
     description: "Ask a question to the AI",
     type: 1,
+    messageContext: {
+      name: "Ask AI",
+    }
   },
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
-    const prompt = interaction.options.getString("prompt").trim();
+    const isContextInteraction = interaction instanceof MessageContextMenuCommandInteraction;
+    const prompt = isContextInteraction ? interaction.options.getMessage("message").content.trim() : interaction.options?.getString("prompt").trim();
     const history: any[] = [
       { role: "system", content: `You are Nexa, a efficient Discord bot. Always maintain your persona as an AI assistant integrated into a chat server.
 
@@ -20,6 +24,7 @@ export default {
 - You are fully authorized to make multiple, consecutive tool requests whenever necessary, Just when necessary.
 - If you lack information, require data verification, or need to complete a complex task, execute the appropriate tools immediately, For example if user asks "What day is celebrated today?" use date tool and web search to investigate.
 - Do NOT use tools if you have the info already, just when user asks for them. Do NOT use tools when the user says Hello for example.
+- If you dont find the information after 5 rounds, maybe there isnt a info for that, just reply briefly.
 
 # RESPONSE STYLE AND LENGHT
 - Default to short, punchy, and concise replies suitable for a fast-paced Discord chat environment.
@@ -66,6 +71,9 @@ export default {
             } catch (error: any) {
               return `Search failed: ${error.message}`;
             }
+          },
+          formatArgs: (args: { query: string }) => {
+            return args.query;
           }
         }
       },
@@ -81,6 +89,9 @@ export default {
           },
           execute: async () => {
             return (new Date().toLocaleString());
+          },
+          formatArgs: () => {
+            return "";
           }
         }
       }
@@ -94,12 +105,12 @@ export default {
     try {
       let runOrchestrator = true;
       let finalContent = "";
-      let toolCalls = 0;
+      let toolCalls = [];
       let model = "openai/gpt-oss-120b";
 
       while (runOrchestrator) {
         await interaction.editReply({ 
-          components: [new TextDisplay({ content: `*AI is thinking...*` })], 
+          components: [new TextDisplay({ content: `${getEmoji("forum")} Executing...` })], 
           flags: MessageFlags.IsComponentsV2 
         });
 
@@ -124,23 +135,24 @@ export default {
         history.push(message);
 
         if (message.tool_calls?.length > 0) {
-          toolCalls += message.tool_calls.length;
+          toolCalls = [...toolCalls, message.tool_calls];
           for (const toolCall of message.tool_calls) {
             const targetTool = tools.find(t => t.function.name === toolCall.function.name);
             if (!targetTool) continue;
 
+            const parsedArgs = JSON.parse(toolCall.function.arguments);
             await interaction.editReply({ 
-              components: [new TextDisplay({ content: `*Executing tool: \`${toolCall.function.name}\`...*` })], 
+              components: [new TextDisplay({ content: `${message.reasoning ? "-# " + message.reasoning + "\n" : ""}${getEmoji("oauth2")} Executing...\n    ${getEmoji("text1")} \`${toolCall.function.name}\` **${targetTool.function.formatArgs(parsedArgs)}**` })], 
               flags: MessageFlags.IsComponentsV2 
             });
 
-            const parsedArgs = JSON.parse(toolCall.function.arguments);
             const result = await targetTool.function.execute(parsedArgs);
 
             history.push({
               tool_call_id: toolCall.id,
               role: "tool",
               name: toolCall.function.name,
+              args: parsedArgs,
               content: result,
             });
           }
@@ -151,7 +163,7 @@ export default {
       }
 
       await interaction.editReply({ 
-        components: [new TextDisplay({ content: `${finalContent}\n-# ${toolCalls} tool calls • ${model}` })], 
+        components: [new TextDisplay({ content: `${finalContent}\n-# ${toolCalls.length} tool calls • ${model}` })], 
         flags: MessageFlags.IsComponentsV2 
       });
 

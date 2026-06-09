@@ -1,9 +1,13 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { importFiles } from "./utils/file.ts";
+import { makeRequest } from "./utils/request.ts";
 import { join } from "node:path";
 import createServer from "./server.ts";
 
 process.loadEnvFile();
+
+process.on('uncaughtException', console.error);
+process.on('unhandledRejection', console.error);
 
 const client = new Client({
   intents: [
@@ -18,6 +22,7 @@ const client = new Client({
 });
 const server = createServer(client);
 
+client.langs = await makeRequest("https://translate.google.com/translate_a/l", { method: "GET", response: "JSON", timeout: 10000, params: { client: "webapp", hl: "en" } });
 client.commands = await importFiles(join(import.meta.dirname, "commands"));
 client.events = await importFiles(join(import.meta.dirname, "events"));
 

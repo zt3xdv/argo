@@ -1,5 +1,5 @@
-import { Client, MessageFlags, SeparatorSpacingSize } from "discord.js";
-import { TextDisplay, Separator } from "../../utils/component.ts";
+import { Client, MessageFlags } from "discord.js";
+import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 
 export default {
@@ -16,11 +16,12 @@ export default {
     const text = new TextDisplay({
       content: `${getEmoji("pings")} **Pong!**\n-# Websocket latency: ${client.ws.ping}ms`,
     });
-    const sep = new Separator({
-      spacing: SeparatorSpacingSize.Large,
-      divider: true,
-    });
     
-    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    await interaction.editReply({
+      components: [
+        new Container({ components: [text, ] })
+      ],
+      flags: MessageFlags.IsComponentsV2
+    });
   }
 };

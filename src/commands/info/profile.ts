@@ -1,5 +1,5 @@
-import { Client, MessageFlags, SeparatorSpacingSize } from "discord.js";
-import { TextDisplay, Separator, Thumbnail, Section } from "../../utils/component.ts";
+import { Client, MessageFlags, MessageContextMenuCommandInteraction } from "discord.js";
+import { TextDisplay, Thumbnail, Section } from "../../utils/component.ts";
 import { Container } from "../../utils/container.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { FormatTime } from "../../utils/utils.ts";
@@ -18,12 +18,16 @@ export default {
     ],
     name: 'profile',
     description: 'View a user or bot profile',
-    type: 1
+    type: 1,
+    messageContext: {
+      name: "Profile"
+    }
   },
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
+    const isContextInteraction = interaction instanceof MessageContextMenuCommandInteraction;
     
-    const target = await interaction.client.users.fetch(interaction.options.getUser('user')?.id || interaction.user.id, {
+    const target = await interaction.client.users.fetch(isContextInteraction ? interaction.options.getMessage("message").author : (interaction.options.getUser('user')?.id || interaction.user.id), {
       force: true,
     });
     
@@ -31,8 +35,7 @@ export default {
       const member = await interaction.guild?.members.fetch(target.id).catch(() => null);
       
       let badges: string[] = [];
-      let status: string = "offline";
-      let clientsStatus: string = "";
+      let status: string = "";
       
       // I need emojis
       /*if (target.flags) {
@@ -46,9 +49,6 @@ export default {
         if (member.presence?.status) {
           status = StatusToEmoji(member.presence?.status);
         }
-        if (member.presence?.clientStatus && member.presence?.status != "offline" && member.presence?.clientStatus.length >= 2) {
-          clientsStatus = Object.keys(member.presence?.clientStatus).map(s => getEmoji(StatusToEmoji(member.presence?.clientStatus[s])) + " " + Capitalize(s)).join(", ");
-        }
       }
       
       const badgeIcons = badges.map((badge) => getEmoji(badge)).join('');
@@ -56,7 +56,7 @@ export default {
       const avatar = target.avatarURL?.() ?? target.defaultAvatarURL;
 
       const text1 = new TextDisplay({
-        content: `\`${target.username}\` ${Pill(target.id)} ${getEmoji(status)}\n${badgeIcons ? badgeIcons + "•" + clientsStatus : clientsStatus}\n_ _`,
+        content: `\`${target.username}\` ${Pill(target.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
       });
 
       const text2 = new TextDisplay({

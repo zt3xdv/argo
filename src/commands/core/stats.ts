@@ -1,5 +1,5 @@
-import { Client, MessageFlags, SeparatorSpacingSize } from "discord.js";
-import { TextDisplay, Separator } from "../../utils/component.ts";
+import { Client, MessageFlags } from "discord.js";
+import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { FormatTime } from "../../utils/utils.ts";
 
@@ -8,7 +8,7 @@ export default {
   data: {
     options: [],
     name: 'stats',
-    description: 'Overall Bot stats',
+    description: 'Overall bot stats',
     type: 1
   },
   async execute(interaction: any, client: Client) {
@@ -23,11 +23,7 @@ export default {
     const text = new TextDisplay({
       content: `${getEmoji("clock")} Uptime\n**\`${FormatTime(uptime)}\`**\n${getEmoji("box")} Current memory usage\n**\`${memoryUsage}mb\`**\n\n${getEmoji("generalinfo")} Guilds\n**\`${guildCount}\`**\n${getEmoji("person")} Users\n**\`${installations}\`**`,
     });
-    const sep = new Separator({
-      spacing: SeparatorSpacingSize.Large,
-      divider: true,
-    });
     
-    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    await interaction.editReply({ components: [text], flags: MessageFlags.IsComponentsV2 });
   }
 };

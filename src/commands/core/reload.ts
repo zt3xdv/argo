@@ -1,5 +1,5 @@
-import { Client, MessageFlags, SeparatorSpacingSize } from "discord.js";
-import { TextDisplay, Separator } from "../../utils/component.ts";
+import { Client, MessageFlags } from "discord.js";
+import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { isDeveloper, reload } from "../../utils/utils.ts";
 import git from 'isomorphic-git';
@@ -20,15 +20,10 @@ export default {
     await interaction.deferReply();
     const dir = join(import.meta.dirname, "..", "..", "..");
     
-    const sep = new Separator({
-      spacing: SeparatorSpacingSize.Large,
-      divider: true,
-    });
-    
     let text = new TextDisplay({
       content: `${getEmoji("loop")} Reloading...`,
     });
-    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    await interaction.editReply({ components: [text], flags: MessageFlags.IsComponentsV2 });
       
     await git.checkout({ fs, dir, ref: 'HEAD', force: true });
     await git.pull({
@@ -47,6 +42,6 @@ export default {
     text = new TextDisplay({
       content: `${getEmoji("correct")} Bot reloaded.\n-# Commit hash: ${commit}`,
     });
-    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    await interaction.editReply({ components: [text], flags: MessageFlags.IsComponentsV2 });
   }
 };

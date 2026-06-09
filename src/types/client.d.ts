@@ -4,5 +4,6 @@ declare module 'discord.js' {
   interface Client {
     commands: any;
     events: any;
+    langs: any;
   }
 }

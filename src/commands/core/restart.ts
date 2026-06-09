@@ -1,5 +1,5 @@
-import { Client, MessageFlags, SeparatorSpacingSize } from "discord.js";
-import { TextDisplay, Separator } from "../../utils/component.ts";
+import { Client, MessageFlags } from "discord.js";
+import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { isDeveloper } from "../../utils/utils.ts";
 
@@ -18,12 +18,8 @@ export default {
     const text = new TextDisplay({
       content: `${getEmoji("loop")} Restarting bot...`,
     });
-    const sep = new Separator({
-      spacing: SeparatorSpacingSize.Large,
-      divider: true,
-    });
     
-    await interaction.editReply({ components: [text, sep], flags: MessageFlags.IsComponentsV2 });
+    await interaction.editReply({ components: [text], flags: MessageFlags.IsComponentsV2 });
     
     process.exit();
   }
