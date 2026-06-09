@@ -1,9 +1,11 @@
-import type { Client } from 'discord.js';
+import type { Client } from "discord.js";
+import type { Database } from "../utils/db.ts";
 
 declare module 'discord.js' {
   interface Client {
-    commands: any;
-    events: any;
-    langs: any;
+    commands: Array;
+    events: Array;
+    langs: { [key: string]: { [key: string]: string } };
+    database: Database;
   }
 }

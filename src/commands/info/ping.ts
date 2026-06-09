@@ -1,5 +1,6 @@
 import { Client, MessageFlags } from "discord.js";
 import { TextDisplay } from "../../utils/component.ts";
+import { Container } from "../../utils/container.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 
 export default {
@@ -19,7 +20,7 @@ export default {
     
     await interaction.editReply({
       components: [
-        new Container({ components: [text, ] })
+        new Container({ components: [text] })
       ],
       flags: MessageFlags.IsComponentsV2
     });

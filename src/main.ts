@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { importFiles } from "./utils/file.ts";
 import { makeRequest } from "./utils/request.ts";
+import { Database } from "./utils/db.ts";
 import { join } from "node:path";
 import createServer from "./server.ts";
 
@@ -25,6 +26,7 @@ const server = createServer(client);
 client.langs = await makeRequest("https://translate.google.com/translate_a/l", { method: "GET", response: "JSON", timeout: 10000, params: { client: "webapp", hl: "en" } });
 client.commands = await importFiles(join(import.meta.dirname, "commands"));
 client.events = await importFiles(join(import.meta.dirname, "events"));
+client.database = new Database(join(import.meta.dirname, "..", "database.db"));
 
 client.events.forEach((event: any) => {
   if (event.once) {
