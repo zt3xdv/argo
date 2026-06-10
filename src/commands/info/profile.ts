@@ -1,4 +1,4 @@
-import { Client, MessageFlags, MessageContextMenuCommandInteraction } from "discord.js";
+import { Client, MessageFlags, UserContextMenuCommandInteraction, ApplicationCommandType } from "discord.js";
 import { TextDisplay, Thumbnail, Section } from "../../utils/component.ts";
 import { Container } from "../../utils/container.ts";
 import { getEmoji } from "../../utils/emojis.ts";
@@ -8,6 +8,7 @@ import { Timestamp, Pill, Capitalize, StatusToEmoji } from "../../utils/markdown
 export default {
   category: "info",
   data: {
+    type: [ ApplicationCommandType.ChatInput, ApplicationCommandType.User ],
     options: [
       {
         name: 'user',
@@ -18,22 +19,26 @@ export default {
     ],
     name: 'profile',
     description: 'View a user or bot profile',
-    type: 1,
-    messageContext: {
+    context: {
       name: "Profile"
     }
   },
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
-    const isContextInteraction = interaction instanceof MessageContextMenuCommandInteraction;
-    
-    const target = await interaction.client.users.fetch(isContextInteraction ? interaction.options.getMessage("message").author : (interaction.options.getUser('user')?.id || interaction.user.id), {
-      force: true,
-    });
-    
+
+    const isContextInteraction = interaction.isUserContextMenuCommand();
+
+    const targetUser = isContextInteraction 
+      ? interaction.targetUser 
+      : (interaction.options.getUser('user') || interaction.user);
+
+    const target = await interaction.client.users.fetch(targetUser.id, { force: true });
+
+    let member = null;
     if (target) {
-      const member = await interaction.guild?.members.fetch(target.id).catch(() => null);
-      
+      member = interaction.options.getMember('user') || 
+               await interaction.guild.members.fetch(target.id).catch(() => null);
+
       let badges: string[] = [];
       let status: string = "";
       
@@ -56,11 +61,11 @@ export default {
       const avatar = target.avatarURL?.() ?? target.defaultAvatarURL;
 
       const text1 = new TextDisplay({
-        content: `\`${target.username}\` ${Pill(target.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
+        content: `\`${target.username}\` ${Pill(target.id)} ${status}\n${badgeIcons}\n_ _`,
       });
 
       const text2 = new TextDisplay({
-        content: `${getEmoji('person')} Display Name\n${member ? member.displayName : target.displayName}`,
+        content: `${getEmoji('person')} Display Name\n${member ? member.nick : target.displayName}`,
       });
       
       const text3 = new TextDisplay({
@@ -81,10 +86,17 @@ export default {
 
       if (member) {
         const text4 = new TextDisplay({
-          content: `${getEmoji('newmembers')} Joined at ${Timestamp(member.joinedTimestamp, 'D')}`,
+          content: `${getEmoji('newmembers')} Joined\n${Timestamp(member.joined_at ? Date.parse(member.joined_at) : member.joinedTimestamp, 'D')}`,
         });
 
         container.addTextDisplayComponents(text4);
+        
+        if (member.roles instanceof Array) {
+          const text5 = new TextDisplay({
+            content: `${getEmoji('ping')} Roles\n-# ${member.roles.slice(0, 5).map(id => `<@&${id}>`).join(" ")}${member.roles.length > 5 ? ` +${member.roles.length - 5}` : ""}`,
+          });
+          container.addTextDisplayComponents(text5);
+        }
       }
       
       await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 });

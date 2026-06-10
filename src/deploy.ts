@@ -1,6 +1,7 @@
 import { REST, Routes } from "discord.js";
 import { importFiles } from "./utils/file.ts";
 import { join } from "node:path";
+import { ApplicationCommandType } from "discord.js";
 
 process.loadEnvFile();
 
@@ -9,16 +10,28 @@ rest.setToken(process.env.DISCORD_TOKEN);
 
 const commands = await importFiles(join(import.meta.dirname, "commands"));
 const commandsData = commands.flatMap(c => {
-  c.data.integration_types = [0, 1];
-  c.data.contexts = [0, 1, 2];
-      
-  if (c.data && c.data.messageContext) {
-    const duplicate = { ...c.data, description: undefined, options: undefined, type: 3, ...c.data.messageContext };
-    
-    return [duplicate, c.data];
-  }
-  
-  return [c.data];
+  const types = Array.isArray(c.data.type) ? c.data.type : [c.data.type || ApplicationCommandType.ChatInput];
+
+  return types.map(type => {
+    const baseCommand = {
+      ...c.data,
+      integration_types: [0, 1],
+      contexts: [0, 1, 2],
+      type
+    };
+
+    if (type === ApplicationCommandType.ChatInput) {
+      return baseCommand;
+    } else {
+      delete baseCommand.description;
+      delete baseCommand.options;
+
+      return {
+        ...baseCommand,
+        ...(c.data.context || {})
+      };
+    }
+  });
 });
 
 try {

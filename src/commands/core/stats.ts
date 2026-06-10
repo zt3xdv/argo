@@ -1,4 +1,4 @@
-import { Client, MessageFlags } from "discord.js";
+import { Client, MessageFlags, ApplicationCommandType } from "discord.js";
 import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { FormatTime } from "../../utils/utils.ts";
@@ -6,10 +6,10 @@ import { FormatTime } from "../../utils/utils.ts";
 export default {
   category: "core",
   data: {
+    type: [ ApplicationCommandType.ChatInput ],
     options: [],
     name: 'stats',
-    description: 'Overall bot stats',
-    type: 1
+    description: 'Overall bot stats'
   },
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();

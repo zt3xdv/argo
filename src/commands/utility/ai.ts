@@ -1,15 +1,15 @@
-import { Client, MessageFlags, MessageContextMenuCommandInteraction } from "discord.js";
+import { Client, MessageFlags, MessageContextMenuCommandInteraction, ApplicationCommandType } from "discord.js";
 import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 
 export default {
   category: "utility",
   data: {
+    type: [ ApplicationCommandType.ChatInput, ApplicationCommandType.Message ],
     options: [{ type: 3, name: "prompt", description: "Prompt", required: true }],
     name: "ai",
     description: "Ask a question to the AI",
-    type: 1,
-    messageContext: {
+    context: {
       name: "Ask AI",
     }
   },

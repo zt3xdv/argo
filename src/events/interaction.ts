@@ -1,4 +1,4 @@
-import { Client, Events, MessageFlags } from "discord.js";
+import { Client, Events, MessageFlags, ApplicationCommandType } from "discord.js";
 import { TextDisplay } from "../utils/component.ts";
 import { getEmoji } from "../utils/emojis.ts";
 import { isDeveloper } from "../utils/utils.ts";
@@ -9,12 +9,19 @@ export default {
 
   async execute(interaction: any) {
     const client = interaction.client;
+    const isContext = interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand();
     
-    if (interaction.isChatInputCommand() || interaction.isMessageContextMenuCommand()) {
-      const command = client.commands.find(c => 
-        c.data.name === interaction.commandName || 
-        c.data.messageContext?.name === interaction.commandName
-      );
+    if (interaction.isChatInputCommand() || isContext) {
+      const command = client.commands.find(c => {
+        const name = isContext ? c.data.context?.name : c.data.name;
+        if (name !== interaction.commandName) return false;
+
+        const types = Array.isArray(c.data.type) ? c.data.type : [c.data.type];
+
+        return (interaction.isChatInputCommand() && types.includes(ApplicationCommandType.ChatInput)) ||
+               (interaction.isUserContextMenuCommand() && types.includes(ApplicationCommandType.User)) ||
+               (interaction.isMessageContextMenuCommand() && types.includes(ApplicationCommandType.Message));
+      });
 
       if (!command) return;
 

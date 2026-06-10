@@ -1,4 +1,4 @@
-import { Client, MessageFlags, SeparatorSpacingSize, MessageContextMenuCommandInteraction, ComponentType, ButtonStyle, TextInputStyle } from "discord.js";
+import { Client, MessageFlags, SeparatorSpacingSize, MessageContextMenuCommandInteraction, ComponentType, ButtonStyle, TextInputStyle, ApplicationCommandType } from "discord.js";
 import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow } from "../../utils/component.ts";
 import { Container } from "../../utils/container.ts";
 import { getEmoji } from "../../utils/emojis.ts";
@@ -7,11 +7,11 @@ import { makeRequest } from "../../utils/request.ts";
 export default {
   category: "utility",
   data: {
+    type: [ ApplicationCommandType.ChatInput, ApplicationCommandType.Message ],
     options: [{ type: 3, name: "text", description: "Text to translate", required: true }, { type: 3, name: "from", description: "Translate from", required: false, autocomplete: true }, { type: 3, name: "to", description: "Translate to", required: false, autocomplete: true }],
     name: "translate",
     description: "Translate a text",
-    type: 1,
-    messageContext: {
+    context: {
       name: "Translate",
     }
   },
