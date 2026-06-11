@@ -9,3 +9,4 @@ Argo is a multipurpose Discord Bot.
 
 - Website: A website with landing and commands page
 - Commands: Some commands (see src/commands)
+
