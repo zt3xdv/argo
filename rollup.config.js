@@ -40,7 +40,7 @@ export default {
           .replace('${scripts}', scripts)
           .replace('${links}', links);
       },
-      title: "Nexa"
+      title: "Argo - Discord Bot"
     }),
     nodeResolve({
       extensions: [".js", ".jsx"],
