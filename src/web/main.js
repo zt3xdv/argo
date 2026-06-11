@@ -5,9 +5,10 @@ import { Link, Route, Switch } from 'wouter-preact';
 import Home from "./routes/home.js";
 import Commands from "./routes/commands.js";
 
-import Logo from "./assets/logo.png";
+import Logo from "./assets/argo-nobg.png";
 import CommandsIcon from "./assets/icons/commands.png";
 import HomeIcon from "./assets/icons/home.png";
+import HeartIcon from "./assets/icons/heart.png";
 
 export default function App() {
   return (
@@ -35,6 +36,19 @@ export default function App() {
           </Route>
         </Switch>
       </main>
+      <footer className="footer-container">
+        <div className="footer-brand">
+          <img className="brand-icon" src={Logo} alt="Argo Logo" />
+          <span className="brand-name">Argo</span>
+        </div>
+
+        <div className="footer-content">
+          <nav className="footer-links">
+            <a href="https://github.com/zt3xdv/argo" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/zt3xdv" target="_blank" rel="noopener noreferrer">Author</a>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }

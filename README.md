@@ -1,9 +1,9 @@
-# Nexa
+# Argo
 
 ![Version](https://img.shields.io/badge/version-stable-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-Nexa is a multipurpose Discord App.
+Argo is a multipurpose Discord Bot.
 
 ## Features
 

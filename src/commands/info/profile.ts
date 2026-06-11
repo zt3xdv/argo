@@ -61,7 +61,7 @@ export default {
       const avatar = target.avatarURL?.() ?? target.defaultAvatarURL;
 
       const text1 = new TextDisplay({
-        content: `\`${target.username}\` ${Pill(target.id)} ${status}\n${badgeIcons}\n_ _`,
+        content: `\`${target.username}\` ${Pill(target.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
       });
 
       const text2 = new TextDisplay({

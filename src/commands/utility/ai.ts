@@ -18,7 +18,7 @@ export default {
     const isContextInteraction = interaction instanceof MessageContextMenuCommandInteraction;
     const prompt = isContextInteraction ? interaction.options.getMessage("message").content.trim() : interaction.options?.getString("prompt").trim();
     const history: any[] = [
-      { role: "system", content: `You are Nexa, a efficient Discord bot. Always maintain your persona as an AI assistant integrated into a chat server.
+      { role: "system", content: `You are Argo, a efficient Discord bot. Always maintain your persona as an AI assistant integrated into a chat server.
 
 # TOOL USAGE DEFINITION
 - You are fully authorized to make multiple, consecutive tool requests whenever necessary, Just when necessary.

@@ -153,10 +153,47 @@ body {
   color: var(--muted);
 }
 
+.commands .commands-list .command-item .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  background: var(--bg-surface);
+  color: var(--muted);
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  opacity: 0.8;
+}
+
+.tab-button.active {
+  background: #fff;
+}
+
 .home {
   width: 100%;
   min-height: 100%;
   height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
 }
 
 .home .hero {
@@ -200,6 +237,42 @@ body {
   gap: 15px;
 }
 
+.home .section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 15px;
+}
+
+.home .stats {
+  align-items: center;
+  gap: 60px;
+}
+
+.home .stats .stat {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.home .stats .stat p {
+  text-transform: uppercase;
+}
+
+.home .features {
+  align-items: center;
+  gap: 40px;
+}
+
+.home .features .feature {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
 button {
   display: flex;
   gap: 5px;
@@ -232,6 +305,55 @@ a {
   border: 1px solid var(--border-color);
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 2rem 1.5rem;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+}
+
+.brand-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.brand-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #000;
 }
 
 @media (max-width: 640px) {

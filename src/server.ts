@@ -6,8 +6,11 @@ export default function createServer(client) {
   
   app.use(express.static(join(import.meta.dirname, "..", "dist", "web")));
 
-  app.get("/api/status", (req, res) => {
-    res.json({ status: "online", user: client.user.tag, ping: client.ws.ping });
+  app.get("/api/stats", (req, res) => {
+    const guildCount = client?.guilds?.cache?.size ?? (interaction.guild ? 1 : 0);
+    const totalUsers = client?.guilds?.cache?.reduce((acc, guild) => acc + guild.memberCount, 0);
+
+    res.json({ status: "online", guildCount, totalUsers, user: client.user.tag, ping: client.ws.ping });
   });
   
   app.get("/api/commands", (req, res) => {
