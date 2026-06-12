@@ -19,10 +19,7 @@ export default {
   async autocomplete(interaction: any, client: Client) {
     const focused = interaction.options.getFocused(true);
     const query = focused.value.toLowerCase();
-    const res = await makeRequest('https://api.frankfurter.dev/v2/currencies', {
-      method: "GET",
-      response: "JSON",
-    });
+    const res = await makeRequest('https://api.frankfurter.dev/v2/currencies', { method: "GET", response: "JSON" });
 
     const choices = res
       .map((currency: any) => ({
@@ -41,14 +38,13 @@ export default {
     const to = interaction.options?.getString("to");
     
     const res = await makeRequest(`https://api.frankfurter.dev/v2/rate/${from}/${to}`, { method: "GET", response: "JSON" });
-    const converted = (res.rate * amount).toLocaleString('en-US', { style: 'currency', currency: to.toUpperCase() });
-
+    
     await interaction.editReply({ 
       components: [
         new Container({
           components: [
             new TextDisplay({
-              content: `${getEmoji("dollar")} ${amount.toLocaleString('en-US', { style: 'currency', currency: from.toUpperCase() })} **${from}** equals ${converted} **${to}**`
+              content: `${getEmoji("dollar")} ${amount} **${from.toUpperCase()}** -> ${res.rate * amount} **${to.toUpperCase()}**`
             }),
             new Separator({
               spacing: SeparatorSpacingSize.Large,
