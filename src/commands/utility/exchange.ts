@@ -3,6 +3,7 @@ import { TextDisplay, Separator } from "../../utils/component.ts";
 import { Container } from "../../utils/container.ts";
 import { getEmoji } from "../../utils/emojis.ts";
 import { makeRequest } from "../../utils/request.ts";
+import { FormatCurrency } from "../../utils/utils.ts";
 
 export default {
   category: "utility",
@@ -44,14 +45,14 @@ export default {
         new Container({
           components: [
             new TextDisplay({
-              content: `${getEmoji("dollar")} ${amount} **${from.toUpperCase()}** -> ${res.rate * amount} **${to.toUpperCase()}**`
+              content: `${getEmoji("dollar")} ${FormatCurrency(amount, from)} **${from.toUpperCase()}** -> ${FormatCurrency(res.rate * amount, to)} **${to.toUpperCase()}**`
             }),
             new Separator({
               spacing: SeparatorSpacingSize.Large,
               divider: true,
             }),
             new TextDisplay({
-              content: `-# Exchange rate: ${res.rate}`
+              content: `-# Exchange rate: ${FormatCurrency(res.rate, to)}`
             })
           ] 
         })], 

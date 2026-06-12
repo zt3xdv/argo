@@ -41,6 +41,20 @@ export function FormatTime(duration: number | string) {
   return parts.join(' ');
 }
 
+export function FormatCurrency(amount: number, currency: string) {
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency
+  });
+
+  return formatter
+    .formatToParts(amount)
+    .filter(part => part.type !== 'currency')
+    .map(part => part.value)
+    .join('')
+    .trim();
+}
+
 export async function Reference(message: Message) {
   let last = message;
   let after = SnowflakeUtil.generate({
