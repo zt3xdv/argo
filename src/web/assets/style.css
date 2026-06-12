@@ -276,6 +276,7 @@ body {
 button {
   display: flex;
   gap: 5px;
+  align-items: center;
   background-color: var(--bg-surface);
   padding: 1em 1.5em;
   border: none;

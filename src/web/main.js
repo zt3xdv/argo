@@ -1,11 +1,12 @@
 import "./assets/style.css";
 import { render, h } from 'preact';
 import { Link, Route, Switch } from 'wouter-preact';
+import Icon from "./components/icon.js";
 
 import Home from "./routes/home.js";
 import Commands from "./routes/commands.js";
 
-import Logo from "./assets/argo-nobg.png";
+import Logo from "./assets/argo.png";
 import CommandsIcon from "./assets/icons/commands.png";
 import HomeIcon from "./assets/icons/home.png";
 import HeartIcon from "./assets/icons/heart.png";
@@ -17,10 +18,10 @@ export default function App() {
         <img class="nav-brand" src={Logo}></img>
         <ul class="nav-links">
           <li class="nav-item">
-            <Link href="/"><img src={HomeIcon} style={{ width: "auto", height: 20 }}></img></Link>
+            <Link href="/"><Icon src={HomeIcon} style={{ width: "auto", height: 26 }}/></Link>
           </li>
           <li class="nav-item">
-            <Link href="/commands"><img src={CommandsIcon} style={{ width: "auto", height: 20 }}></img></Link>
+            <Link href="/commands"><Icon src={CommandsIcon} style={{ width: "auto", height: 26 }}/></Link>
           </li>
         </ul>
       </nav>

@@ -1,6 +1,7 @@
-import bg from "../assets/bg-sm.png";
+import bg from "../assets/bg.png";
 import addBot from "../assets/icons/addbot.png";
 import search from "../assets/icons/search.png";
+import Icon from "../components/icon.js";
 import { Link } from "wouter-preact";
 import { useState, useEffect } from 'preact/hooks';
 
@@ -29,8 +30,8 @@ export default function Home() {
         <h1>Just a Discord <span className="app">App</span>.</h1>
         <p>Yeah just that, we dont have anything to offer... yet</p>
         <div className="buttons">
-          <a href="/invite"><button><img src={addBot}></img> Add Me!</button></a>
-          <Link href="/commands"><button><img src={search}></img> Explore the commands</button></Link>
+          <a href="/invite"><button><Icon src={addBot} style={{ width: "auto", height: "1.5em" }}/> Add Me!</button></a>
+          <Link href="/commands"><button><Icon src={search} style={{ width: "auto", height: "1.5em" }}/> Explore the commands</button></Link>
         </div>
       </div>
       <div
