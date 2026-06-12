@@ -23,7 +23,7 @@ export default {
     const choices = Object.entries(langData || {})
       .filter(([short, long]) => short.includes(query) || long.toLowerCase().includes(query))
       .map(([short, long]) => ({ name: String(long), value: short }))
-      .slice(0, 5);
+      .slice(0, 25);
 
     await interaction.respond(choices);
   },
