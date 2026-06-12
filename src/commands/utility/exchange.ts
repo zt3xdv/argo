@@ -52,7 +52,7 @@ export default {
               divider: true,
             }),
             new TextDisplay({
-              content: `-# Exchange rate: ${FormatCurrency(res.rate, to)}`
+              content: `-# **Exchange rate:** 1 **${from.toUpperCase}** -> ${FormatCurrency(res.rate, to)} **${to.toUpperCase()}**`
             })
           ] 
         })], 
