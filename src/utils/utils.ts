@@ -81,6 +81,7 @@ export function isDeveloper(id: string) {
 
 export async function reload(client: Client) {
   client.events.forEach((event: any) => {
+    client.debug("unloading event", event.name);
     client.off(event.eventName, event.execute);
   });
   
@@ -88,6 +89,7 @@ export async function reload(client: Client) {
   client.events = await importFiles(join(import.meta.dirname, "..", "events"));
   
   client.events.forEach((event: any) => {
+    client.debug("loading event", event.name);
     if (event.once) {
       client.once(event.eventName, event.execute);
     } else {

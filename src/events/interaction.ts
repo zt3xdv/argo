@@ -12,6 +12,8 @@ export default {
     const isContext = interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand();
     
     if (interaction.isChatInputCommand() || isContext) {
+      client.debug("command executed", interaction.commandName, "user", interaction.user.id);
+      
       const command = client.commands.find(c => {
         const name = isContext ? c.data.context?.name : c.data.name;
         if (name !== interaction.commandName) return false;

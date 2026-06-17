@@ -7,5 +7,6 @@ declare module 'discord.js' {
     events: Array;
     langs: { [key: string]: { [key: string]: string } };
     database: Database;
+    debug: any;
   }
 }

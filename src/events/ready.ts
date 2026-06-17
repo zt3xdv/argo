@@ -7,5 +7,8 @@ export default {
   
   async execute(readyClient: any) {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+    
+    // Some bs to do
+    // readyClient.user.setActivity("to your messages", { type: 'LISTENING' });
   }
 };

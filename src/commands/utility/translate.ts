@@ -101,7 +101,7 @@ export default {
             });
             collector.resetTimer();
 
-            const newLanguage = modalSubmit.fields.getTextInputValue("change_language_new");
+            const newLanguage = modalSubmit.fields.getTextInputValue("change_language_new").toLowerCase();
             if (!client.langs.tl[newLanguage]) {
               await modalSubmit.reply({
                 content: `${getEmoji("exclamation")} Lang **\`${newLanguage}\`** is not supported.`,

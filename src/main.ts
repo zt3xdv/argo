@@ -28,7 +28,12 @@ client.commands = await importFiles(join(import.meta.dirname, "commands"));
 client.events = await importFiles(join(import.meta.dirname, "events"));
 client.database = new Database(join(import.meta.dirname, "..", "database.db"));
 
+client.debug = (...msg) => {
+  if (process.env.ARGO_DEBUG) console.log(...msg);
+};
+
 client.events.forEach((event: any) => {
+  client.debug("loading event", event.name);
   if (event.once) {
     client.once(event.eventName, event.execute);
   } else {
