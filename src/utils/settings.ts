@@ -20,8 +20,15 @@ export class Settings {
       type: 'bool',
       defaultValue: false,
       name: "Ephemeral Apps Commands",
-      description: 'Show application commands messages as ephemeral (to hide :p)'
-      }
+      description: 'Show application commands messages as ephemeral (only context commands)'
+    },
+    {
+      key: 'ephemeral_commands',
+      type: 'bool',
+      defaultValue: false,
+      name: "Ephemeral Commands",
+      description: 'Show commands as ephemeral (this applies to all commands)'
+    }
   ];
 
   public static async get<T = any>(

@@ -16,7 +16,8 @@ export default {
       client.debug("command executed", interaction.commandName, "user", interaction.user.id);
       
       const ephemeralApps = await Settings.get(client.db, interaction.user.id, "ephemeral_apps");
-      if (ephemeralApps) makeEphemeral(interaction);
+      const ephemeralCommands = await Settings.get(client.db, interaction.user.id, "ephemeral_commands");
+      if (ephemeralCommands || (ephemeralApps && isContext)) makeEphemeral(interaction);
       
       const command = client.commands.find(c => {
         const name = isContext ? c.data.context?.name : c.data.name;
