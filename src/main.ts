@@ -1,8 +1,10 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { importFiles } from "./utils/file.ts";
 import { makeRequest } from "./utils/request.ts";
-import { Database } from "./utils/db.ts";
 import { join } from "node:path";
+import { QuickDB } from "quick.db";
+import { JSONDriver } from "quick.db/out/drivers/JSONDriver.js";
+
 import createServer from "./server.ts";
 
 process.loadEnvFile();
@@ -22,11 +24,15 @@ const client = new Client({
   allowedMentions: { parse: [] },
 });
 const server = createServer(client);
+const dbDriver = new JSONDriver(join(import.meta.dirname, "..", "db.local"));
 
 client.langs = await makeRequest("https://translate.google.com/translate_a/l", { method: "GET", response: "JSON", params: { client: "webapp", hl: "en" } });
 client.commands = await importFiles(join(import.meta.dirname, "commands"));
 client.events = await importFiles(join(import.meta.dirname, "events"));
-client.database = new Database(join(import.meta.dirname, "..", "database.db"));
+
+// Json just for now, will add another driver later
+client.db = new QuickDB({ driver: dbDriver });
+await client.db.init();
 
 client.debug = (...msg) => {
   if (process.env.ARGO_DEBUG) console.log(...msg);

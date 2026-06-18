@@ -29,8 +29,11 @@
     "wouter-preact": "^3.10.0"
   },
   "dependencies": {
+    "crc": "^4.3.2",
     "discord.js": "^14.26.4",
     "express": "^5.2.1",
-    "isomorphic-git": "^1.38.3"
+    "isomorphic-git": "^1.38.3",
+    "quick.db": "^9.1.7",
+    "write-file-atomic": "^7.0.1"
   }
 }

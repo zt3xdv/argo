@@ -1,7 +1,8 @@
 import { Client, Events, MessageFlags, ApplicationCommandType } from "discord.js";
 import { TextDisplay } from "../utils/component.ts";
 import { getEmoji } from "../utils/emojis.ts";
-import { isDeveloper } from "../utils/utils.ts";
+import { isDeveloper, makeEphemeral } from "../utils/utils.ts";
+import { Settings } from "../utils/settings.ts";
 
 export default {
   name: 'interactionCreate',
@@ -13,6 +14,9 @@ export default {
     
     if (interaction.isChatInputCommand() || isContext) {
       client.debug("command executed", interaction.commandName, "user", interaction.user.id);
+      
+      const ephemeralApps = await Settings.get(client.db, interaction.user.id, "ephemeral_apps");
+      if (ephemeralApps) makeEphemeral(interaction);
       
       const command = client.commands.find(c => {
         const name = isContext ? c.data.context?.name : c.data.name;
@@ -26,6 +30,7 @@ export default {
       });
 
       if (!command) return;
+      
 
       try {
         if (command.dev && !isDeveloper(interaction.user.id)) {

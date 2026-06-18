@@ -97,3 +97,26 @@ export async function reload(client: Client) {
     }
   });
 }
+
+export function makeEphemeral(interaction) {
+  if (!interaction.isRepliable || !interaction.isRepliable()) return interaction;
+
+  const originalReply = interaction.reply;
+  interaction.reply = function (options) {
+    if (typeof options === 'string') options = { content: options };
+    return originalReply.call(this, { ...options, ephemeral: true });
+  };
+
+  const originalDeferReply = interaction.deferReply;
+  interaction.deferReply = function (options) {
+    return originalDeferReply.call(this, { ...options, ephemeral: true });
+  };
+    
+  const originalFollowUp = interaction.followUp;
+  interaction.followUp = function (options) {
+    if (typeof options === 'string') options = { content: options };
+    return originalFollowUp.call(this, { ...options, ephemeral: true });
+  };
+
+  return interaction;
+}
