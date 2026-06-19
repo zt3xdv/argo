@@ -4,7 +4,6 @@ import { makeRequest } from "./utils/request.ts";
 import { join } from "node:path";
 import { QuickDB } from "quick.db";
 import { JSONDriver } from "quick.db/out/drivers/JSONDriver.js";
-
 import createServer from "./server.ts";
 
 process.loadEnvFile();

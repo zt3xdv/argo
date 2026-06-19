@@ -42,7 +42,7 @@ export default {
   
         components.push(
           new TextDisplay({
-            content: `### ${setting.name ? setting.name : setting.key}\n${setting.description || 'No description'}` + ((setting.type === 'string' && !setting.enum) ? `\n\n-# \`${displayValue}\`` : "")
+            content: `### ${setting.name ? setting.name : setting.key}\n${setting.description || 'No description'}`
           })
         );
   
@@ -79,6 +79,11 @@ export default {
                 customId: `edit_${setting.key}`,
                 text: "Edit Value",
                 emoji: getEmoji("edit"),
+                color: ButtonStyle.Secondary
+              }),
+              new Button({
+                customId: `view_${setting.key}`,
+                text: "View Value",
                 color: ButtonStyle.Secondary
               })
             )
@@ -128,17 +133,15 @@ export default {
       
     selectCollector.on("collect", async (menuInt) => {
       if (menuInt.customId.startsWith("enum_")) {
+        await menuInt.deferUpdate(); // Primero respondemos a Discord
         const settingKey = menuInt.customId.substring(5);
         const setting = settingsDefinitions.find(s => s.key === settingKey);
       
         if (!setting) return;
       
         const newValue = menuInt.values[0];
-      
         await Settings.put(client.db, userId, setting.key, newValue);
-      
         await updateMessage();
-        await menuInt.deferUpdate();
       }
     });
 
@@ -150,19 +153,20 @@ export default {
 
     collector.on("collect", async (btnInt) => {
       if (btnInt.customId === "prev_page") {
+        await btnInt.deferUpdate();
         currentPage = Math.max(0, currentPage - 1);
         await updateMessage();
-        await btnInt.deferUpdate();
       }
       else if (btnInt.customId === "next_page") {
+        await btnInt.deferUpdate();
         currentPage = Math.min(
           Math.ceil(settingsDefinitions.length / itemsPerPage) - 1,
           currentPage + 1
         );
         await updateMessage();
-        await btnInt.deferUpdate();
       }
       else if (btnInt.customId.startsWith("toggle_")) {
+        await btnInt.deferUpdate();
         const settingKey = btnInt.customId.substring(7);
         const setting = settingsDefinitions.find(s => s.key === settingKey);
       
@@ -172,9 +176,7 @@ export default {
         const newValue = !currentValue;
       
         await Settings.put(client.db, userId, setting.key, newValue);
-      
         await updateMessage();
-        await btnInt.deferUpdate();
       }
       else if (btnInt.customId.startsWith("edit_")) {
         const settingKey = btnInt.customId.substring(5);
@@ -183,9 +185,8 @@ export default {
         if (!setting) return;
 
         const currentValue = await Settings.get(client.db, userId, setting.key);
-
         let modalComponents = [];
-        let modalTitle = `Edit ${setting.key}`;
+        let modalTitle = `Edit ${setting.name ? setting.name : setting.key}`;
 
         switch (setting.type) {
           case 'number':
@@ -193,13 +194,11 @@ export default {
               new ActionRow(
                 new TextInput({
                   customId: "new_value",
-                  text: "New value",
+                  text: "New value (Number)",
                   format: TextInputStyle.Short,
-                  placeholder: String(setting.defaultValue),
-                  value: String(currentValue),
-                  required: true,
-                  max: setting.max !== undefined ? String(setting.max).length : undefined,
-                  min: setting.min !== undefined ? String(setting.min).length : undefined
+                  placeholder: String(setting.defaultValue ?? ''),
+                  value: String(currentValue ?? ''),
+                  required: true
                 })
               )
             );
@@ -213,8 +212,10 @@ export default {
                     customId: "new_value",
                     text: "New value",
                     format: TextInputStyle.Short,
-                    placeholder: String(setting.defaultValue),
-                    value: currentValue,
+                    placeholder: String(setting.defaultValue ?? ''),
+                    value: String(currentValue ?? ''),
+                    min: setting.min,
+                    max: setting.max,
                     required: true
                   })
                 )
@@ -222,6 +223,54 @@ export default {
             }
             break;
         }
+
+        if (modalComponents.length === 0) return;
+
+        const modalCustomId = `modal_edit_${settingKey}`;
+        const modal = new Modal({
+          customId: modalCustomId,
+          title: modalTitle.substring(0, 45),
+          components: modalComponents
+        });
+
+        await btnInt.showModal(modal);
+
+        try {
+          const modalSubmitInt = await btnInt.awaitModalSubmit({
+            filter: i => i.customId === modalCustomId && i.user.id === userId,
+            time: 60000
+          });
+
+          await modalSubmitInt.deferUpdate();
+
+          let rawValue: any = modalSubmitInt.fields.getTextInputValue("new_value");
+          
+          if (setting.type === 'number') {
+            rawValue = Number(rawValue);
+            if (isNaN(rawValue)) {
+              return modalSubmitInt.followUp({ content: `${getEmoji("wrong")} Please enter a valid number.`, ephemeral: true });
+            }
+            if (setting.max !== undefined && rawValue > setting.max) return modalSubmitInt.followUp({ content: `${getEmoji("wrong")} Max value is ${setting.max}`, ephemeral: true });
+            if (setting.min !== undefined && rawValue < setting.min) return modalSubmitInt.followUp({ content: `${getEmoji("wrong")} Min value is ${setting.min}`, ephemeral: true });
+          }
+
+          await Settings.put(client.db, userId, setting.key, rawValue);
+          await updateMessage();
+
+        } catch (err) { /**/ }
+      }
+      else if (btnInt.customId.startsWith("view_")) {
+        const settingKey = btnInt.customId.substring(5);
+        const setting = settingsDefinitions.find(s => s.key === settingKey);
+
+        if (!setting) return;
+
+        const currentValue = await Settings.get(client.db, userId, setting.key);
+        
+        await btnInt.reply({
+          content: `-# **${setting.name ? setting.name : setting.key}** value\n\`\`\`${currentValue}\`\`\``, 
+          flags: MessageFlags.Ephemeral 
+        });
       }
     });
   }

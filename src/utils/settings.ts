@@ -28,6 +28,15 @@ export class Settings {
       defaultValue: false,
       name: "Ephemeral Commands",
       description: 'Show commands as ephemeral (this applies to all commands)'
+    },
+    {
+      key: 'ai_system_prompt',
+      type: 'string',
+      min: 0,
+      max: 200,
+      defaultValue: "You are Argo",
+      name: "AI System Prompt",
+      description: 'System prompt to use on AI command.'
     }
   ];
 
@@ -97,6 +106,8 @@ export class Settings {
           break;
       case 'string':
         if (typeof value !== 'string') return false;
+        if (definition.min !== undefined && value.length < definition.min) return false;
+        if (definition.max !== undefined && value.length > definition.max) return false;
         if (definition.enum && !definition.enum.includes(value)) return false;
           break;
       case 'object':
