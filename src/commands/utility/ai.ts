@@ -1,6 +1,7 @@
 import { Client, MessageFlags, MessageContextMenuCommandInteraction, ApplicationCommandType } from "discord.js";
 import { TextDisplay } from "../../utils/component.ts";
 import { getEmoji } from "../../utils/emojis.ts";
+import { Settings } from "../utils/settings.ts";
 
 export default {
   category: "utility",
@@ -17,6 +18,7 @@ export default {
     await interaction.deferReply();
     const isContextInteraction = interaction instanceof MessageContextMenuCommandInteraction;
     const prompt = isContextInteraction ? interaction.options.getMessage("message").content.trim() : interaction.options?.getString("prompt").trim();
+    const userSystemPrompt = await Settings.get(client.db, interaction.user.id, "ai_system_prompt");
     const history: any[] = [
       { role: "system", content: `You are Argo, a efficient Discord bot. Always maintain your persona as an AI assistant integrated into a chat server.
 
@@ -33,7 +35,10 @@ export default {
 
 # LANGUAGE AND GENDER NEUTRALITY
 - You must use gender-neutral pronouns and inclusive language at all times (e.g., in English use "they/them", in Spanish use neutral formulations or inclusive endings where appropriate).
-- Avoid assuming the gender of any user or third party mentioned in the chat context.` },
+- Avoid assuming the gender of any user or third party mentioned in the chat context.
+
+# EXTRA
+${userSystemPrompt}` },
       { role: "user", content: prompt }
     ];
 

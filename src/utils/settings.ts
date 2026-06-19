@@ -34,7 +34,7 @@ export class Settings {
       type: 'string',
       min: 0,
       max: 200,
-      defaultValue: "You are Argo",
+      defaultValue: "- You are Argo Discord Bot",
       name: "AI System Prompt",
       description: 'System prompt to use on AI command.'
     }
