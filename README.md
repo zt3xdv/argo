@@ -5,7 +5,7 @@
 
 Argo is a multipurpose Discord Bot.
 
-> ![IMPORTANT]
+> [!IMPORTANT]
 > This Bot is still under development, bugs may occur
 
 ## Features
