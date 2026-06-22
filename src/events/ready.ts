@@ -1,14 +1,20 @@
-import { Client, Events } from "discord.js";
+import { Client, Events, ActivityType } from "discord.js";
 
 export default {
   name: "ready",
   eventName: Events.ClientReady,
   once: true,
   
-  async execute(readyClient: any) {
-    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+  async execute(client: any) {
+    console.log(`Ready! Logged in as ${client.user.tag}`);
     
-    // Some bs to do
-    // readyClient.user.setActivity("to your messages", { type: 'LISTENING' });
+    client.user.setPresence({
+        activities: [{
+            name: 'customstatus',
+            type: ActivityType.Custom,
+            state: 'heh'
+        }],
+        status: 'idle',
+    });
   }
 };

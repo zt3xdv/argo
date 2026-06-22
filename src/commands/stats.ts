@@ -2,7 +2,7 @@ import { Client, MessageFlags, ApplicationCommandType, ButtonStyle } from "disco
 import { TextDisplay, ActionRow, Button } from "../utils/component.ts";
 import { getEmoji } from "../utils/emojis.ts";
 import { Container } from "../utils/container.ts";
-import { FormatTime } from "../utils/utils.ts";
+import { formatTime } from "../utils/utils.ts";
 
 export default {
   category: "core",
@@ -23,30 +23,16 @@ export default {
     const totalUsers = interaction.client?.guilds?.cache?.reduce((acc, guild) => acc + guild.memberCount, 0);
 
     const text1 = new TextDisplay({
-      content: `## Argo Discord Bot\n-# Bot status`,
+      content: `-# ${getEmoji("linked")} Stats`,
     });
     
     const text2 = new TextDisplay({
-      content: `### Overall\n> Installations: **${installations}**\n> Users: **${totalUsers}**\n> Uptime: **${FormatTime(uptime)}**\n> Memory Usage: **${memoryUsage}mb**\n> Guilds: **${guildCount}**`,
+      content: `> Installations: **${installations}**\n> Users: **${totalUsers}**\n> Uptime: **${formatTime(uptime)}**\n> Memory Usage: **${memoryUsage}mb**\n> Guilds: **${guildCount}**`,
     });
-    
-    const button = new Button({
-      text: "Invite Me",
-      url: `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`,
-      color: ButtonStyle.Link
-    });
-    
-    const button2 = new Button({
-      text: "Support Server",
-      url: "https://discord.gg/mqt2ZTquF9",
-      color: ButtonStyle.Link
-    });
-    
-    const actionRow = new ActionRow(button, button2);
     
     await interaction.editReply({
       components: [
-        new Container({ components: [text1, text2, actionRow] })
+        new Container({ components: [text1, text2] })
       ],
       flags: MessageFlags.IsComponentsV2
     });

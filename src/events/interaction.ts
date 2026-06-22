@@ -9,17 +9,16 @@ export default {
   eventName: Events.InteractionCreate,
 
   async execute(interaction: any) {
-    const client = interaction.client;
     const isContext = interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand();
     
     if (interaction.isChatInputCommand() || isContext) {
-      client.debug("command executed", interaction.commandName, "user", interaction.user.id);
+      interaction.client.debug("command executed", interaction.commandName, interaction.id, "user", interaction.user.id);
       
-      const ephemeralApps = await Settings.get(client.db, interaction.user.id, "ephemeral_apps");
-      const ephemeralCommands = await Settings.get(client.db, interaction.user.id, "ephemeral_commands");
+      const ephemeralApps = await Settings.get(interaction.client.db, interaction.user.id, "ephemeral_apps");
+      const ephemeralCommands = await Settings.get(interaction.client.db, interaction.user.id, "ephemeral_commands");
       if (ephemeralCommands || (ephemeralApps && isContext)) makeEphemeral(interaction);
       
-      const command = client.commands.find(c => {
+      const command = interaction.client.commands.find(c => {
         const name = isContext ? c.data.context?.name : c.data.name;
         if (name !== interaction.commandName) return false;
 
@@ -41,13 +40,13 @@ export default {
     
           await interaction.reply({ components: [text], flags: MessageFlags.IsComponentsV2 });
         } else {
-          await command.execute(interaction, client);
+          await command.execute(interaction, interaction.client);
         }
       } catch (cmdError) {
         console.error(cmdError);
         
         const text = new TextDisplay({
-          content: `${getEmoji("wrong")} An error ocurred while processing command **/${interaction.commandName}**.`,
+          content: `${getEmoji("wrong")} An error ocurred while processing command </${interaction.commandName}:${interaction.commandId}>.`,
         });
         const args = { components: [text], flags: MessageFlags.IsComponentsV2 };
         
@@ -58,12 +57,12 @@ export default {
         }
       }
     } else if (interaction.isAutocomplete()) {
-      const command = client.commands.find(c => c.data.name === interaction.commandName);
+      const command = interaction.client.commands.find(c => c.data.name === interaction.commandName);
       
       if (!command) return;
       
       try {
-        if (command.autocomplete) command.autocomplete(interaction, client);
+        if (command.autocomplete) command.autocomplete(interaction, interaction.client);
       } catch (e) { console.error(e); }
     }
   },

@@ -34,7 +34,7 @@ export class Settings {
       type: 'string',
       min: 0,
       max: 300,
-      defaultValue: "System Prompt",
+      defaultValue: "",
       name: "AI System Prompt",
       description: 'System prompt to use on AI command'
     }

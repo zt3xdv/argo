@@ -30,6 +30,24 @@ export default {
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
     const timezone = interaction.options?.getString("timezone");
+    
+    if (!Object.values(Intl.supportedValuesOf('timeZone')).includes(timezone)) {
+      await interaction.editReply({
+        components: [
+          new Container({
+            components: [
+              new TextDisplay({
+                content: `${getEmoji("exclamation")} Please enter a valid timezone`
+              })
+            ]
+          })
+        ],
+        flags: MessageFlags.IsComponentsV2
+      });
+      
+      return;
+    }
+    
     const time = new Date().toLocaleString('en-US', { timeZone: timezone, timeStyle: 'medium', hour12: false });
 
     await interaction.editReply({ 

@@ -1,47 +1,5 @@
 import { TextInputBuilder } from '@discordjs/builders';
-import { MentionableSelectMenuBuilder, RoleSelectMenuBuilder, SectionBuilder, SeparatorBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ChannelType, FileBuilder, MediaGalleryBuilder, StringSelectMenuBuilder, TextDisplayBuilder, ThumbnailBuilder, UserSelectMenuBuilder, type APISelectMenuOption, type APIMediaGalleryItem, SeparatorSpacingSize, ModalBuilder, TextInputStyle, ComponentType } from 'discord.js';
-
-export interface MentionableSelectMenuProps {
-  customId: string;
-  placeholder?: string;
-  maxValues?: number;
-  minValues?: number;
-  disabled?: boolean;
-}
-
-export class MentionableSelectMenu extends MentionableSelectMenuBuilder {
-  constructor(props: MentionableSelectMenuProps) {
-    super({
-      custom_id: props.customId,
-      placeholder: props.placeholder,
-      max_values: props.maxValues,
-      min_values: props.minValues,
-      disabled: props.disabled,
-    });
-  }
-}
-
-export interface ChannelSelectMenuProps {
-  customId: string;
-  placeholder?: string;
-  maxValues?: number;
-  minValues?: number;
-  disabled?: boolean;
-  channelTypes?: ChannelType[];
-}
-
-export class ChannelSelectMenu extends ChannelSelectMenuBuilder {
-  constructor(props: ChannelSelectMenuProps) {
-    super({
-      custom_id: props.customId,
-      placeholder: props.placeholder,
-      max_values: props.maxValues,
-      min_values: props.minValues,
-      channel_types: props.channelTypes,
-      disabled: props.disabled,
-    });
-  }
-}
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, ComponentType, MentionableSelectMenuBuilder, MediaGalleryBuilder, ModalBuilder, RoleSelectMenuBuilder, SeparatorBuilder, SeparatorSpacingSize, SectionBuilder, StringSelectMenuBuilder, ThumbnailBuilder, TextDisplayBuilder, TextInputStyle, TextInputStyle as TextInputBuilderStyle, UserSelectMenuBuilder, type APISelectMenuOption, type APIMediaGalleryItem } from 'discord.js';
 
 export interface ModalProps {
   customId: string;
@@ -83,20 +41,6 @@ export class TextInput extends TextInputBuilder {
       min_length: props.min,
       value: props.default,
       required: props.required,
-    });
-  }
-}
-
-export interface FileProps {
-  url: string;
-}
-
-export class File extends FileBuilder {
-  constructor(props: FileProps) {
-    super({
-      file: {
-        url: props.url,
-      },
     });
   }
 }
@@ -206,54 +150,7 @@ export class StringSelectMenu extends StringSelectMenuBuilder {
   }
 }
 
-export interface UserSelectMenuProps {
-  customId: string;
-  placeholder?: string;
-  maxValues?: number;
-  minValues?: number;
-  disabled?: boolean;
-}
-
-export class UserSelectMenu extends UserSelectMenuBuilder {
-  constructor(props: UserSelectMenuProps) {
-    super({
-      custom_id: props.customId,
-      placeholder: props.placeholder,
-      max_values: props.maxValues,
-      min_values: props.minValues,
-      disabled: props.disabled,
-    });
-  }
-}
-
-export interface RoleSelectMenuProps {
-  customId: string;
-  placeholder?: string;
-  maxValues?: number;
-  minValues?: number;
-  disabled?: boolean;
-}
-
-export class RoleSelectMenu extends RoleSelectMenuBuilder {
-  constructor(props: RoleSelectMenuProps) {
-    super({
-      custom_id: props.customId,
-      placeholder: props.placeholder,
-      max_values: props.maxValues,
-      min_values: props.minValues,
-      disabled: props.disabled,
-    });
-  }
-}
-
-export type ActionRowMessageComponents =
-  | Button
-  | StringSelectMenu
-  | UserSelectMenu
-  | RoleSelectMenu
-  | MentionableSelectMenu
-  | ChannelSelectMenu
-  | TextInput;
+export type ActionRowMessageComponents = Button | StringSelectMenu | UserSelectMenu | RoleSelectMenu | MentionableSelectMenu | ChannelSelectMenu | TextInput;
 
 export class ActionRow extends ActionRowBuilder<ActionRowMessageComponents> {
   constructor(...components: ActionRowMessageComponents[]) {

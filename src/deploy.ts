@@ -38,6 +38,7 @@ try {
   const res = await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commandsData });
   if (res) {
     console.log(`Deployed commands: ${res.map(c => c.name).join(" ")}`);
+    console.log(`Total: ${res.length}`);
   }
 } catch (e) {
   console.log("Failed to deploy commands: ", e);

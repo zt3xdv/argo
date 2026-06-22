@@ -3,7 +3,7 @@ import { TextDisplay, Separator } from "../utils/component.ts";
 import { Container } from "../utils/container.ts";
 import { getEmoji } from "../utils/emojis.ts";
 import { makeRequest } from "../utils/request.ts";
-import { FormatCurrency } from "../utils/utils.ts";
+import { formatCurrency } from "../utils/utils.ts";
 
 export default {
   category: "utility",
@@ -37,6 +37,26 @@ export default {
     const amount = interaction.options?.getNumber("amount");
     const from = interaction.options?.getString("from");
     const to = interaction.options?.getString("to");
+    
+    const currencies = await makeRequest('https://api.frankfurter.dev/v2/currencies', { method: "GET", response: "JSON" });
+    const currenciesIso = currencies.map(c => c.iso_code);
+    
+    if (!currenciesIso.includes(from) || !currenciesIso.includes(to)) {
+      await interaction.editReply({
+        components: [
+          new Container({
+            components: [
+              new TextDisplay({
+                content: `${getEmoji("exclamation")} Please enter a valid currency`
+              })
+            ]
+          })
+        ],
+        flags: MessageFlags.IsComponentsV2
+      });
+      
+      return;
+    }
     
     const res = await makeRequest(`https://api.frankfurter.dev/v2/rate/${from}/${to}`, { method: "GET", response: "JSON" });
     

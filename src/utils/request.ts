@@ -1,50 +1,32 @@
-import type { RequestOptions, RequestResponse } from '../types/types.ts';
-import { RequestMethod, ResponseType } from '../types/types.ts';
+import type { RequestOptions, RequestResponse } from "../types/types.ts";
+import { RequestMethod, ResponseType } from "../types/types.ts";
 
-export async function makeRequest<Type extends ResponseType>(
+export async function makeRequest<T extends ResponseType>(
   url: string,
-  options: RequestOptions<Type>,
-): Promise<RequestResponse[Type]> {
-  const parsedUrl = new URL(url);
+  options: RequestOptions<T>,
+): Promise<RequestResponse[T]> {
+  const u = new URL(url);
+  if (options.params) u.search = new URLSearchParams(options.params).toString();
 
-  const timeout = options.timeout || 20000;
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-  const controller = new AbortController();
-
-  if (options.params) {
-    parsedUrl.search = new URLSearchParams(options.params).toString();
-  }
+  const c = new AbortController();
+  const id = setTimeout(() => c.abort(), options.timeout ?? 20_000);
 
   try {
-    const res = await fetch(parsedUrl.toString(), {
+    const res = await fetch(u.toString(), {
       method: options.method,
       headers: options.headers,
-      body: options.body && options.method !== RequestMethod.GET ? JSON.stringify(options.body) : undefined,
-      signal: controller.signal,
+      body: options.body != null && options.method !== RequestMethod.GET ? JSON.stringify(options.body) : undefined,
+      signal: c.signal,
     });
 
-    clearTimeout(timeoutId);
+    if (!res.ok) throw new Error(`Request failed with status ${res.status}: ${(await res.text().catch(() => ""))}`);
 
-    if (!res.ok) {
-      const e = await res.text().catch(() => '');
-      throw new Error(`Request failed with status ${res.status}: ${e}`);
-    }
-
-    switch (options.response) {
-      case ResponseType.BUFFER: {
-        const arrayBuffer = await res.arrayBuffer();
-        return Buffer.from(arrayBuffer) as RequestResponse[Type];
-      }
-      case ResponseType.JSON: {
-        return (await res.json()) as RequestResponse[Type];
-      }
-      default: {
-        return (await res.text()) as RequestResponse[Type];
-      }
-    }
-  } catch (e) {
-    // Catch is useless there lol
-    throw e;
+    return options.response === ResponseType.BUFFER
+      ? Buffer.from(await res.arrayBuffer())
+      : options.response === ResponseType.JSON
+        ? await res.json()
+        : await res.text();
+  } finally {
+    clearTimeout(id);
   }
 }

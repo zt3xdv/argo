@@ -2,8 +2,7 @@ import { Client, MessageFlags, ApplicationCommandType } from "discord.js";
 import { TextDisplay, Thumbnail, Section } from "../utils/component.ts";
 import { Container } from "../utils/container.ts";
 import { getEmoji } from "../utils/emojis.ts";
-import { FormatTime, getCDN } from "../utils/utils.ts";
-import { Timestamp, Pill, StatusToEmoji } from "../utils/markdown.ts";
+import { getCDN, formatTimestamp, statusEmoji } from "../utils/utils.ts";
 
 export default {
   category: "info",
@@ -52,7 +51,7 @@ export default {
     }
     
     let badges: string[] = [];
-    let status: string = "";
+    let status: string = member.presence?.status ? statusEmoji(member.presence.status) : "";
       
     // I need emojis
     /*if (user.flags) {
@@ -61,12 +60,6 @@ export default {
         if (allowedFlags.includes(flag.toLowerCase())) badges.push(flag);
       }
     }*/
-      
-    if (member?.presence) {
-      if (member.presence?.status) {
-        status = StatusToEmoji(member.presence.status);
-      }
-    }
       
     const badgeIcons = badges.map((badge) => getEmoji(badge)).join('');
     
@@ -77,13 +70,13 @@ export default {
             new Section({
               components: [
                 new TextDisplay({
-                  content: `${getEmoji("ping")} \`${user.username}\` ${Pill(user.id)}${status ? " " + getEmoji(status) : ""}\n${badgeIcons}\n_ _`,
+                  content: `${getEmoji("ping")} \`${user.username}\` **\`${user.id}\`**${status ? " " + getEmoji(status) : ""}\n${badgeIcons}\n_ _`,
                 }),
                 new TextDisplay({
                   content: `${getEmoji('person')} Display Name\n${member && member.displayName ? member.displayName : user.displayName}`,
                 }),
                 new TextDisplay({
-                  content: `${getEmoji('calendar1')} Created\n${Timestamp(user.createdTimestamp, 'D')}`,
+                  content: `${getEmoji('calendar1')} Created\n${formatTimestamp(user.createdTimestamp, 'D')}`,
                 })
               ],
               accessory: new Thumbnail({
@@ -93,7 +86,7 @@ export default {
             }),
             ...(member ? [
               new TextDisplay({
-                content: `${getEmoji('newmembers')} Joined\n${Timestamp(member.joined_at ? Date.parse(member.joined_at) : member.joinedTimestamp, 'D')}`,
+                content: `${getEmoji('newmembers')} Joined\n${formatTimestamp(member.joined_at ? Date.parse(member.joined_at) : member.joinedTimestamp, 'D')}`,
               }),
               ...(member.roles instanceof Array ? [
                 new TextDisplay({
