@@ -102,7 +102,7 @@ export default {
               items: [
                 {
                   media: {
-                    url: getAvatar("webp")
+                    url: (member && scope == "guild" ? member.avatar : user.avatar).startsWith('a_') ? getAvatar("gif") : getAvatar("webp")
                   }
                 }
               ]
