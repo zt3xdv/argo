@@ -120,3 +120,7 @@ export function makeEphemeral(interaction) {
 
   return interaction;
 }
+
+export function getCDN(route: string, size: number = 4096, format: string = 'webp', animated: boolean = false): string {
+  return `https://cdn.discordapp.com/${route}.${format}?size=${size}&animated=${animated}`;
+}
