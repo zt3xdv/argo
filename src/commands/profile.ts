@@ -80,14 +80,14 @@ export default {
                   content: `${getEmoji("ping")} \`${user.username}\` ${Pill(user.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
                 }),
                 new TextDisplay({
-                  content: `${getEmoji('person')} Display Name\n${member ? member.nick : user.displayName}`,
+                  content: `${getEmoji('person')} Display Name\n${member ? member.displayName : user.displayName}`,
                 }),
                 new TextDisplay({
                   content: `${getEmoji('calendar1')} Created\n${Timestamp(user.createdTimestamp, 'D')}`,
                 })
               ],
               accessory: new Thumbnail({
-                url: getCDN(`avatars/${user.id}/${member.avatar}`, 2048, "webm"),
+                url: getCDN(`avatars/${user.id}/${user.avatar}`, 2048, "webm"),
                 description: 'Avatar',
               }),
             }),

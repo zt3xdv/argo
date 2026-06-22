@@ -108,7 +108,7 @@ export default {
               ]
             }),
             new TextDisplay({
-              content: `-# [png](${getAvatar('png')}) • [jpg](${getAvatar('jpg')}) • [webp](${getAvatar('webp')})${member?.avatar?.startsWith('a_') ? ` • [gif](${getAvatar('gif')})` : ''}`
+              content: `-# Formats: [png](${getAvatar('png')}) • [jpg](${getAvatar('jpg')}) • [webp](${getAvatar('webp')})${member?.avatar?.startsWith('a_') ? ` • [gif](${getAvatar('gif')})` : ''}`
             })
           ]
         })
