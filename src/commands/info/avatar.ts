@@ -39,10 +39,12 @@ export default {
           components: [
             new MediaGallery({
               items: [
-                media: {
-                  url: avatar
-                },
-                description: "Avatar"
+                {
+                  media: {
+                    url: avatar
+                  },
+                  description: "Avatar"
+                }
               ]
             })
           ]
