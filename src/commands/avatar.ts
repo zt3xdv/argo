@@ -108,7 +108,7 @@ export default {
               ]
             }),
             new TextDisplay({
-              content: `-# Formats: [png](${getAvatar('png')}) • [jpg](${getAvatar('jpg')}) • [webp](${getAvatar('webp')})${(member && scope == "guild" ? member : user).startsWith('a_') ? ` • [gif](${getAvatar('gif')})` : ''}`
+              content: `-# Formats: [png](${getAvatar('png')}) • [jpg](${getAvatar('jpg')}) • [webp](${getAvatar('webp')})${(member && scope == "guild" ? member.avatar : user.avatar).startsWith('a_') ? ` • [gif](${getAvatar('gif')})` : ''}`
             })
           ]
         })

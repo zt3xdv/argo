@@ -64,7 +64,7 @@ export default {
       
     if (member?.presence) {
       if (member.presence?.status) {
-        status = StatusToEmoji(member.presence?.status);
+        status = StatusToEmoji(member.presence.status);
       }
     }
       
@@ -77,7 +77,7 @@ export default {
             new Section({
               components: [
                 new TextDisplay({
-                  content: `${getEmoji("ping")} \`${user.username}\` ${Pill(user.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
+                  content: `${getEmoji("ping")} \`${user.username}\` ${Pill(user.id)}${status ? " " + getEmoji(status) : ""}\n${badgeIcons}\n_ _`,
                 }),
                 new TextDisplay({
                   content: `${getEmoji('person')} Display Name\n${member && member.displayName ? member.displayName : user.displayName}`,
