@@ -55,8 +55,8 @@ export default {
     let status: string = "";
       
     // I need emojis
-    /*if (target.flags) {
-      for (const flag of target.flags) {
+    /*if (user.flags) {
+      for (const flag of user.flags) {
         const allowedFlags = ["staff", "partner", "hypesquad", "bughunterlevel1", "bughunterlevel2", "hypesquadonlinehouse1", "hypesquadonlinehouse2", "hypesquadonlinehouse3", "premiumearlysupporter", "verifiedbot", "verifieddeveloper", "certifiedmoderator"];
         if (allowedFlags.includes(flag.toLowerCase())) badges.push(flag);
       }
@@ -77,7 +77,7 @@ export default {
             new Section({
               components: [
                 new TextDisplay({
-                  content: `${getEmoji("ping")} \`${user.username}\` ${Pill(target.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
+                  content: `${getEmoji("ping")} \`${user.username}\` ${Pill(user.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
                 }),
                 new TextDisplay({
                   content: `${getEmoji('person')} Display Name\n${member ? member.nick : user.displayName}`,
