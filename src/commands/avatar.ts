@@ -94,7 +94,7 @@ export default {
           components: [
             new TextDisplay({
               content: `-# ${getEmoji("image")} ${target.username} • Avatar`
-            })
+            }),
             new MediaGallery({
               items: [
                 {
