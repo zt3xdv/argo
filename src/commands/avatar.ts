@@ -43,10 +43,13 @@ export default {
     await interaction.deferReply();
     const isContextInteraction = interaction.isUserContextMenuCommand();
     
-    const scope = isContextInteraction ? "global" : (interaction.options.getUser('user') || "global");
-    const { user, member } = isContextInteraction 
+    const scope = isContextInteraction ? "global" : (interaction.options.getString('scope') || "global");
+    const user = isContextInteraction 
       ? interaction.targetUser 
       : (interaction.options.getUser('user') || interaction.user);
+    const member = isContextInteraction 
+      ? interaction.targetMember 
+      : (interaction.options.getMember('user') || interaction.member);
     
     if (!user) {
       await interaction.editReply({

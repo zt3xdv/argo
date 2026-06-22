@@ -27,9 +27,12 @@ export default {
     await interaction.deferReply();
     const isContextInteraction = interaction.isUserContextMenuCommand();
     
-    const { user, member } = isContextInteraction 
+    const user = isContextInteraction 
       ? interaction.targetUser 
       : (interaction.options.getUser('user') || interaction.user);
+    const member = isContextInteraction 
+      ? interaction.targetMember 
+      : (interaction.options.getMember('user') || interaction.member);
     
     if (!user) {
       await interaction.editReply({
