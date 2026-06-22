@@ -84,23 +84,23 @@ export default {
                 }),
                 new TextDisplay({
                   content: `${getEmoji('calendar1')} Created\n${Timestamp(user.createdTimestamp, 'D')}`,
-                }),
-                ...(member ? [
-                  new TextDisplay({
-                    content: `${getEmoji('newmembers')} Joined\n${Timestamp(member.joined_at ? Date.parse(member.joined_at) : member.joinedTimestamp, 'D')}`,
-                  }),
-                  ...(member.roles instanceof Array ? [
-                    new TextDisplay({
-                      content: `${getEmoji('ping')} Roles\n-# ${member.roles.slice(0, 5).map(id => `<@&${id}>`).join(" ")}${member.roles.length > 5 ? ` +${member.roles.length - 5}` : ""}`,
-                    })
-                  ] : [])
-                ] : [])
+                })
               ],
               accessory: new Thumbnail({
                 url: getCDN(`avatars/${user.id}/${member.avatar}`, 2048, "webm"),
                 description: 'Avatar',
               }),
-            })
+            }),
+            ...(member ? [
+              new TextDisplay({
+                content: `${getEmoji('newmembers')} Joined\n${Timestamp(member.joined_at ? Date.parse(member.joined_at) : member.joinedTimestamp, 'D')}`,
+              }),
+              ...(member.roles instanceof Array ? [
+                new TextDisplay({
+                  content: `${getEmoji('ping')} Roles\n-# ${member.roles.slice(0, 5).map(id => `<@&${id}>`).join(" ")}${member.roles.length > 5 ? ` +${member.roles.length - 5}` : ""}`,
+                })
+              ] : [])
+            ] : [])
           ]
         })
       ],
