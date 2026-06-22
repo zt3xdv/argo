@@ -1,8 +1,8 @@
 import { Client, ApplicationCommandType, ComponentType, ButtonStyle, TextInputStyle, MessageFlags } from "discord.js";
-import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow, StringSelectMenu } from "../../utils/component.ts";
-import { Container } from "../../utils/container.ts";
-import { getEmoji } from "../../utils/emojis.ts";
-import { Settings } from "../../utils/settings.ts";
+import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow, StringSelectMenu } from "../utils/component.ts";
+import { Container } from "../utils/container.ts";
+import { getEmoji } from "../utils/emojis.ts";
+import { Settings } from "../utils/settings.ts";
 
 export default {
   category: "core",

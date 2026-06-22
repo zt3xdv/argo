@@ -1,8 +1,8 @@
 import { Client, MessageFlags, ApplicationCommandType, ButtonStyle } from "discord.js";
-import { TextDisplay, ActionRow, Button } from "../../utils/component.ts";
-import { getEmoji } from "../../utils/emojis.ts";
-import { Container } from "../../utils/container.ts";
-import { FormatTime } from "../../utils/utils.ts";
+import { TextDisplay, ActionRow, Button } from "../utils/component.ts";
+import { getEmoji } from "../utils/emojis.ts";
+import { Container } from "../utils/container.ts";
+import { FormatTime } from "../utils/utils.ts";
 
 export default {
   category: "core",

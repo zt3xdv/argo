@@ -1,7 +1,7 @@
 import { Client, MessageFlags, ApplicationCommandType } from "discord.js";
-import { TextDisplay } from "../../utils/component.ts";
-import { Container } from "../../utils/container.ts";
-import { getEmoji } from "../../utils/emojis.ts";
+import { TextDisplay } from "../utils/component.ts";
+import { Container } from "../utils/container.ts";
+import { getEmoji } from "../utils/emojis.ts";
 
 export default {
   category: "utility",

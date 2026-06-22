@@ -1,8 +1,8 @@
 import { Client, MessageFlags, SeparatorSpacingSize, MessageContextMenuCommandInteraction, ComponentType, ButtonStyle, TextInputStyle, ApplicationCommandType } from "discord.js";
-import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow } from "../../utils/component.ts";
-import { Container } from "../../utils/container.ts";
-import { getEmoji } from "../../utils/emojis.ts";
-import { makeRequest } from "../../utils/request.ts";
+import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow } from "../utils/component.ts";
+import { Container } from "../utils/container.ts";
+import { getEmoji } from "../utils/emojis.ts";
+import { makeRequest } from "../utils/request.ts";
 
 export default {
   category: "utility",

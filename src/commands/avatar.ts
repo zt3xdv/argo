@@ -1,9 +1,9 @@
 import { Client, MessageFlags, UserContextMenuCommandInteraction, ApplicationCommandType } from "discord.js";
-import { TextDisplay, MediaGallery } from "../../utils/component.ts";
-import { Container } from "../../utils/container.ts";
-import { getEmoji } from "../../utils/emojis.ts";
-import { FormatTime, getCDN } from "../../utils/utils.ts";
-import { Timestamp, Pill, Capitalize, StatusToEmoji } from "../../utils/markdown.ts";
+import { TextDisplay, MediaGallery } from "../utils/component.ts";
+import { Container } from "../utils/container.ts";
+import { getEmoji } from "../utils/emojis.ts";
+import { FormatTime, getCDN } from "../utils/utils.ts";
+import { Timestamp, Pill, Capitalize, StatusToEmoji } from "../utils/markdown.ts";
 
 export default {
   category: "info",

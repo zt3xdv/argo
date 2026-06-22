@@ -1,9 +1,9 @@
 import { Client, MessageFlags, SeparatorSpacingSize, ApplicationCommandType } from "discord.js";
-import { TextDisplay, Separator } from "../../utils/component.ts";
-import { Container } from "../../utils/container.ts";
-import { getEmoji } from "../../utils/emojis.ts";
-import { makeRequest } from "../../utils/request.ts";
-import { FormatCurrency } from "../../utils/utils.ts";
+import { TextDisplay, Separator } from "../utils/component.ts";
+import { Container } from "../utils/container.ts";
+import { getEmoji } from "../utils/emojis.ts";
+import { makeRequest } from "../utils/request.ts";
+import { FormatCurrency } from "../utils/utils.ts";
 
 export default {
   category: "utility",
