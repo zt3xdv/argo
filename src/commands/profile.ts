@@ -81,7 +81,7 @@ export default {
                 }),
                 new TextDisplay({
                   content: `${getEmoji('calendar1')} Created\n${Timestamp(user.createdTimestamp, 'D')}`,
-                })
+                }),
                 ...(member ? [
                   new TextDisplay({
                     content: `${getEmoji('newmembers')} Joined\n${Timestamp(member.joined_at ? Date.parse(member.joined_at) : member.joinedTimestamp, 'D')}`,
