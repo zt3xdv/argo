@@ -197,7 +197,7 @@ export default {
                   text: "New value (Number)",
                   format: TextInputStyle.Short,
                   placeholder: String(setting.defaultValue ?? ''),
-                  value: String(currentValue ?? ''),
+                  default: String(currentValue ?? ''),
                   required: true
                 })
               )
@@ -213,7 +213,7 @@ export default {
                     text: "New value",
                     format: TextInputStyle.Short,
                     placeholder: String(setting.defaultValue ?? ''),
-                    value: String(currentValue ?? ''),
+                    default: String(currentValue ?? ''),
                     min: setting.min,
                     max: setting.max,
                     required: true

@@ -14,9 +14,9 @@ const commandsData = commands.flatMap(c => {
 
   return types.map(type => {
     const baseCommand = {
-      ...c.data,
       integration_types: [0, 1],
       contexts: [0, 1, 2],
+      ...c.data,
       type
     };
 

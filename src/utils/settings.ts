@@ -33,10 +33,10 @@ export class Settings {
       key: 'ai_system_prompt',
       type: 'string',
       min: 0,
-      max: 200,
-      defaultValue: "- You are Argo Discord Bot",
+      max: 300,
+      defaultValue: "System Prompt",
       name: "AI System Prompt",
-      description: 'System prompt to use on AI command.'
+      description: 'System prompt to use on AI command'
     }
   ];
 
