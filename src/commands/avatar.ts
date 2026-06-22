@@ -1,4 +1,4 @@
-import { Client, MessageFlags, UserContextMenuCommandInteraction, ApplicationCommandType } from "discord.js";
+import { Client, MessageFlags, ApplicationCommandType } from "discord.js";
 import { TextDisplay, MediaGallery } from "../utils/component.ts";
 import { Container } from "../utils/container.ts";
 import { getEmoji } from "../utils/emojis.ts";
@@ -108,7 +108,7 @@ export default {
               ]
             }),
             new TextDisplay({
-              content: `-# Formats: [png](${getAvatar('png')}) • [jpg](${getAvatar('jpg')}) • [webp](${getAvatar('webp')})${member?.avatar?.startsWith('a_') ? ` • [gif](${getAvatar('gif')})` : ''}`
+              content: `-# Formats: [png](${getAvatar('png')}) • [jpg](${getAvatar('jpg')}) • [webp](${getAvatar('webp')})${(member && scope == "guild" ? member : user).startsWith('a_') ? ` • [gif](${getAvatar('gif')})` : ''}`
             })
           ]
         })

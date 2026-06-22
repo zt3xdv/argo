@@ -1,4 +1,4 @@
-import { Client, MessageFlags, UserContextMenuCommandInteraction, ApplicationCommandType } from "discord.js";
+import { Client, MessageFlags, ApplicationCommandType } from "discord.js";
 import { TextDisplay, Thumbnail, Section } from "../utils/component.ts";
 import { Container } from "../utils/container.ts";
 import { getEmoji } from "../utils/emojis.ts";
@@ -80,14 +80,14 @@ export default {
                   content: `${getEmoji("ping")} \`${user.username}\` ${Pill(user.id)} ${getEmoji(status)}\n${badgeIcons}\n_ _`,
                 }),
                 new TextDisplay({
-                  content: `${getEmoji('person')} Display Name\n${member ? member.displayName : user.displayName}`,
+                  content: `${getEmoji('person')} Display Name\n${member && member.displayName ? member.displayName : user.displayName}`,
                 }),
                 new TextDisplay({
                   content: `${getEmoji('calendar1')} Created\n${Timestamp(user.createdTimestamp, 'D')}`,
                 })
               ],
               accessory: new Thumbnail({
-                url: getCDN(`avatars/${user.id}/${user.avatar}`, 2048, "webm"),
+                url: getCDN(`avatars/${user.id}/${user.avatar}`, 2048, "webp"),
                 description: 'Avatar',
               }),
             }),
