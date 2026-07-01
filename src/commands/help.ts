@@ -15,7 +15,7 @@ export default {
     await interaction.deferReply();
     
     const text1 = new TextDisplay({
-      content: `-# ${getEmoji("discover")} Help`,
+      content: `${getEmoji("discover")} **Help**`,
     });
     
     const text2 = new TextDisplay({
