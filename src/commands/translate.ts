@@ -1,5 +1,5 @@
 import { Client, MessageFlags, SeparatorSpacingSize, MessageContextMenuCommandInteraction, ComponentType, ButtonStyle, TextInputStyle, ApplicationCommandType } from "discord.js";
-import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow } from "../utils/component.ts";
+import { TextDisplay, Separator, Modal, TextInput, Button, ActionRow, Section } from "../utils/component.ts";
 import { Container } from "../utils/container.ts";
 import { getEmoji } from "../utils/emojis.ts";
 import { makeRequest } from "../utils/request.ts";
@@ -52,17 +52,19 @@ export default {
                 spacing: SeparatorSpacingSize.Large,
                 divider: true,
               }),
-              new TextDisplay({
-                content: data[0][0][0]
-              }),
-              new ActionRow(
-                new Button({
+              new Section({
+                components: [
+                  new TextDisplay({
+                    content: data[0][0][0]
+                  }),
+                ],
+                accessory: new Button({
                   customId: "change_language",
                   text: "Change Language",
                   emoji: getEmoji("loop"),
                   color: ButtonStyle.Secondary
                 })
-              )
+              })
             ] 
           })], 
         flags: MessageFlags.IsComponentsV2 
