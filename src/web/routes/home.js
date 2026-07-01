@@ -27,17 +27,18 @@ export default function Home() {
         className="hero" 
         style={{ backgroundImage: `linear-gradient(to bottom, #101010, rgba(0, 0, 0, 0)), linear-gradient(to top, #0a0a0a 0%, rgba(0, 0, 0, 0) 20%), url(${bg})` }}
       >
-        <h1>Just a Discord <span className="app">App</span>.</h1>
-        <p>Yeah just that, we dont have anything to offer... yet</p>
-        <div className="buttons">
-          <a href="/invite"><button><Icon src={addBot} style={{ width: "auto", height: "1.5em" }}/> Add Me!</button></a>
-          <Link href="/commands"><button><Icon src={search} style={{ width: "auto", height: "1.5em" }}/> Explore the commands</button></Link>
+        <div className="content">
+          <h1>Just a Discord <span className="app">App</span>.</h1>
+          <p>Yeah just that, we dont have anything to offer... yet</p>
+          <div className="buttons">
+            <a href="/invite"><button><Icon src={addBot} style={{ width: "auto", height: "1.5em" }}/> Add Me!</button></a>
+            <Link href="/commands"><button><Icon src={search} style={{ width: "auto", height: "1.5em" }}/> Explore the commands</button></Link>
+          </div>
         </div>
       </div>
       <div
         className="section stats"
       >
-        <h2>Stats</h2>
         {loading ? (
           <p>Loading stats...</p>
         ) : (
@@ -62,23 +63,6 @@ export default function Home() {
             </div>
           </>
         )}
-      </div>
-      <div
-        className="section features"
-      >
-        <h2>Features</h2>
-        <div
-          className="feature"
-        >
-          <h3>Commands</h3>
-          <p>to enchance your experience on Discord</p>
-        </div>
-        <div
-          className="feature"
-        >
-          <h3>Fast</h3>
-          <p>i dont think but it seems fast</p>
-        </div>
       </div>
     </div>
   );

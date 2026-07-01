@@ -9,7 +9,6 @@ import Commands from "./routes/commands.js";
 import Logo from "./assets/argo.png";
 import CommandsIcon from "./assets/icons/commands.png";
 import HomeIcon from "./assets/icons/home.png";
-import HeartIcon from "./assets/icons/heart.png";
 
 export default function App() {
   return (
@@ -31,9 +30,7 @@ export default function App() {
           <Route path="/" component={Home} />
           <Route path="/commands" component={Commands} />
           <Route>
-            <div class="card">
-              <strong style={{ color: 'var(--accent-color)' }}>404 - Page not found</strong>
-            </div>
+            <strong style={{ color: 'var(--accent-color)' }}>404 - Page not found</strong>
           </Route>
         </Switch>
       </main>

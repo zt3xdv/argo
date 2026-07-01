@@ -88,7 +88,7 @@ export default {
                   text: "New language",
                   format: TextInputStyle.Short,
                   placeholder: "es, en, ...",
-                  max: 3,
+                  max: 2,
                   min: 2,
                   required: true
                 })

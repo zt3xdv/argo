@@ -111,7 +111,6 @@ body {
 .main-content {
   flex: 1;
   width: 100%;
-  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -199,9 +198,8 @@ body {
 .home .hero {
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: center;
   justify-content: center;
-  gap: 15px;
   width: 100%;
   height: 600px;
   padding: 1em 2em;
@@ -215,6 +213,16 @@ body {
 
 .home .hero p {
   color: var(--muted);
+}
+
+.home .hero .content {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  gap: 15px;
+  max-width: 800px;
+  width: 100%;
 }
 
 .home .hero .app {
@@ -369,5 +377,9 @@ a {
   .nav-item a {
     padding: 0 0.75rem;
     font-size: 0.9rem;
+  }
+  
+  .home .features {
+    display: flex;
   }
 }
