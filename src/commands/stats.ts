@@ -1,5 +1,5 @@
 import { Client, MessageFlags, ApplicationCommandType, ButtonStyle } from "discord.js";
-import { TextDisplay, ActionRow, Button } from "../utils/component.ts";
+import { TextDisplay, ActionRow, Button, Separator } from "../utils/component.ts";
 import { getEmoji } from "../utils/emojis.ts";
 import { Container } from "../utils/container.ts";
 import { formatTime } from "../utils/utils.ts";
@@ -23,7 +23,7 @@ export default {
     const totalUsers = interaction.client?.guilds?.cache?.reduce((acc, guild) => acc + guild.memberCount, 0);
 
     const text1 = new TextDisplay({
-      content: `-# ${getEmoji("linked")} Stats`,
+      content: `${getEmoji("linked")} Stats`,
     });
     
     const text2 = new TextDisplay({
@@ -32,7 +32,7 @@ export default {
     
     await interaction.editReply({
       components: [
-        new Container({ components: [text1, text2] })
+        new Container({ components: [text1, new Separator({ spacing: 2 }), text2] })
       ],
       flags: MessageFlags.IsComponentsV2
     });

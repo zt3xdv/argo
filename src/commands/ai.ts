@@ -111,11 +111,11 @@ ${userSystemPrompt}` },
       let runOrchestrator = true;
       let finalContent = "";
       let toolCalls = [];
-      let model = "openai/gpt-oss-120b";
+      const model = "openai/gpt-oss-120b";
 
       while (runOrchestrator) {
         await interaction.editReply({ 
-          components: [new TextDisplay({ content: `${getEmoji("forum")} Executing...` })], 
+          components: [new TextDisplay({ content: `${getEmoji("settings")} **Fetching** • using ${model}` })], 
           flags: MessageFlags.IsComponentsV2 
         });
 
