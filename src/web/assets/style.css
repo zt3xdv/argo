@@ -253,6 +253,7 @@ body {
 
 .home .stats {
   align-items: center;
+  justify-content: center;
   gap: 60px;
 }
 
@@ -367,6 +368,5 @@ a {
   
   .home .stats {
     flex-direction: column;
-    justify-content: center;
   }
 }
