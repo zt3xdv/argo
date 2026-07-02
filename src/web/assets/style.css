@@ -253,6 +253,7 @@ body {
 }
 
 .home .stats {
+  display: flex;
   align-items: center;
   gap: 60px;
 }
@@ -266,19 +267,6 @@ body {
 
 .home .stats .stat p {
   text-transform: uppercase;
-}
-
-.home .features {
-  align-items: center;
-  gap: 40px;
-}
-
-.home .features .feature {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  align-items: center;
 }
 
 button {
@@ -379,8 +367,7 @@ a {
     font-size: 0.9rem;
   }
   
-  .home .features {
-    display: flex;
-    flex-direction: row;
+  .home .stats {
+    flex-direction: column;
   }
 }
