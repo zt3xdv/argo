@@ -367,5 +367,6 @@ a {
   
   .home .stats {
     flex-direction: column;
+    justify-content: center;
   }
 }
