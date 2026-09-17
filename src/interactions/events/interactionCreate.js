@@ -7,7 +7,7 @@ export default {
 
   async execute(interaction, client) {
     if (interaction.data?.type == InteractionType.ApplicationCommand || interaction.data?.type == InteractionType.ApplicationCommandAutocomplete) {
-      const command = client.commands.get(interaction.data?.data?.name);
+      const command = client.commands.get(interaction.data?.data?.name) || [...client.commands.values()].find(command => command.types?.[interaction.data?.data?.type]?.name === interaction.data?.data?.name);
       if (!command) {
         return;
       }
