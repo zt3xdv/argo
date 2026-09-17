@@ -18,9 +18,6 @@ gateway.shards = new Map();
 const client = new Client({ rest, gateway });
 client.commands = await load(path.join(import.meta.dirname, "..", "interactions", "commands"), "command");
 client.events = await load(path.join(import.meta.dirname, "..", "interactions", "events"), "event");
-client.rest = rest;
-client.token = config.token;
-client.clientId = config.clientId;
 
 for (const event of client.events) {
   const target = event.type === "gateway" ? client.gateway : client;
