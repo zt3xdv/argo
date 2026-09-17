@@ -15,6 +15,7 @@ export default {
     InteractionContextType.PrivateChannel
   ],
   type: ApplicationCommandType.ChatInput,
+  defer: true,
 
   async execute({ data: interaction, api, shardId }, client) {
     const app = await client.api.applications.getCurrent();
@@ -29,7 +30,7 @@ export default {
       );
     }, 0);
 
-    await api.interactions.reply(interaction.id, interaction.token, {
+    await api.interactions.editReply(interaction.application_id, interaction.token, {
       components: [
         {
           type: ComponentType.Container,

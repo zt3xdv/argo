@@ -17,7 +17,11 @@ export default {
           await command.autocomplete(interaction, client);
           return;
         }
-
+        
+        if (command.defer) {
+          await interaction.api.interactions.defer(interaction.data.id, interaction.data.token, typeof command.defer == "object" ? command.defer : {});
+        }
+        
         await command.execute(interaction, client);
       } catch (error) {
         console.error(`Error executing /${interaction.data.data.name}:`, error);
