@@ -1,0 +1,26 @@
+{
+  "name": "argo",
+  "version": "1.0.0",
+  "description": "Argo is a multipurpose Discord bot",
+  "keywords": [
+    "bot",
+    "discord",
+    "argo",
+    "multipurpose",
+    "utility",
+    "lightweight"
+  ],
+  "license": "MIT",
+  "author": "zt3xdv",
+  "type": "module",
+  "main": "src/client/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@discordjs/core": "^2.6.0",
+    "@discordjs/rest": "^2.6.3",
+    "@discordjs/ws": "^2.0.4",
+    "discord-api-types": "^0.38.55"
+  }
+}
