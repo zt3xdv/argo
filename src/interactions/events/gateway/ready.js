@@ -7,7 +7,8 @@ export default {
   
   async execute(_, shardId, client) {
     client.gateway.shards.set(shardId, {
-      ping: -1
+      ping: -1,
+      guilds: new Map()
     });
   }
 };

@@ -37,7 +37,7 @@ for (const event of client.events) {
     target.on(event.name, listener);
   }
 }
-  
+
 await rest.put(Routes.applicationCommands(config.clientId), {
   body: [...client.commands.values()].map((command) => transformCommand(command))
 });
