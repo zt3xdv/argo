@@ -1,4 +1,5 @@
 import { GatewayDispatchEvents, InteractionType } from '@discordjs/core';
+import { getEmoji } from "../../utils/utils.js";
 
 export default {
   name: GatewayDispatchEvents.InteractionCreate,
@@ -17,7 +18,10 @@ export default {
     try {
       await command.execute(interaction, client);
     } catch (error) {
-      console.error(`Error executing /${interaction.data.name}:`, error, interaction);
+      console.error(`Error executing /${interaction.data.data.name}:`, error);
+      await api.interactions.reply(interaction.id, interaction.token, {
+        content: `${getEmoji("wrong", client)} An error ocurred while processing this request.`,
+      });
     }
   }
 };

@@ -1,11 +1,25 @@
+import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextType } from "@discordjs/core";
+import { getLatency } from "../../utils/rest.js";
+import { getEmoji } from "../../utils/utils.js";
+
 export default {
   name: 'ping',
   description: 'Pong!',
-  type: 1,
+  integrationTypes: [
+    ApplicationIntegrationType.GuildInstall,
+    ApplicationIntegrationType.UserInstall
+  ],
+  contexts: [
+    InteractionContextType.BotDM,
+    InteractionContextType.Guild,
+    InteractionContextType.PrivateChannel
+  ],
+  type: ApplicationCommandType.ChatInput,
 
   async execute({ data: interaction, api, shardId }, client) {
+    const rest = await getLatency(client.rest);
     await api.interactions.reply(interaction.id, interaction.token, {
-      content: `Pong!\n-# my ping is ${client.gateway.shards.get(shardId)?.ping}ms ig`,
+      content: `${getEmoji("pings", client)} Pong!\n-# **Websocket (Shard #${shardId}) ${client.gateway.shards.get(shardId)?.ping}ms • REST ${rest}ms**`,
     });
   }
 };
