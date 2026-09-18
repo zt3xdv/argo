@@ -22,6 +22,7 @@ export default {
     InteractionContextType.PrivateChannel,
   ],
   type: ApplicationCommandType.ChatInput,
+  defer: true,
   options: [
     {
       name: "user",
@@ -50,7 +51,7 @@ export default {
     const remainingRoles = Math.max(roleIds.length - visibleRoles.length, 0);
 
     const rolesText = resolvedMember ? [
-      `**Roles \`${roleIds.length}\`**`,
+      `${getEmoji("roles", client)} **Roles (${roleIds.length})**`,
       visibleRoles.length > 0 ? visibleRoles.join(", ") : "There are no roles",
       remainingRoles > 0 ? `\`+${remainingRoles}\`` : null
     ].filter(Boolean).join("\n") : null;
@@ -117,8 +118,8 @@ export default {
               type: ComponentType.TextDisplay,
               content:
                 `-# ${getEmoji("person", client)} **${displayName}** @${resolvedUser.username} \`${userId}\`\n` +
-                (resolvedMember?.joined_at ? `\n**Joined at**: ${formatDiscordDate(resolvedMember.joined_at)}` : "") +
-                (resolvedUser?.created_at ? `\n**Created at**: ${formatDiscordDate(resolvedUser.created_at)}` : "") +
+                (resolvedMember?.joined_at ? `\n${getEmoji("newmembers", client)} **Joined at**: ${formatDiscordDate(resolvedMember.joined_at)}` : "") +
+                (resolvedUser?.created_at ? `\n${getEmoji("calender", client)} **Created at**: ${formatDiscordDate(resolvedUser.created_at)}` : "") +
                 (rolesText ? `\n${rolesText}` : "")
             },
           ],
