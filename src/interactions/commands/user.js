@@ -163,7 +163,7 @@ export default {
           ],
         },
       ],
-      allowedMentions: {
+      allowed_mentions: {
         parse: []
       },
       flags: MessageFlags.IsComponentsV2,
