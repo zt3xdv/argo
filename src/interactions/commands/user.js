@@ -37,12 +37,11 @@ export default {
     const selectedUserId = isUserContextMenu ? interaction.data.target_id : interaction.data.options?.find((option) => option.type === ApplicationCommandOptionType.User && option.name === "user")?.value;
 
     const interactionUser = interaction.member?.user ?? interaction.user;
-    const interactionUserId = interactionUser?.id;
 
-    const userId = selectedUserId ?? interactionUserId;
-    const isInteractionUser = userId === interactionUserId;
+    const userId = selectedUserId ?? interactionUser?.id;
+    const isInteractionUser = userId === interactionUser?.id;
 
-    const resolvedUser = interaction.data.resolved?.users?.[userId] ?? (isInteractionUser ? interactionUser : await client.api.users.get(userId));
+    const resolvedUser = await client.api.users.get(userId);
     const resolvedMember = interaction.data.resolved?.members?.[userId] ?? (isInteractionUser ? interaction.member : undefined);
 
     const roleIds = resolvedMember?.roles ?? [];
@@ -58,13 +57,13 @@ export default {
 
     const visibleRoles = roles.slice(0, 5).map((role) => `<@&${role.id}>`);
     const remainingRoles = Math.max(roles.length - 5, 0);
-
     const rolesText = resolvedMember ? [
       `${getEmoji("roles", client)} **Roles (${roles.length})**:`,
-      (visibleRoles.length ? "_ _    " + (visibleRoles.join(", ")) : "-# This user has no roles!") + (remainingRoles > 0 ? ` \`+${remainingRoles}\`` : null),
+      (visibleRoles.length ? "_ _    " + (visibleRoles.join(", ")) : "-# This user has no roles!") + (remainingRoles > 0 ? ` \`+${remainingRoles}\`` : ""),
     ].join("\n") : null;
 
     const displayName = resolvedMember?.nick ?? (resolvedUser.global_name ?? resolvedUser.username);
+    const discriminator = resolvedUser.discriminator != "0" ? "#" + resolvedUser.discriminator : "";
     
     const avatarResponse = await fetch(resolvedUser.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${resolvedUser.avatar}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
 
@@ -75,29 +74,60 @@ export default {
     const avatarMimeType = avatarResponse.headers.get("content-type") ?? "image/png";
     const avatarBase64 = Buffer.from(await avatarResponse.arrayBuffer()).toString("base64");
 
+    let bannerBase64 = null;
+
+    if (resolvedMember?.banner || resolvedUser?.banner) {
+      const bannerResponse = await fetch(`https://cdn.discordapp.com/banners/${userId}/${resolvedMember?.banner ?? resolvedUser?.banner}.png?size=1024`);
+      if (bannerResponse.ok) {
+        bannerBase64 = Buffer.from(await bannerResponse.arrayBuffer()).toString("base64");
+      }
+    }
+
     const renderer = new Resvg(`
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="260" viewBox="0 0 900 260">
         <defs>
-          <clipPath id="avatar-clip">
-            <circle cx="130" cy="130" r="90" />
+          <filter id="blur" x="-20%" y="-30%" width="140%" height="160%">
+            <feGaussianBlur stdDeviation="18"/>
+          </filter>
+
+          <linearGradient id="maskGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="black"/>
+            <stop offset="55%" stop-color="white" stop-opacity=".65"/>
+            <stop offset="100%" stop-color="white"/>
+          </linearGradient>
+
+          <mask id="bannerMask">
+            <rect width="900" height="260" fill="url(#maskGradient)"/>
+          </mask>
+
+          <linearGradient id="overlay" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#000" stop-opacity=".25"/>
+          </linearGradient>
+
+          <clipPath id="avatarClip">
+            <circle cx="130" cy="130" r="90"/>
           </clipPath>
         </defs>
 
-        <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatar-clip)" href="data:${avatarMimeType};base64,${avatarBase64}" xlink:href="data:${avatarMimeType};base64,${avatarBase64}"/>
+        ${bannerBase64 ? `<image x="-25" y="-25" width="950" height="310" preserveAspectRatio="xMidYMid slice" filter="url(#blur)" mask="url(#bannerMask)" href="data:image/png;base64,${bannerBase64}" xlink:href="data:image/png;base64,${bannerBase64}"/>
+        <rect width="900" height="260" fill="url(#overlay)"/>` : ""}
 
-        <text x="270" y="120" fill="#ffffff" font-family="Geist" font-size="52" font-weight="700">
+        <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarMimeType};base64,${avatarBase64}" xlink:href="data:${avatarMimeType};base64,${avatarBase64}"/>
+
+        <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
           ${escapeXml(displayName.length > 28 ? `${displayName.slice(0, 27)}...` : displayName)}
         </text>
 
-        <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32" font-weight="400">
-          @${escapeXml(resolvedUser.username.length > 32 ? `${resolvedUser.username.slice(0, 31)}...` : resolvedUser.username)}
+        <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">
+          @${escapeXml(resolvedUser.username.length > 32 ? `${resolvedUser.username.slice(0, 31)}...` : resolvedUser.username)}${discriminator}
         </text>
       </svg>
     `, {
       font: {
         fontBuffers: client.fontBuffers,
-        loadSystemFonts: false,
-      },
+        loadSystemFonts: false
+      }
     });
     const png = renderer.render().asPng();
     
@@ -125,7 +155,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("person", client)} **${displayName}** @${resolvedUser.username} \`${userId}\`\n` +
+                `-# ${getEmoji("person", client)} **${displayName}** @${resolvedUser.username}${discriminator} \`${userId}\`\n` +
                 (resolvedMember?.joined_at ? `\n${getEmoji("newmembers", client)} **Joined at**: ${formatDiscordDate(resolvedMember.joined_at)}` : "") +
                 (resolvedUser?.created_at ? `\n${getEmoji("calender", client)} **Created at**: ${formatDiscordDate(resolvedUser.created_at)}` : "") +
                 (rolesText ? `\n${rolesText}` : "")
