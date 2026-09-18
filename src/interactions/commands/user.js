@@ -46,17 +46,23 @@ export default {
     const resolvedMember = interaction.data.resolved?.members?.[userId] ?? (isInteractionUser ? interaction.member : undefined);
 
     const roleIds = resolvedMember?.roles ?? [];
-    const guildRoles = interaction.guild_id ? await api.guilds.getRoles(interaction.guild_id) : [];
+    let guildRoles = [];
 
-    const roles = roleIds.map((id) => guildRoles.find((role) => role.id === id)).filter(Boolean).sort((a, b) => b.position - a.position);
+    if (interaction.guild_id) {
+      try {
+        guildRoles = await api.guilds.getRoles(interaction.guild_id);
+      } catch { /* no access to guild roles */ }
+    }
+
+    const roles = guildRoles.length ? roleIds.map((id) => guildRoles.find((role) => role.id === id)).filter(Boolean).sort((a, b) => b.position - a.position) : roleIds.map((id) => ({ id }));
+
     const visibleRoles = roles.slice(0, 5).map((role) => `<@&${role.id}>`);
     const remainingRoles = Math.max(roles.length - 5, 0);
 
     const rolesText = resolvedMember ? [
-      `${getEmoji("roles", client)} **Roles (${roles.length})**`,
-      visibleRoles.length ? visibleRoles.join(", ") : "There are no roles",
-      remainingRoles > 0 ? `\`+${remainingRoles}\`` : null
-    ].filter(Boolean).join("\n") : null;
+      `${getEmoji("roles", client)} **Roles (${roles.length})**:`,
+      (visibleRoles.length ? "_ _    " + (visibleRoles.join(", ")) : "-# This user has no roles!") + (remainingRoles > 0 ? ` \`+${remainingRoles}\`` : null),
+    ].join("\n") : null;
 
     const displayName = resolvedMember?.nick ?? (resolvedUser.global_name ?? resolvedUser.username);
     
