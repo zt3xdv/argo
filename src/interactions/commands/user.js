@@ -33,7 +33,6 @@ export default {
   ],
 
   async execute({ data: interaction, api }, client) {
-    // the code is messy but whatever
     const isUserContextMenu = interaction.data.type === ApplicationCommandType.User;
     const selectedUserId = isUserContextMenu ? interaction.data.target_id : interaction.data.options?.find((option) => option.type === ApplicationCommandOptionType.User && option.name === "user")?.value;
 
@@ -47,15 +46,18 @@ export default {
     const resolvedMember = interaction.data.resolved?.members?.[userId] ?? (isInteractionUser ? interaction.member : undefined);
 
     const roleIds = resolvedMember?.roles ?? [];
-    const visibleRoles = roleIds.slice(0, 5).map((roleId) => `<@&${roleId}>`);
-    const remainingRoles = Math.max(roleIds.length - visibleRoles.length, 0);
+    const guildRoles = interaction.guild_id ? await api.guilds.getRoles(interaction.guild_id) : [];
+
+    const roles = roleIds.map((id) => guildRoles.find((role) => role.id === id)).filter(Boolean).sort((a, b) => b.position - a.position);
+    const visibleRoles = roles.slice(0, 5).map((role) => `<@&${role.id}>`);
+    const remainingRoles = Math.max(roles.length - 5, 0);
 
     const rolesText = resolvedMember ? [
-      `${getEmoji("roles", client)} **Roles (${roleIds.length})**`,
-      visibleRoles.length > 0 ? visibleRoles.join(", ") : "There are no roles",
+      `${getEmoji("roles", client)} **Roles (${roles.length})**`,
+      visibleRoles.length ? visibleRoles.join(", ") : "There are no roles",
       remainingRoles > 0 ? `\`+${remainingRoles}\`` : null
     ].filter(Boolean).join("\n") : null;
-    
+
     const displayName = resolvedMember?.nick ?? (resolvedUser.global_name ?? resolvedUser.username);
     
     const avatarResponse = await fetch(resolvedUser.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${resolvedUser.avatar}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
