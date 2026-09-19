@@ -18,9 +18,7 @@ export default {
   defer: true,
 
   async execute({ data: interaction, api }, client) {
-    const guildId = interaction.guild_id;
-
-    if (!guildId) {
+    if (!interaction.guild_id) {
       await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
@@ -41,7 +39,7 @@ export default {
     let guild;
 
     try {
-      guild = await api.guilds.get(guildId, { with_counts: true });
+      guild = await api.guilds.get(interaction.guild_id, { with_counts: true });
     } catch {
       await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
@@ -167,14 +165,11 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("discover", client)} **${guild.name}** \`${guild.id}\`` +
+                `-# ${getEmoji("discover", client)} **${guild.name}** \`${guild.id}\` • ${getEmoji("boost", client)} ${boostCount.toLocaleString("en-US")}, level ${boostLevel}` +
                 (guild.description ? `\n_ _   ${guild.description}` : "") +
                 `\n\n${getEmoji("calendar", client)} **Created at**: ${formatDiscordDate(createdAt)}` +
-                `\n${getEmoji("people", client)} **Members**: ${typeof memberCount === "number" ? memberCount.toLocaleString("en-US") : "Unknown"}` +
                 `\n${getEmoji("roles", client)} **Roles**: ${roleCount}` +
-                `\n\n${getEmoji("boost", client)} **Boosts**: ${boostCount.toLocaleString("en-US")}` +
-                `\n${getEmoji("boost", client)} **Boost level**: ${boostLevel}` +
-                (guild.owner_id ? `\n\n${getEmoji("owner", client)} **Owner**: <@${guild.owner_id}>` : "") +
+                (guild.owner_id ? `\n${getEmoji("owner", client)} **Owner**: <@${guild.owner_id}>` : "") +
                 `\n\n-# ${getEmoji("image", client)} **Assets**: [Server Icon](${iconUrl})${bannerUrl ? ` • [Server Banner](${bannerUrl})` : ""}`
             },
           ],

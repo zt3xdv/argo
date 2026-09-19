@@ -33,11 +33,9 @@ export default {
   ],
 
   async execute({ data: interaction, api }, client) {
-    const isUserContextMenu = interaction.data.type === ApplicationCommandType.User;
-    const selectedUserId = isUserContextMenu ? interaction.data.target_id : interaction.data.options?.find((option) => option.type === ApplicationCommandOptionType.User && option.name === "user")?.value;
-
+    const selectedUserId = interaction.data.type === ApplicationCommandType.User ? interaction.data.target_id : interaction.data.options?.find((option) => option.name === "user")?.value;
     const interactionUser = interaction.member?.user ?? interaction.user;
-
+    
     const userId = selectedUserId ?? interactionUser?.id;
     const isInteractionUser = userId === interactionUser?.id;
 

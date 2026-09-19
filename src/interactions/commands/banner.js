@@ -26,7 +26,7 @@ export default {
 
   async execute({ data: interaction }, client) {
     const interactionUser = interaction.member?.user ?? interaction.user;
-    const selectedUserId = interaction.data.options?.find((option) => option.type === ApplicationCommandOptionType.User && option.name === "user")?.value;
+    const selectedUserId = interaction.data.options?.find((option) => option.name === "user")?.value;
 
     const userId = selectedUserId ?? interactionUser.id;
     const user = await client.api.users.get(userId);
@@ -48,8 +48,6 @@ export default {
       });
       return;
     }
-
-    const displayName = user.global_name ?? user.username;
 
     const isAnimated = user.banner?.startsWith("a_");
 
@@ -73,7 +71,7 @@ export default {
             },
             {
               type: ComponentType.TextDisplay,
-              content: `-# ${getEmoji("image", client)} **${displayName}'s Banner**\n` + links
+              content: `-# ${getEmoji("image", client)} **${user.global_name ?? user.username}'s Banner**\n` + links
             },
           ],
         },

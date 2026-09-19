@@ -22,6 +22,7 @@
     "@discordjs/rest": "^2.6.3",
     "@discordjs/ws": "^2.0.4",
     "@resvg/resvg-wasm": "^2.6.2",
-    "discord-api-types": "^0.38.55"
+    "discord-api-types": "^0.38.55",
+    "unstorage": "^1.17.5"
   }
 }

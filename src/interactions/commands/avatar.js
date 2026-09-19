@@ -26,14 +26,12 @@ export default {
 
   async execute({ data: interaction }, client) {
     const interactionUser = interaction.member?.user ?? interaction.user;
-    const selectedUserId = interaction.data.options?.find((option) => option.type === ApplicationCommandOptionType.User && option.name === "user")?.value;
+    const selectedUserId = interaction.data.options?.find((option) => option.name === "user")?.value;
 
     const userId = selectedUserId ?? interactionUser.id;
     const user = await client.api.users.get(userId);
-
-    const displayName = user.global_name ?? user.username;
+    
     const defaultAvatarIndex = Number(BigInt(userId) >> 22n) % 6;
-
     const isAnimated = user.avatar?.startsWith("a_");
 
     const baseUrl = user.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}` : `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIndex}`;
@@ -56,7 +54,7 @@ export default {
             },
             {
               type: ComponentType.TextDisplay,
-              content: `-# ${getEmoji("image", client)} **${displayName}'s Avatar**\n` + links
+              content: `-# ${getEmoji("image", client)} **${user.global_name ?? user.username}'s Avatar**\n` + links
             },
           ],
         },

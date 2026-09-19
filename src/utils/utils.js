@@ -45,3 +45,7 @@ export function getSnowflakeDate(id) {
 
   return new Date(timestamp).toISOString();
 }
+
+export function formatBoolean(bool) {
+  return bool ? "yes" : "no";
+}
