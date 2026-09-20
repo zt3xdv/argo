@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, fetchImage } from "../../utils/utils.js";
 import { UserFlags } from 'discord-api-types/v10';
 
 export default {
@@ -63,22 +63,11 @@ export default {
     const displayName = resolvedMember?.nick ?? (resolvedUser.global_name ?? resolvedUser.username);
     const discriminator = resolvedUser.discriminator != "0" ? "#" + resolvedUser.discriminator : "";
     
-    const avatarResponse = await fetch(resolvedUser.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${resolvedUser.avatar}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
-
-    if (!avatarResponse.ok) {
-      throw new Error(`Failed to fetch avatar: ${avatarResponse.status}`);
-    }
-
-    const avatarMimeType = avatarResponse.headers.get("content-type") ?? "image/png";
-    const avatarBase64 = Buffer.from(await avatarResponse.arrayBuffer()).toString("base64");
-
-    let bannerBase64 = null;
+    const avatarData = await fetchImage(resolvedMember.avatar || resolvedUser.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${resolvedMember.avatar ?? resolvedUser.avatar}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
+    let bannerData = null;
 
     if (resolvedMember?.banner || resolvedUser?.banner) {
-      const bannerResponse = await fetch(`https://cdn.discordapp.com/banners/${userId}/${resolvedMember?.banner ?? resolvedUser?.banner}.png?size=1024`);
-      if (bannerResponse.ok) {
-        bannerBase64 = Buffer.from(await bannerResponse.arrayBuffer()).toString("base64");
-      }
+      bannerData = await fetchImage(`https://cdn.discordapp.com/banners/${userId}/${resolvedMember?.banner ?? resolvedUser?.banner}.png?size=1024`);
     }
 
     const renderer = new Resvg(`
@@ -108,10 +97,10 @@ export default {
           </clipPath>
         </defs>
 
-        ${bannerBase64 ? `<image x="-25" y="-25" width="950" height="310" preserveAspectRatio="xMidYMid slice" filter="url(#blur)" mask="url(#bannerMask)" href="data:image/png;base64,${bannerBase64}" xlink:href="data:image/png;base64,${bannerBase64}"/>
+        ${bannerData ? `<image x="-25" y="-25" width="950" height="310" preserveAspectRatio="xMidYMid slice" filter="url(#blur)" mask="url(#bannerMask)" href="data:image/png;base64,${bannerData.base64}" xlink:href="data:image/png;base64,${bannerData.base64}"/>
         <rect width="900" height="260" fill="url(#overlay)"/>` : ""}
 
-        <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarMimeType};base64,${avatarBase64}" xlink:href="data:${avatarMimeType};base64,${avatarBase64}"/>
+        <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
 
         <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
           ${escapeXml(displayName.length > 28 ? `${displayName.slice(0, 27)}...` : displayName)}

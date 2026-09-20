@@ -2,7 +2,7 @@ import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import database from "../../utils/database.js";
 import config from "../../../config.json" with { type: "json" };
-import { getEmoji, escapeXml } from "../../utils/utils.js";
+import { getEmoji, escapeXml, fetchImage } from "../../utils/utils.js";
 
 export default {
   name: "lastfm",
@@ -159,17 +159,11 @@ export default {
 
     const truncate = (value, length) => value.length > length ? `${value.slice(0, length - 3)}...` : value;
 
-    let coverBase64 = null;
-    let coverMimeType = "image/jpeg";
+    let cover;
 
     if (image) {
       try {
-        const coverResponse = await fetch(image);
-
-        if (coverResponse.ok) {
-          coverMimeType = coverResponse.headers.get("content-type")?.split(";")[0] || "image/jpeg";
-          coverBase64 = Buffer.from(await coverResponse.arrayBuffer()).toString("base64");
-        }
+        cover = await fetchImage(image);
       } catch { /* no cover image ig */ }
     }
 
@@ -186,7 +180,7 @@ export default {
           </clipPath>
         </defs>
         
-        ${coverBase64 ? `<image x="30" y="30" width="200" height="200" preserveAspectRatio="xMidYMid slice" clip-path="url(#coverClip)" href="data:${coverMimeType};base64,${coverBase64}" xlink:href="data:${coverMimeType};base64,${coverBase64}"/>` : `
+        ${cover ? `<image x="30" y="30" width="200" height="200" preserveAspectRatio="xMidYMid slice" clip-path="url(#coverClip)" href="data:${cover.mimeType};base64,${cover.base64}" xlink:href="data:${cover.mimeType};base64,${cover.base64}"/>` : `
         <rect x="30" y="30" width="200" height="200" rx="18" fill="#292929"/>`}
 
         <rect width="900" height="260" fill="url(#overlay)"/>
