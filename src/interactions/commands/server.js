@@ -17,8 +17,8 @@ export default {
   type: ApplicationCommandType.ChatInput,
   defer: true,
 
-  async execute({ data: interaction, api }, client) {
-    if (!interaction.guild_id) {
+  async execute({ data: interaction, api }, client, { customGuildData, shouldReturn }) {
+    if (!customGuildData && !interaction.guild_id) {
       await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
@@ -36,10 +36,12 @@ export default {
       return;
     }
 
-    let guild;
+    let guild = customGuildData ?? null;
 
     try {
-      guild = await api.guilds.get(interaction.guild_id, { with_counts: true });
+      if (!customGuildData) {
+        guild = await api.guilds.get(interaction.guild_id, { with_counts: true });
+      }
     } catch {
       await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
@@ -60,7 +62,9 @@ export default {
 
     let roles = [];
     try {
-      roles = await api.guilds.getRoles(guild.id);
+      if (!customGuildData) {
+        roles = await api.guilds.getRoles(guild.id);
+      }
     } catch { /* cant access to roles */ }
 
     const defaultGuildIcon = "https://cdn.discordapp.com/embed/avatars/0.png";
@@ -130,7 +134,7 @@ export default {
         </text>
 
         <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">
-          ${escapeXml(typeof memberCount === "number" ? `${memberCount.toLocaleString("en-US")} members` : "Unknown members")}
+          ${escapeXml(typeof memberCount === "number" ? `${memberCount.toLocaleString("en-US")} members • ${guild.online_count.toLocaleString("en-US")} online` : "Unknown members")}
         </text>
       </svg>
     `, {
@@ -140,8 +144,7 @@ export default {
       },
     });
     const png = renderer.render().asPng();
-
-    await api.interactions.editReply(interaction.application_id, interaction.token, {
+    const payload = { // To use the shouldReturn api dont blame me for doing this bullshit
       files: [
         {
           name: "server.png",
@@ -166,11 +169,11 @@ export default {
               type: ComponentType.TextDisplay,
               content:
                 `-# ${getEmoji("discover", client)} **${guild.name}** \`${guild.id}\` • ${getEmoji("boost", client)} ${boostCount.toLocaleString("en-US")}, level ${boostLevel}` +
-                (guild.description ? `\n_ _   ${guild.description}` : "") +
+                (guild.description ? `\n${guild.description}` : "") +
                 `\n\n${getEmoji("calendar", client)} **Created at**: ${formatDiscordDate(createdAt)}` +
-                `\n${getEmoji("roles", client)} **Roles**: ${roleCount}` +
+                (!customGuildData ?`\n${getEmoji("roles", client)} **Roles**: ${roleCount}` : "") +
                 (guild.owner_id ? `\n${getEmoji("owner", client)} **Owner**: <@${guild.owner_id}>` : "") +
-                `\n\n-# ${getEmoji("image", client)} **Assets**: [Server Icon](${iconUrl})${bannerUrl ? ` • [Server Banner](${bannerUrl})` : ""}`
+                `\n${getEmoji("image", client)} **Assets**: [Server Icon](${iconUrl})${bannerUrl ? ` • [Server Banner](${bannerUrl})` : ""}`
             },
           ],
         },
@@ -179,6 +182,11 @@ export default {
         parse: [],
       },
       flags: MessageFlags.IsComponentsV2,
-    });
+    };
+    
+    if (shouldReturn) {
+      return payload;
+    }
+    await api.interactions.editReply(interaction.application_id, interaction.token, payload);
   },
 };

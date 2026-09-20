@@ -35,13 +35,8 @@ export default {
       await client.api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
-            type: ComponentType.Container,
-            components: [
-              {
-                type: ComponentType.TextDisplay,
-                content: `-# ${getEmoji("exclamation", client)} This user does not have a banner.`,
-              },
-            ],
+            type: ComponentType.TextDisplay,
+            content: `-# ${getEmoji("exclamation", client)} This user does not have a banner.`,
           },
         ],
         flags: MessageFlags.IsComponentsV2,
