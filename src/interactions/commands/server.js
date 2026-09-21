@@ -124,8 +124,8 @@ export default {
           </clipPath>
         </defs>
 
-        ${bannerBase64 ? `<image x="-25" y="-25" width="950" height="310" preserveAspectRatio="xMidYMid slice" filter="url(#blur)" mask="url(#bannerMask)" href="data:image/png;base64,${bannerBase64}" xlink:href="data:image/png;base64,${bannerBase64}"/>
-        <rect width="900" height="260" fill="url(#overlay)"/>` : ""}
+        ${bannerBase64 ? `<image x="-25" y="-25" width="950" height="310" preserveAspectRatio="xMidYMid slice" filter="url(#blur)" mask="url(#bannerMask)" href="data:image/png;base64,${bannerBase64}" xlink:href="data:image/png;base64,${bannerBase64}"/>` : ""}
+        <rect width="900" height="260" fill="url(#overlay)"/>
 
         <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
         
