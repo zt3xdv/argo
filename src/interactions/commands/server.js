@@ -134,7 +134,7 @@ export default {
         </text>
 
         <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">
-          ${escapeXml(typeof memberCount === "number" ? `${memberCount.toLocaleString("en-US")} members • ${guild.online_count.toLocaleString("en-US")} online` : "Unknown members")}
+          ${escapeXml(typeof memberCount === "number" ? `${memberCount.toLocaleString("en-US")} members${typeof invite?.approximate_presence_count === "number" ? ` • ${invite.approximate_presence_count.toLocaleString("en-US")} online` : typeof guild?.online_count === "number" ? ` • ${guild.online_count.toLocaleString("en-US")} online` : ""}` : "Unknown members")}
         </text>
       </svg>
     `, {
