@@ -90,7 +90,7 @@ export default {
       "supports-commands.svg",
       "orb.svg",
       "discord-nitro.svg"
-    ]);
+    ], { width: 900 });
 
     const renderer = new Resvg(`
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="260" viewBox="0 0 900 260">

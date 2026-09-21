@@ -88,7 +88,10 @@ export async function getAsset(relativePath, asBase64 = false) {
   return `data:${mimeType};base64,${file.toString("base64")}`;
 }
 
-export async function buildSvgBadges(badgePaths, { badgeSize = 32, offset = 10, gap = 10 } = {}) {
+export async function buildSvgBadges(badgePaths, { width, badgeSize = 32, offset = 10, gap = 10 } = {}) {
   const badges = await Promise.all(badgePaths.map((badgePath) => getAsset(badgePath, true)));
-  return badges.map((badge, index) => `<image href="${badge}" x="${-(index * (badgeSize + gap))}" y="${offset}" width="${badgeSize}" height="${badgeSize}" preserveAspectRatio="xMidYMid meet"/>`).join("");
+  const totalWidth = badges.length * badgeSize + Math.max(0, badges.length - 1) * gap;
+  const startX = width - totalWidth;
+
+  return badges.map((badge, index) => `<image href="${badge}" x="${startX + index * (badgeSize + gap)}" y="${offset}" width="${badgeSize}" height="${badgeSize}" preserveAspectRatio="xMidYMid meet"/>`).join("");
 }
