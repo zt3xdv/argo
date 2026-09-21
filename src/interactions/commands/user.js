@@ -63,11 +63,25 @@ export default {
     const displayName = resolvedMember?.nick ?? (resolvedUser.global_name ?? resolvedUser.username);
     const discriminator = resolvedUser.discriminator != "0" ? "#" + resolvedUser.discriminator : "";
     
-    const avatarData = await fetchImage(resolvedMember.avatar || resolvedUser.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${resolvedMember.avatar ?? resolvedUser.avatar}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
-    let bannerData = null;
+    const avatarHash = resolvedMember?.avatar ?? resolvedUser.avatar;
+    const avatarData = await fetchImage(avatarHash ? `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
 
-    if (resolvedMember?.banner || resolvedUser?.banner) {
-      bannerData = await fetchImage(`https://cdn.discordapp.com/banners/${userId}/${resolvedMember?.banner ?? resolvedUser?.banner}.png?size=1024`);
+    const decorationAsset = resolvedUser.avatar_decoration_data?.asset;
+    let avatarDecorationData = null;
+    
+    if (decorationAsset) {
+      try {
+        avatarDecorationData = await fetchImage(`https://cdn.discordapp.com/avatar-decoration-presets/${decorationAsset}.png?size=256`);
+      } catch { /* could not get decoration */ }
+    }
+    
+    const bannerHash = resolvedMember?.banner || resolvedUser?.banner;
+    let bannerData = null;
+    
+    if (bannerHash) {
+      try {
+        bannerData = await fetchImage(`https://cdn.discordapp.com/banners/${userId}/${bannerHash}.png?size=1024`);
+      } catch { /* could not get banner */ }
     }
 
     const renderer = new Resvg(`
@@ -102,8 +116,10 @@ export default {
 
         <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
 
+        ${avatarDecorationData ? `<image x="10" y="10" width="240" height="240" preserveAspectRatio="xMidYMid meet" href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}" xlink:href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}"/>` : ""}
+
         <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
-          ${escapeXml(displayName.length > 28 ? `${displayName.slice(0, 27)}...` : displayName)}
+          ${escapeXml(displayName.length > 24 ? `${displayName.slice(0, 23)}...` : displayName)}
         </text>
 
         <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">
