@@ -77,8 +77,8 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("invite", client)} **Inviter**: **${escapeMarkdown(data.inviter.global_name)}** @${escapeMarkdown(data.inviter.username)}${data.inviter.discriminator != 0 ? "#" + data.inviter.discriminator : ""} \`${data.inviter.id}\`\n` +
-                `-# ${getEmoji("calendar", client)} **Expires at**: ${formatDiscordDate(data.expires_at)}`
+                (data.inviter ? `-# ${getEmoji("invite", client)} **Inviter**: **${escapeMarkdown(data.inviter.global_name)}** @${escapeMarkdown(data.inviter.username)}${data.inviter.discriminator != 0 ? "#" + data.inviter.discriminator : ""} \`${data.inviter.id}\`\n` : "") +
+                (data.expires_at ? `-# ${getEmoji("calendar", client)} **Expires at**: ${formatDiscordDate(data.expires_at)}` : "")
             },
           ],
         },
