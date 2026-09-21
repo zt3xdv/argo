@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { UserFlags, UserPremiumType } from "discord-api-types/v10";
 
 export const assetsDir = path.resolve(import.meta.dirname, "../assets");
 
@@ -7,6 +8,19 @@ export const mimeTypes = {
   ".svg": "image/svg+xml",
   ".png": "image/png",
   ".ttf": "font/ttf",
+};
+
+const badgePaths = {
+  [UserFlags.Staff]: "discord-staff.svg",
+  [UserFlags.Partner]: "discord-partner.svg",
+  [UserFlags.BugHunterLevel1]: "discord-bug-hunter-green.svg",
+  [UserFlags.BugHunterLevel2]: "discord-bug-hunter-gold.svg",
+  [UserFlags.HypeSquadOnlineHouse1]: "hype-squad-bravery.svg",
+  [UserFlags.HypeSquadOnlineHouse2]: "hype-squad-brilliance.svg",
+  [UserFlags.HypeSquadOnlineHouse3]: "hype-squad-balance.svg",
+  [UserFlags.PremiumEarlySupporter]: "discord-early-supporter.svg",
+  [UserFlags.BotHTTPInteractions]: "supports-commands.svg",
+  [UserFlags.CertifiedModerator]: "discord-mod.svg",
 };
 
 export function getEmoji(name, client) {
@@ -94,4 +108,55 @@ export async function buildSvgBadges(badgePaths, { width, badgeSize = 40, offset
   const startX = width - totalWidth - offset;
 
   return badges.map((badge, index) => `<image href="${badge}" x="${startX + index * (badgeSize + gap)}" y="${offset}" width="${badgeSize}" height="${badgeSize}" preserveAspectRatio="xMidYMid meet"/>`).join("");
+}
+
+export function hasUserFlag(publicFlags, flag) {
+  if (!publicFlags) {
+    return false;
+  }
+
+  return (
+    (BigInt(publicFlags) & BigInt(flag)) === BigInt(flag)
+  );
+}
+
+export function getPremiumBadge(resolvedUser) {
+  switch (resolvedUser?.premium_type) {
+    case UserPremiumType.Nitro:
+    case UserPremiumType.NitroClassic:
+      return "discord-nitro.svg";
+
+    case UserPremiumType.NitroBasic:
+      return "discord-nitro-basic.svg";
+
+    default:
+      return undefined;
+  }
+}
+
+export function getPublicFlagBadges(resolvedUser) {
+  const publicFlags = resolvedUser?.public_flags ?? 0;
+
+  return Object.entries(badgePaths)
+    .filter(([flag]) =>
+      hasUserFlag(publicFlags, Number(flag)),
+    )
+    .map(([, path]) => path);
+}
+
+export function getUserBadges(resolvedUser, resolvedMember) {
+  const badges = [];
+  const premiumBadge = getPremiumBadge(resolvedUser);
+
+  if (premiumBadge) {
+    badges.push(premiumBadge);
+  }
+
+  badges.push(...getPublicFlagBadges(resolvedUser));
+
+  if (resolvedMember?.premium_since) {
+    badges.push("boosts/discord-boost-1.svg");
+  }
+
+  return [...new Set(badges)];
 }

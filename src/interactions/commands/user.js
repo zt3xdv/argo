@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges, getUserBadges } from "../../utils/utils.js";
 import { UserFlags } from 'discord-api-types/v10';
 
 export default {
@@ -84,13 +84,7 @@ export default {
       } catch { /* could not get banner */ }
     }
     
-    const badges = await buildSvgBadges([
-      "last-meadow.png",
-      "automod.svg",
-      "supports-commands.svg",
-      "orb.svg",
-      "discord-nitro.svg"
-    ], { width: 900 });
+    const badges = await buildSvgBadges(getUserBadges(resolvedUser, resolvedMember), { width: 900 });
 
     const renderer = new Resvg(`
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="260" viewBox="0 0 900 260">
