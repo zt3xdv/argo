@@ -116,7 +116,7 @@ export default {
 
         <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
 
-        ${avatarDecorationData ? `<image x="10" y="10" width="240" height="240" preserveAspectRatio="xMidYMid meet" href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}" xlink:href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}"/>` : ""}
+        ${avatarDecorationData ? `<image x="20" y="20" width="220" height="220" preserveAspectRatio="xMidYMid meet" href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}" xlink:href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}"/>` : ""}
 
         <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
           ${escapeXml(displayName.length > 24 ? `${displayName.slice(0, 23)}...` : displayName)}
