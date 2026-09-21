@@ -17,7 +17,7 @@ export default {
   type: ApplicationCommandType.ChatInput,
   defer: true,
 
-  async execute({ data: interaction, api }, client, { customGuildData, shouldReturn }) {
+  async execute({ data: interaction, api }, client, { customGuildData, shouldReturn } = {}) {
     if (!customGuildData && !interaction.guild_id) {
       await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
