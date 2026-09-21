@@ -91,7 +91,7 @@ export async function getAsset(relativePath, asBase64 = false) {
 export async function buildSvgBadges(badgePaths, { width, badgeSize = 40, offset = 20, gap = 10 } = {}) {
   const badges = await Promise.all(badgePaths.map((badgePath) => getAsset(badgePath, true)));
   const totalWidth = badges.length * badgeSize + Math.max(0, badges.length - 1) * gap;
-  const startX = width - totalWidth;
+  const startX = width - totalWidth - offset;
 
   return badges.map((badge, index) => `<image href="${badge}" x="${startX + index * (badgeSize + gap)}" y="${offset}" width="${badgeSize}" height="${badgeSize}" preserveAspectRatio="xMidYMid meet"/>`).join("");
 }
