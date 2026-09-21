@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeMarkdown } from "../../utils/utils.js";
 import Server from "./server.js";
 
 export default {
@@ -77,7 +77,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("invite", client)} **Inviter**: **${data.inviter.global_name}** @${data.inviter.username}${data.inviter.discriminator != 0 ? "#" + data.inviter.discriminator : ""} \`${data.inviter.id}\`\n` +
+                `-# ${getEmoji("invite", client)} **Inviter**: **${escapeMarkdown(data.inviter.global_name)}** @${escapeMarkdown(data.inviter.username)}${data.inviter.discriminator != 0 ? "#" + data.inviter.discriminator : ""} \`${data.inviter.id}\`\n` +
                 `-# ${getEmoji("calendar", client)} **Expires at**: ${formatDiscordDate(data.expires_at)}`
             },
           ],

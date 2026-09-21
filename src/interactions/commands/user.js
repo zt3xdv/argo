@@ -158,7 +158,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("person", client)} **${escapeMarkdown(displayName)}** @${resolvedUser.username}${discriminator} \`${userId}\`\n` +
+                `-# ${getEmoji("person", client)} **${escapeMarkdown(displayName)}** @${escapeMarkdown(resolvedUser.username)}${discriminator} \`${userId}\`\n` +
                 (resolvedMember?.joined_at ? `\n${getEmoji("newmembers", client)} **Joined at**: ${formatDiscordDate(resolvedMember.joined_at)}` : "") +
                 (resolvedUser?.created_at ? `\n${getEmoji("calender", client)} **Created at**: ${formatDiscordDate(resolvedUser.created_at)}` : "") +
                 (rolesText ? `\n${rolesText}` : "")

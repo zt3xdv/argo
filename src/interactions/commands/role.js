@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatBoolean } from "../../utils/utils.js";
+import { getEmoji, formatBoolean, escapeMarkdown } from "../../utils/utils.js";
 
 export default {
   name: "role",
@@ -41,7 +41,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("roles", client)} **${role.name}** \`${role.id}\`\n` +
+                `-# ${getEmoji("roles", client)} **${escapeMarkdown(role.name)}** \`${role.id}\`\n` +
                 `\n**Position**: ${role.position}` +
                 `\n**Mentionable**: ${formatBoolean(role.mentionable)}` +
                 `\n**Managed**: ${formatBoolean(role.managed)}` +

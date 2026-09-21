@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji } from "../../utils/utils.js";
+import { getEmoji, escapeMarkdown } from "../../utils/utils.js";
 
 export default {
   name: "banner",
@@ -66,7 +66,7 @@ export default {
             },
             {
               type: ComponentType.TextDisplay,
-              content: `-# ${getEmoji("image", client)} **${user.global_name ?? user.username}'s Banner**\n` + links
+              content: `-# ${getEmoji("image", client)} **${escapeMarkdown(user.global_name ?? user.username)}'s Banner**\n` + links
             },
           ],
         },

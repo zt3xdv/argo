@@ -2,7 +2,7 @@ import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import database from "../../utils/database.js";
 import config from "../../../config.json" with { type: "json" };
-import { getEmoji, escapeXml, fetchImage } from "../../utils/utils.js";
+import { getEmoji, escapeXml, escapeMarkdown, fetchImage } from "../../utils/utils.js";
 
 export default {
   name: "lastfm",
@@ -237,9 +237,9 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("music", client)} **${status} [${trackName}](${songUrl})** by **${artist}**\n` +
-                (album ? `\nAlbum: **${album}**` : "") +
-                `\n-# Account: ${username} · ${scrobbles} scrobbles`,
+                `-# ${getEmoji("music", client)} **${status} [${escapeMarkdown(trackName)}](${songUrl})** by **${escapeMarkdown(artist)}**\n` +
+                (album ? `\nAlbum: **${escapeMarkdown(album)}**` : "") +
+                `\n-# Account: ${escapeMarkdown(username)} · ${scrobbles} scrobbles`,
             },
           ],
         },
