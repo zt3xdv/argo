@@ -88,7 +88,7 @@ export async function getAsset(relativePath, asBase64 = false) {
   return `data:${mimeType};base64,${file.toString("base64")}`;
 }
 
-export async function buildSvgBadges(badgePaths, { width, badgeSize = 32, offset = 10, gap = 10 } = {}) {
+export async function buildSvgBadges(badgePaths, { width, badgeSize = 40, offset = 20, gap = 10 } = {}) {
   const badges = await Promise.all(badgePaths.map((badgePath) => getAsset(badgePath, true)));
   const totalWidth = badges.length * badgeSize + Math.max(0, badges.length - 1) * gap;
   const startX = width - totalWidth;
