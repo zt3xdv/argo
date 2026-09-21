@@ -1,6 +1,6 @@
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, getGuildAssetUrl, fetchImage, getSnowflakeDate } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, getGuildAssetUrl, fetchImage, getSnowflakeDate } from "../../utils/utils.js";
 
 export default {
   name: "server",
@@ -168,7 +168,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("discover", client)} **${guild.name}** \`${guild.id}\` • ${getEmoji("boost", client)} ${boostCount.toLocaleString("en-US")}, level ${boostLevel}` +
+                `-# ${getEmoji("discover", client)} **${escapeMarkdown(guild.name)}** \`${guild.id}\` • ${getEmoji("boost", client)} ${boostCount.toLocaleString("en-US")}, level ${boostLevel}` +
                 (guild.description ? `\n${guild.description}` : "") +
                 `\n\n${getEmoji("calendar", client)} **Created at**: ${formatDiscordDate(createdAt)}` +
                 (!customGuildData ?`\n${getEmoji("roles", client)} **Roles**: ${roleCount}` : "") +

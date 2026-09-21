@@ -49,3 +49,7 @@ export function getSnowflakeDate(id) {
 export function formatBoolean(bool) {
   return bool ? "yes" : "no";
 }
+
+export function escapeMarkdown(text) {
+  return text.replace(/[\\`*_{}\[\]()#+\-.!|>~=]/g, "\\$&");
+}
