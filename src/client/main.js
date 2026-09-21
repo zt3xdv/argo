@@ -5,6 +5,7 @@ import { Client, GatewayIntentBits, Routes } from '@discordjs/core';
 import { REST } from '@discordjs/rest';
 import { WebSocketManager, WebSocketShardEvents } from '@discordjs/ws';
 import { load } from '../utils/loaders.js';
+import { getAsset } from "../utils/utils.js";
 import { transformCommand } from '../builders/command.js';
 import { initWasm } from "@resvg/resvg-wasm";
 
@@ -29,7 +30,7 @@ client.commands = await load(path.join(import.meta.dirname, "..", "interactions"
 client.events = await load(path.join(import.meta.dirname, "..", "interactions", "events"), "event");
 client.emojis = await rest.get(Routes.applicationEmojis(config.clientId));
 client.fontBuffers = [
-  new Uint8Array(await readFile(path.join(import.meta.dirname, "..", "..", "fonts", "geist.ttf")))
+  new Uint8Array(await getAsset(path.join("fonts", "geist.ttf")))
 ];
 
 for (const event of client.events) {

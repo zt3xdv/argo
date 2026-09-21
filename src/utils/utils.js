@@ -1,3 +1,14 @@
+import fs from "fs/promises";
+import path from "path";
+
+export const assetsDir = path.resolve(import.meta.dirname, "../assets");
+
+export const mimeTypes = {
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".ttf": "font/ttf",
+};
+
 export function getEmoji(name, client) {
   const emoji = client.emojis.items.find(e => e.name == name);
   return emoji ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>` : ":e:";
@@ -52,4 +63,32 @@ export function formatBoolean(bool) {
 
 export function escapeMarkdown(text) {
   return text.replace(/[\\`*_{}\[\]()#+\-.!|>~=]/g, "\\$&");
+}
+
+export async function getAsset(relativePath, asBase64 = false) {
+  const assetPath = path.resolve(assetsDir, relativePath);
+
+  if (!assetPath.startsWith(`${assetsDir}${path.sep}`)) {
+    throw new Error("Invalid asset path");
+  }
+
+  const file = await fs.readFile(assetPath);
+
+  if (!asBase64) {
+    return file;
+  }
+
+  const extension = path.extname(assetPath).toLowerCase();
+  const mimeType = mimeTypes[extension];
+
+  if (!mimeType) {
+    throw new Error(`Unsupported asset type: ${extension}`);
+  }
+
+  return `data:${mimeType};base64,${file.toString("base64")}`;
+}
+
+export async function buildSvgBadges(badgePaths, { badgeSize = 32, offset = 10, gap = 10 } = {}) {
+  const badges = await Promise.all(badgePaths.map((badgePath) => getAsset(badgePath, true)));
+  return badges.map((badge, index) => `<image href="${badge}" x="${-(index * (badgeSize + gap))}" y="${offset}" width="${badgeSize}" height="${badgeSize}" preserveAspectRatio="xMidYMid meet"/>`).join("");
 }

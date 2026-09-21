@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges } from "../../utils/utils.js";
 import { UserFlags } from 'discord-api-types/v10';
 
 export default {
@@ -83,6 +83,14 @@ export default {
         bannerData = await fetchImage(`https://cdn.discordapp.com/banners/${userId}/${bannerHash}.png?size=1024`);
       } catch { /* could not get banner */ }
     }
+    
+    const badges = await buildSvgBadges([
+      "last-meadow.png",
+      "automod.svg",
+      "supports-commands.svg",
+      "orb.svg",
+      "discord-nitro.svg"
+    ]);
 
     const renderer = new Resvg(`
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="260" viewBox="0 0 900 260">
@@ -113,7 +121,9 @@ export default {
 
         ${bannerData ? `<image x="-25" y="-25" width="950" height="310" preserveAspectRatio="xMidYMid slice" filter="url(#blur)" mask="url(#bannerMask)" href="data:image/png;base64,${bannerData.base64}" xlink:href="data:image/png;base64,${bannerData.base64}"/>` : ""}
         <rect width="900" height="260" fill="url(#overlay)"/>
-
+        
+        ${badges}
+        
         <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
 
         ${avatarDecorationData ? `<image x="20" y="20" width="220" height="220" preserveAspectRatio="xMidYMid meet" href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}" xlink:href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}"/>` : ""}
