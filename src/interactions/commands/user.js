@@ -164,7 +164,7 @@ export default {
               content:
                 `-# ${getEmoji("person", client)} **${escapeMarkdown(displayName)}** @${escapeMarkdown(resolvedUser.username)}${discriminator} \`${userId}\`\n` +
                 (resolvedMember?.joined_at ? `\n${getEmoji("newmembers", client)} **Joined at**: ${formatDiscordDate(resolvedMember.joined_at)}` : "") +
-                `\n${getEmoji("calender", client)} **Created at**: ${formatDiscordDate(getSnowflakeDate(resolvedUser.id))}` +
+                `\n${getEmoji("calendar", client)} **Created at**: ${formatDiscordDate(getSnowflakeDate(resolvedUser.id))}` +
                 (rolesText ? `\n${rolesText}` : "")
             },
           ],
