@@ -202,9 +202,8 @@ export default {
           const recentCoverData = recentCover ? `data:${recentCover.mimeType};base64,${recentCover.base64}` : null;
 
           return `
-        ${recentCoverData ? `<image x="30" y="${y}" width="90" height="90" preserveAspectRatio="xMidYMid slice" href="${recentCoverData}" xlink:href="${recentCoverData}"/>` : `
-        <rect x="30" y="${y}" width="90" height="90" rx="14" fill="#292929"/>
-        <text x="75" y="${y + 58}" text-anchor="middle" fill="#b5bac1" font-family="Geist" font-size="34">♪</text>`}
+        ${recentCoverData ? `<image x="30" y="${y}" width="90" height="90" preserveAspectRatio="xMidYMid slice" clip-path="url(#coverClip)" href="${recentCoverData}" xlink:href="${recentCoverData}"/>` : `
+        <rect x="30" y="${y}" width="90" height="90" rx="14" fill="#292929"/>`}
 
         <text x="145" y="${y + 30}" fill="#fff" font-family="Geist" font-size="25" font-weight="700">
           ${escapeXml(`${index + 1}. ${truncate(recentTrackName, 38)}`)}
@@ -238,8 +237,6 @@ export default {
         </defs>
         
         ${subcommand === "recent" ? `
-        <rect width="900" height="${150 + tracks.slice(0, 5).length * 125}" fill="#17181c"/>
-
         <text x="30" y="52" fill="#fff" font-family="Geist" font-size="31" font-weight="700">
           Recent tracks
         </text>
