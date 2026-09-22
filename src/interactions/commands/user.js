@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges, getUserBadges } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges, getUserBadges, getSnowflakeDate } from "../../utils/utils.js";
 import { UserFlags } from 'discord-api-types/v10';
 
 export default {
@@ -164,7 +164,7 @@ export default {
               content:
                 `-# ${getEmoji("person", client)} **${escapeMarkdown(displayName)}** @${escapeMarkdown(resolvedUser.username)}${discriminator} \`${userId}\`\n` +
                 (resolvedMember?.joined_at ? `\n${getEmoji("newmembers", client)} **Joined at**: ${formatDiscordDate(resolvedMember.joined_at)}` : "") +
-                (resolvedUser?.created_at ? `\n${getEmoji("calender", client)} **Created at**: ${formatDiscordDate(resolvedUser.created_at)}` : "") +
+                `\n${getEmoji("calender", client)} **Created at**: ${formatDiscordDate(getSnowflakeDate(resolvedUser.id))}` +
                 (rolesText ? `\n${rolesText}` : "")
             },
           ],
