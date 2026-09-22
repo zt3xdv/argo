@@ -202,7 +202,7 @@ export default {
           const recentCoverData = recentCover ? `data:${recentCover.mimeType};base64,${recentCover.base64}` : null;
 
           return `
-        ${recentCoverData ? `<image x="30" y="${y}" width="90" height="90" preserveAspectRatio="xMidYMid slice" clip-path="url(#coverClip)" href="${recentCoverData}" xlink:href="${recentCoverData}"/>` : `
+        ${recentCoverData ? `<image x="30" y="${y}" width="90" height="90" preserveAspectRatio="xMidYMid slice" href="${recentCoverData}" xlink:href="${recentCoverData}"/>` : `
         <rect x="30" y="${y}" width="90" height="90" rx="14" fill="#292929"/>`}
 
         <text x="145" y="${y + 30}" fill="#fff" font-family="Geist" font-size="25" font-weight="700">
