@@ -48,7 +48,7 @@ export default {
     if (interaction.guild_id) {
       try {
         guildRoles = await api.guilds.getRoles(interaction.guild_id);
-      } catch { /* no access to guild roles */ }
+      } catch { /* could not get guild roles */ }
     }
 
     const roles = guildRoles.length ? roleIds.map((id) => guildRoles.find((role) => role.id === id)).filter(Boolean).sort((a, b) => b.position - a.position) : roleIds.map((id) => ({ id }));
@@ -66,12 +66,12 @@ export default {
     const avatarHash = resolvedMember?.avatar ?? resolvedUser.avatar;
     const avatarData = await fetchImage(avatarHash ? `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.png?size=256` : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(userId) >> 22n) % 6}.png`);
 
-    const decorationAsset = resolvedUser.avatar_decoration_data?.asset;
-    let avatarDecorationData = null;
+    const decorationHash = resolvedUser.avatar_decoration_data?.asset;
+    let decorationData = null;
     
-    if (decorationAsset) {
+    if (decorationHash) {
       try {
-        avatarDecorationData = await fetchImage(`https://cdn.discordapp.com/avatar-decoration-presets/${decorationAsset}.png?size=256`);
+        decorationData = await fetchImage(`https://cdn.discordapp.com/avatar-decoration-presets/${decorationHash}.png?size=256`);
       } catch { /* could not get decoration */ }
     }
     
@@ -120,14 +120,14 @@ export default {
         
         <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
 
-        ${avatarDecorationData ? `<image x="20" y="20" width="220" height="220" preserveAspectRatio="xMidYMid meet" href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}" xlink:href="data:${avatarDecorationData.mimeType};base64,${avatarDecorationData.base64}"/>` : ""}
+        ${decorationData ? `<image x="20" y="20" width="220" height="220" preserveAspectRatio="xMidYMid meet" href="data:${decorationData.mimeType};base64,${decorationData.base64}" xlink:href="data:${decorationData.mimeType};base64,${decorationData.base64}"/>` : ""}
 
         <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
           ${escapeXml(displayName.length > 24 ? `${displayName.slice(0, 23)}...` : displayName)}
         </text>
 
         <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">
-          @${escapeXml(resolvedUser.username.length > 32 ? `${resolvedUser.username.slice(0, 31)}...` : resolvedUser.username)}${discriminator}
+          @${escapeXml(resolvedUser.username)}${discriminator}
         </text>
       </svg>
     `, {
