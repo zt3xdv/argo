@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges, getUserBadges, getSnowflakeDate } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, buildSvgBadges, getUserBadges, getSnowflakeDate, truncate } from "../../utils/utils.js";
 import { UserFlags } from 'discord-api-types/v10';
 
 export default {
@@ -123,7 +123,7 @@ export default {
         ${decorationData ? `<image x="20" y="20" width="220" height="220" preserveAspectRatio="xMidYMid meet" href="data:${decorationData.mimeType};base64,${decorationData.base64}" xlink:href="data:${decorationData.mimeType};base64,${decorationData.base64}"/>` : ""}
 
         <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
-          ${escapeXml(displayName.length > 24 ? `${displayName.slice(0, 23)}...` : displayName)}
+          ${escapeXml(truncate(displayName, 25))}
         </text>
 
         <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">

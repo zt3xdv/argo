@@ -2,7 +2,7 @@ import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import database from "../../utils/database.js";
 import config from "../../../config.json" with { type: "json" };
-import { getEmoji, escapeXml, escapeMarkdown, fetchImage } from "../../utils/utils.js";
+import { getEmoji, escapeXml, escapeMarkdown, fetchImage, truncate } from "../../utils/utils.js";
 
 export default {
   name: "lastfm",
@@ -35,10 +35,15 @@ export default {
       ],
     },
     
-    // just another not checked subcomand cuz yes
+    // such useless subcommands
+    {
+      name: "last",
+      description: "View what are you listening to",
+      type: ApplicationCommandOptionType.Subcommand,
+    },
     {
       name: "recent",
-      description: "View what are you listening to",
+      description: "View your last 5 listened songs",
       type: ApplicationCommandOptionType.Subcommand,
     },
   ],
@@ -50,10 +55,10 @@ export default {
     const databaseKey = `lastfm.username.${userId}`;
 
     const options = interaction.data.options ?? [];
-    const setSubcommand = options.find((option) => option.name === "set");
+    const subcommand = options[0]?.name;
 
-    if (setSubcommand) {
-      const usernameOption = setSubcommand.options?.find((option) => option.name === "username");
+    if (subcommand === "set") {
+      const usernameOption = options[0]?.options?.find((option) => option.name === "username");
       const username = String(usernameOption?.value ?? "").trim();
 
       if (!username) {
@@ -100,7 +105,7 @@ export default {
       user: String(username),
       api_key: config.lastFmKey,
       format: "json",
-      limit: "1",
+      limit: subcommand === "recent" ? "5" : "1",
       autocorrect: "0",
     });
 
@@ -112,7 +117,10 @@ export default {
       autocorrect: "0",
     });
 
-    const [recentTracksResponse, userInfoResponse] = await Promise.all([fetch(`${apiUrl}?${recentTracksParams}`), fetch(`${apiUrl}?${userInfoParams}`)]);
+    const [recentTracksResponse, userInfoResponse] = await Promise.all([
+      fetch(`${apiUrl}?${recentTracksParams}`),
+      fetch(`${apiUrl}?${userInfoParams}`),
+    ]);
 
     if (!recentTracksResponse.ok) {
       throw new Error(`Last.fm request failed with status ${recentTracksResponse.status}`);
@@ -133,9 +141,13 @@ export default {
       });
     }
 
-    const track = data.recenttracks?.track?.[0];
+    const tracks = Array.isArray(data.recenttracks?.track)
+      ? data.recenttracks.track
+      : data.recenttracks?.track
+        ? [data.recenttracks.track]
+        : [];
 
-    if (!track) {
+    if (!tracks.length) {
       return api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
@@ -147,6 +159,8 @@ export default {
       });
     }
 
+    const track = tracks[0];
+
     const artist = track.artist?.["#text"] ?? "Unknown artist";
     const trackName = track.name ?? "Unknown track";
     const album = track.album?.["#text"] ?? "";
@@ -157,8 +171,6 @@ export default {
     const status = (isPlaying ? "Listening" : "Listened") + " to";
     const scrobbles = Number(userInfoData?.user?.playcount ?? 0).toLocaleString("en-US");
 
-    const truncate = (value, length) => value.length > length ? `${value.slice(0, length - 3)}...` : value;
-
     let cover;
 
     if (image) {
@@ -167,8 +179,53 @@ export default {
       } catch { /* no cover image ig */ }
     }
 
+    let recentRows = "";
+
+    if (subcommand === "recent") {
+      const recentRowsData = await Promise.all(
+        tracks.slice(0, 5).map(async (recentTrack, index) => {
+          const recentArtist = recentTrack.artist?.["#text"] ?? "Unknown artist";
+          const recentTrackName = recentTrack.name ?? "Unknown track";
+          const recentAlbum = recentTrack.album?.["#text"] ?? "Unknown album";
+          const recentIsPlaying = recentTrack["@attr"]?.nowplaying === "true" || recentTrack["@attr"]?.nowplaying === true;
+          const recentImage = recentTrack.image?.find((item) => item.size === "extralarge")?.["#text"] || recentTrack.image?.find((item) => item.size === "large")?.["#text"] || recentTrack.image?.at(-1)?.["#text"];
+
+          let recentCover;
+
+          if (recentImage) {
+            try {
+              recentCover = await fetchImage(recentImage);
+            } catch { /* no cover image ig */ }
+          }
+
+          const y = 105 + index * 125;
+          const recentCoverData = recentCover ? `data:${recentCover.mimeType};base64,${recentCover.base64}` : null;
+
+          return `
+        ${recentCoverData ? `<image x="30" y="${y}" width="90" height="90" preserveAspectRatio="xMidYMid slice" href="${recentCoverData}" xlink:href="${recentCoverData}"/>` : `
+        <rect x="30" y="${y}" width="90" height="90" rx="14" fill="#292929"/>
+        <text x="75" y="${y + 58}" text-anchor="middle" fill="#b5bac1" font-family="Geist" font-size="34">♪</text>`}
+
+        <text x="145" y="${y + 30}" fill="#fff" font-family="Geist" font-size="25" font-weight="700">
+          ${escapeXml(`${index + 1}. ${truncate(recentTrackName, 38)}`)}
+        </text>
+
+        <text x="145" y="${y + 60}" fill="#d5d8dc" font-family="Geist" font-size="21">
+          ${escapeXml(truncate(recentArtist, 43))}
+        </text>
+
+        <text x="145" y="${y + 85}" fill="#aeb3ba" font-family="Geist" font-size="18">
+          ${escapeXml(recentIsPlaying ? "Now playing" : truncate(recentAlbum || "Unknown Album", 48))}
+        </text>
+      `;
+        }),
+      );
+
+      recentRows = recentRowsData.join("");
+    }
+
     const renderer = new Resvg(`
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="260" viewBox="0 0 900 260">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="${subcommand === "recent" ? 150 + tracks.slice(0, 5).length * 125 : 260}" viewBox="0 0 900 ${subcommand === "recent" ? 150 + tracks.slice(0, 5).length * 125 : 260}">
         <defs>
           <linearGradient id="overlay" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stop-color="#000" stop-opacity=".05"/>
@@ -180,6 +237,18 @@ export default {
           </clipPath>
         </defs>
         
+        ${subcommand === "recent" ? `
+        <rect width="900" height="${150 + tracks.slice(0, 5).length * 125}" fill="#17181c"/>
+
+        <text x="30" y="52" fill="#fff" font-family="Geist" font-size="31" font-weight="700">
+          Recent tracks
+        </text>
+
+        <text x="30" y="80" fill="#b5bac1" font-family="Geist" font-size="19">
+          ${escapeXml(String(username))}
+        </text>
+
+        ${recentRows}` : `
         ${cover ? `<image x="30" y="30" width="200" height="200" preserveAspectRatio="xMidYMid slice" clip-path="url(#coverClip)" href="data:${cover.mimeType};base64,${cover.base64}" xlink:href="data:${cover.mimeType};base64,${cover.base64}"/>` : `
         <rect x="30" y="30" width="200" height="200" rx="18" fill="#292929"/>`}
 
@@ -203,7 +272,7 @@ export default {
 
         <text x="270" y="232" fill="#b5bac1" font-family="Geist" font-size="20">
           ${scrobbles} scrobbles · ${escapeXml(truncate(String(username), 24))}
-        </text>
+        </text>`}
       </svg>
     `, {
       font: {
@@ -211,6 +280,7 @@ export default {
         loadSystemFonts: false,
       },
     });
+
     const png = renderer.render().asPng();
 
     return api.interactions.editReply(interaction.application_id, interaction.token, {
@@ -233,14 +303,7 @@ export default {
                   },
                 },
               ],
-            },
-            {
-              type: ComponentType.TextDisplay,
-              content:
-                `-# ${getEmoji("music", client)} **${status} [${escapeMarkdown(trackName)}](${songUrl})** by **${escapeMarkdown(artist)}**\n` +
-                (album ? `\nAlbum: **${escapeMarkdown(album)}**` : "") +
-                `\n-# Account: ${escapeMarkdown(username)} · ${scrobbles} scrobbles`,
-            },
+            }
           ],
         },
       ],

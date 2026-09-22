@@ -23,6 +23,19 @@ const badgePaths = {
   [UserFlags.CertifiedModerator]: "discord-mod.svg",
 };
 
+// sorted by value (e. seed is 1, and bud is 3)
+const accountAgeBadges = [
+  "seed.svg",
+  "sprout.svg",
+  "bud.svg",
+  "sapling.svg",
+  "blossom.svg",
+  "redwood.svg",
+  "sequoia.svg",
+  "bristlecone.svg",
+  "primordial.svg",
+];
+
 export function getEmoji(name, client) {
   const emoji = client.emojis.items.find(e => e.name == name);
   return emoji ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>` : ":e:";
@@ -134,6 +147,23 @@ export function getPremiumBadge(resolvedUser) {
   }
 }
 
+export function getAccountAgeBadge(resolvedUser) {
+  if (!resolvedUser?.id) return undefined;
+
+  const created = new Date(getSnowflakeDate(resolvedUser.id));
+  const now = new Date();
+
+  let age = now.getUTCFullYear() - created.getUTCFullYear();
+
+  if (now.getUTCMonth() < created.getUTCMonth() || (now.getUTCMonth() === created.getUTCMonth() && now.getUTCDate() < created.getUTCDate())) {
+    age--;
+  }
+
+  if (age < 1) return undefined;
+
+  return `account-age/${accountAgeBadges[Math.min(age, 9) - 1]}`;
+}
+
 export function getPublicFlagBadges(resolvedUser) {
   const publicFlags = resolvedUser?.public_flags ?? 0;
 
@@ -153,10 +183,15 @@ export function getUserBadges(resolvedUser, resolvedMember) {
   }
 
   badges.push(...getPublicFlagBadges(resolvedUser));
+  badges.push(getAccountAgeBadge(resolvedUser));
 
   if (resolvedMember?.premium_since) {
     badges.push("boosts/discord-boost-1.svg");
   }
 
   return [...new Set(badges)];
+}
+
+export function truncate(value, length) {
+  return value.length > length ? `${value.slice(0, length - 3)}...` : value;
 }
