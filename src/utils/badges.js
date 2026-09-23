@@ -1,5 +1,5 @@
 import { UserFlags, UserPremiumType } from "discord-api-types/v10";
-import { hasFlag, getAsset } from "./utils.js";
+import { hasFlag, getAsset, getSnowflakeDate } from "./utils.js";
 
 export const badgePaths = {
   [UserFlags.Staff]: "discord-staff.svg",
