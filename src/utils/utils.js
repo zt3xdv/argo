@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { ComponentType, MessageFlags} from '@discordjs/core';
 import { UserFlags, UserPremiumType } from "discord-api-types/v10";
 
 export const assetsDir = path.resolve(import.meta.dirname, "../assets");
@@ -194,4 +195,40 @@ export function getUserBadges(resolvedUser, resolvedMember) {
 
 export function truncate(value, length) {
   return value.length > length ? `${value.slice(0, length - 3)}...` : value;
+}
+
+// some workaround to rewrite api
+export function addMessage(api, message) {
+  const originalReply = api.interactions.reply;
+  const originalEditReply = api.interactions.editReply;
+
+  const add = data => {
+    const isComponentsV2 = (data.flags ?? 0) & MessageFlags.IsComponentsV2;
+
+    if (isComponentsV2) {
+      const components = data.components ?? [];
+
+      if (!components.some(component => component.type === ComponentType.TextDisplay && component.content === message)) {
+        components.push({
+          type: ComponentType.TextDisplay,
+          content: message
+        });
+      }
+
+      return { ...data, components };
+    }
+
+    return {
+      ...data,
+      content: `${data.content ?? ''}\n\n${message}`.trim()
+    };
+  };
+  
+  api.interactions.reply = (id, token, data) => originalReply.call(api.interactions, id, token, add(data));
+  api.interactions.editReply = (id, token, data) => originalEditReply.call(api.interactions, id, token, add(data));
+
+  return () => {
+    api.interactions.reply = originalReply;
+    api.interactions.editReply = originalEditReply;
+  };
 }

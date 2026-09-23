@@ -1,5 +1,5 @@
 import { GatewayDispatchEvents, InteractionType } from '@discordjs/core';
-import { getEmoji } from '../../utils/utils.js';
+import { getEmoji, addMessage } from '../../utils/utils.js';
 
 export default {
   name: GatewayDispatchEvents.InteractionCreate,
@@ -22,6 +22,7 @@ export default {
           await interaction.api.interactions.defer(interaction.data.id, interaction.data.token, typeof command.defer == "object" ? command.defer : {});
         }
         
+        await addMessage(interaction.api, "-# Consider ignoring this message im just testing");
         await command.execute(interaction, client);
       } catch (error) {
         console.error(`Error executing /${interaction.data.data.name}:`, error);
