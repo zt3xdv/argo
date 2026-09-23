@@ -209,7 +209,7 @@ export function addMessage(api, message) {
       const components = data.components ?? [];
 
       if (!components.some(component => component.type === ComponentType.TextDisplay && component.content === message)) {
-        components.push({
+        components.unshift({
           type: ComponentType.TextDisplay,
           content: message
         });

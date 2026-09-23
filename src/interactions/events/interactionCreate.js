@@ -22,7 +22,7 @@ export default {
           await interaction.api.interactions.defer(interaction.data.id, interaction.data.token, typeof command.defer == "object" ? command.defer : {});
         }
         
-        await addMessage(interaction.api, "-# Consider ignoring this message im just testing");
+        await addMessage(interaction.api, "-# why even reading this");
         await command.execute(interaction, client);
       } catch (error) {
         console.error(`Error executing /${interaction.data.data.name}:`, error);
