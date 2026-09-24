@@ -1,5 +1,4 @@
-import { ComponentType, MessageFlags } from '@discordjs/core';
-
+import { ComponentType, MessageFlags, Routes } from '@discordjs/core';
 import fs from "fs/promises";
 import path from "path";
 
@@ -136,4 +135,10 @@ export function addMessage(api, message) {
     api.interactions.reply = originalReply;
     api.interactions.editReply = originalEditReply;
   };
+}
+
+export async function getRestLatency(rest) {
+  const start = performance.now()
+  await rest.get(Routes.gateway())
+  return Math.round(performance.now() - start)
 }

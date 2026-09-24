@@ -1,6 +1,5 @@
 import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextType } from "@discordjs/core";
-import { getLatency } from "../../utils/rest.js";
-import { getEmoji } from "../../utils/utils.js";
+import { getEmoji, getRestLatency } from "../../utils/utils.js";
 
 export default {
   name: 'ping',
@@ -17,9 +16,9 @@ export default {
   type: ApplicationCommandType.ChatInput,
 
   async execute({ data: interaction, api, shardId }, client) {
-    const rest = await getLatency(client.rest);
+    const rest = await getRestLatency(client.rest);
     await api.interactions.reply(interaction.id, interaction.token, {
-      content: `${getEmoji("pings", client)} Pong!\n-# **Websocket (Shard #${shardId}) ${client.gateway.shards.get(shardId)?.ping}ms • REST ${rest}ms**`,
+      content: `${getEmoji("pings", client)} Pong!\n-# Websocket (Shard #${shardId}) **${client.gateway.shards.get(shardId)?.ping}ms** • REST **${rest}ms**`,
     });
   }
 };

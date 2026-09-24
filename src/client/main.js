@@ -1,13 +1,13 @@
 import path from 'node:path';
 import { readFile } from "node:fs/promises";
-import config from '../../config.json' with { type: 'json' };
 import { Client, GatewayIntentBits, Routes } from '@discordjs/core';
 import { REST } from '@discordjs/rest';
-import { WebSocketManager, WebSocketShardEvents } from '@discordjs/ws';
+import { WebSocketManager } from '@discordjs/ws';
 import { load } from '../utils/loaders.js';
 import { getAsset } from "../utils/utils.js";
 import { transformCommand } from '../builders/command.js';
 import { initWasm } from "@resvg/resvg-wasm";
+import config from '../../config.json' with { type: 'json' };
 
 // init resvg wasm
 await initWasm((
@@ -26,8 +26,8 @@ const gateway = new WebSocketManager({
 gateway.shards = new Map();
 
 const client = new Client({ rest, gateway });
-client.commands = await load(path.join(import.meta.dirname, "..", "interactions", "commands"), "command");
-client.events = await load(path.join(import.meta.dirname, "..", "interactions", "events"), "event");
+client.commands = await load(path.join(import.meta.dirname, "commands"), "command");
+client.events = await load(path.join(import.meta.dirname, "events"), "event");
 client.emojis = await rest.get(Routes.applicationEmojis(config.clientId));
 client.fontBuffers = [
   new Uint8Array(await getAsset(path.join("fonts", "geist.ttf")))

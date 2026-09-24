@@ -12,29 +12,35 @@ export const badgePaths = {
   [UserFlags.PremiumEarlySupporter]: "discord-early-supporter.svg",
   [UserFlags.BotHTTPInteractions]: "supports-commands.svg",
   [UserFlags.CertifiedModerator]: "discord-mod.svg",
+  
+  // Account age
+  "account-age-1": "account-age/seed.svg",
+  "account-age-2": "account-age/sprout.svg",
+  "account-age-3": "account-age/bud.svg",
+  "account-age-4": "account-age/sapling.svg",
+  "account-age-5": "account-age/blossom.svg",
+  "account-age-6": "account-age/redwood.svg",
+  "account-age-7": "account-age/sequoia.svg",
+  "account-age-8": "account-age/bristlecone.svg",
+  "account-age-9": "account-age/primordial.svg",
+  
+  // Premium
+  "nitro": "discord-nitro.svg",
+  "nitro-basic": "discord-nitro-basic.svg",
+  
+  boost(type) {
+    return `boosts/discord-boost-${type}.svg`;
+  }
 };
-
-// sorted by value (e. seed is 1, and bud is 3)
-export const accountAgeBadges = [
-  "seed.svg",
-  "sprout.svg",
-  "bud.svg",
-  "sapling.svg",
-  "blossom.svg",
-  "redwood.svg",
-  "sequoia.svg",
-  "bristlecone.svg",
-  "primordial.svg",
-];
 
 export function getPremiumBadge(resolvedUser) {
   switch (resolvedUser?.premium_type) {
     case UserPremiumType.Nitro:
     case UserPremiumType.NitroClassic:
-      return "discord-nitro.svg";
+      return badgePaths["nitro"];
 
     case UserPremiumType.NitroBasic:
-      return "discord-nitro-basic.svg";
+      return badgePaths["nitro-basic"];
 
     default:
       return undefined;
@@ -49,13 +55,19 @@ export function getAccountAgeBadge(resolvedUser) {
 
   let age = now.getUTCFullYear() - created.getUTCFullYear();
 
-  if (now.getUTCMonth() < created.getUTCMonth() || (now.getUTCMonth() === created.getUTCMonth() && now.getUTCDate() < created.getUTCDate())) {
+  if (
+    now.getUTCMonth() < created.getUTCMonth() ||
+    (
+      now.getUTCMonth() === created.getUTCMonth() &&
+      now.getUTCDate() < created.getUTCDate()
+    )
+  ) {
     age--;
   }
 
   if (age < 1) return undefined;
 
-  return `account-age/${accountAgeBadges[Math.min(age, 9) - 1]}`;
+  return badgePaths[`account-age-${Math.min(age, 9)}`];
 }
 
 export function getPublicFlagBadges(resolvedUser) {
@@ -80,7 +92,7 @@ export function getUserBadges(resolvedUser, resolvedMember) {
   badges.push(getAccountAgeBadge(resolvedUser));
 
   if (resolvedMember?.premium_since) {
-    badges.push("boosts/discord-boost-1.svg");
+    badges.push(badgePaths.boost("1"));
   }
 
   return [...new Set(badges)];
