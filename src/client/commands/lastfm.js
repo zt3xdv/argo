@@ -101,7 +101,7 @@ export default {
 
     const [userInfoData, tracks] = await Promise.all([
       moonify.getUserProfile(String(username)),
-      subcommand === "recent" ? moonify.getRecentTracks(String(username), 5) : moonify.getCurrentlyPlaying(String(username)),
+      moonify.getRecentTracks(String(username), 5),
     ]);
 
     if (!userInfoData) {
