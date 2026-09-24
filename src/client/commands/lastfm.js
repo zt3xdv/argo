@@ -99,9 +99,10 @@ export default {
       });
     }
 
-    const [userInfoData, tracks] = await Promise.all([
+    const [userInfoData, tracks, currentTrack] = await Promise.all([
       moonify.getUserProfile(String(username)),
       moonify.getRecentTracks(String(username), 5),
+      moonify.getCurrentlyPlaying(String(username))
     ]);
 
     if (!userInfoData) {
@@ -128,9 +129,9 @@ export default {
       });
     }
 
-    const track = tracks[0];
+    const track = currentTrack ?? tracks[0];
     
-    const isPlaying = subcommand === "recent" ? track.isPlaying === true : true;
+    const isPlaying = subcommand === "recent" ? track.isPlaying === true : currentTrack ? currentTrack.isPlaying === true : false;
     const status = (isPlaying ? "Listening" : "Listened") + " to";
 
     let cover;
