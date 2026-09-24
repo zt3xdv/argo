@@ -98,9 +98,12 @@ export default {
         flags: MessageFlags.IsComponentsV2,
       });
     }
+    
+    let tracks;
+    let userInfoData;
 
     try {
-      const [userInfoData, tracks] = await Promise.all([
+      [tracks, userInfoData] = await Promise.all([
         moonify.getUserProfile(String(username)),
         moonify.getRecentTracks(String(username), 5)
       ]);
