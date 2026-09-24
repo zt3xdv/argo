@@ -99,21 +99,25 @@ export default {
       });
     }
 
-    const [userInfoData, tracks] = await Promise.all([
-      moonify.getUserProfile(String(username)),
-      moonify.getRecentTracks(String(username), 5)
-    ]);
-
-    if (!userInfoData) {
-      return api.interactions.editReply(interaction.application_id, interaction.token, {
-        components: [
-          {
-            type: ComponentType.TextDisplay,
-            content: `-# ${getEmoji("exclamation", client)} This Last.fm user could not be found.`,
-          },
-        ],
-        flags: MessageFlags.IsComponentsV2,
-      });
+    try {
+      const [userInfoData, tracks] = await Promise.all([
+        moonify.getUserProfile(String(username)),
+        moonify.getRecentTracks(String(username), 5)
+      ]);
+    } catch (e) {
+      if (e.status == 404) {
+        return api.interactions.editReply(interaction.application_id, interaction.token, {
+          components: [
+            {
+              type: ComponentType.TextDisplay,
+              content: `-# ${getEmoji("exclamation", client)} This Last.fm user could not be found.`,
+            },
+          ],
+          flags: MessageFlags.IsComponentsV2,
+        });
+      }
+      
+      return console.error(e);
     }
 
     if (!tracks.length) {
