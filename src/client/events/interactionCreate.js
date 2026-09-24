@@ -24,7 +24,7 @@ export default {
         }
         
         // might change it later
-        if (Math.random() < 0.15) {
+        if (Math.random() < 0.25) {
           await addMessage(interaction.api, `-# ${getEmoji("topgg", client)} Consider voting for us on [Top.gg](https://top.gg/bot/${config.clientId})!`);
         }
 
