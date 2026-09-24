@@ -23,7 +23,11 @@ export default {
           await interaction.api.interactions.defer(interaction.data.id, interaction.data.token, typeof command.defer == "object" ? command.defer : {});
         }
         
-        // await addMessage(interaction.api, `-# ${getEmoji("topgg", client)} Consider voting for us on [Top.gg](https://top.gg/bot/${config.clientId})!`);
+        // might change it later
+        if (Math.random() < 0.15) {
+          await addMessage(interaction.api, `-# ${getEmoji("topgg", client)} Consider voting for us on [Top.gg](https://top.gg/bot/${config.clientId})!`);
+        }
+
         await command.execute(interaction, client);
       } catch (error) {
         console.error(`Error executing /${interaction.data.data.name}:`, error);
