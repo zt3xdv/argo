@@ -75,7 +75,7 @@ export function getPublicFlagBadges(resolvedUser) {
 
   return Object.entries(badgePaths)
     .filter(([flag]) =>
-      hasFlag(publicFlags, Number(flag)),
+      typeof flag === "number" && hasFlag(publicFlags, Number(flag)),
     )
     .map(([, path]) => path);
 }
