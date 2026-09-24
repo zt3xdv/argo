@@ -131,7 +131,7 @@ export default {
 
     const track = currentTrack ?? tracks[0];
     
-    const isPlaying = subcommand === "recent" ? track.isPlaying === true : currentTrack ? currentTrack.isPlaying === true : false;
+    const isPlaying = subcommand === "recent" ? track.isPlaying === true : currentTrack !== null;
     const status = (isPlaying ? "Listening" : "Listened") + " to";
 
     let cover;
@@ -210,23 +210,23 @@ export default {
 
         <rect width="900" height="260" fill="url(#overlay)"/>
 
-        <text x="270" y="68" fill="#b5bac1" font-family="Geist" font-size="25">
+        <text x="270" y="55" fill="#b5bac1" font-family="Geist" font-size="25">
           ${escapeXml(status)}
         </text>
 
-        <text x="270" y="123" fill="#fff" font-family="Geist" font-size="42" font-weight="700">
+        <text x="270" y="110" fill="#fff" font-family="Geist" font-size="42" font-weight="700">
           ${escapeXml(truncate(track.trackName ?? "Unknown track", 31))}
         </text>
 
-        <text x="270" y="161" fill="#d5d8dc" font-family="Geist" font-size="27">
+        <text x="270" y="148" fill="#d5d8dc" font-family="Geist" font-size="27">
           ${escapeXml(truncate(track.artistName ?? "Unknown artist", 34))}
         </text>
 
-        <text x="270" y="196" fill="#aeb3ba" font-family="Geist" font-size="22">
+        <text x="270" y="182" fill="#aeb3ba" font-family="Geist" font-size="22">
           ${escapeXml(truncate(track.albumName || "Unknown Album", 34))}
         </text>
 
-        <text x="270" y="230" fill="#b5bac1" font-family="Geist" font-size="20">
+        <text x="270" y="217" fill="#b5bac1" font-family="Geist" font-size="20">
           ${Number(userInfoData.playCount ?? 0).toLocaleString("en-US")} scrobbles · ${escapeXml(truncate(String(username), 24))}
         </text>`}
       </svg>
