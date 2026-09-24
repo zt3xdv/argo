@@ -1,5 +1,4 @@
 import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getLatency } from "../../utils/rest.js";
 import { getEmoji } from "../../utils/utils.js";
 
 export default {

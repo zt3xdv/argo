@@ -1,6 +1,6 @@
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, getGuildAssetUrl, fetchImage, getSnowflakeDate } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, getGuildAssetUrl, fetchImage, getSnowflakeDate, truncate } from "../../utils/utils.js";
 
 export default {
   name: "server",
@@ -130,7 +130,7 @@ export default {
         <image x="40" y="40" width="180" height="180" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)" href="data:${avatarData.mimeType};base64,${avatarData.base64}" xlink:href="data:${avatarData.mimeType};base64,${avatarData.base64}"/>
         
         <text x="270" y="120" fill="#fff" font-family="Geist" font-size="52" font-weight="700">
-          ${escapeXml(guild.name.length > 28 ? `${guild.name.slice(0, 27)}...` : guild.name)}
+          ${escapeXml(truncate(guild.name, 25))}
         </text>
 
         <text x="270" y="170" fill="#b5bac1" font-family="Geist" font-size="32">
