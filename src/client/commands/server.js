@@ -153,18 +153,18 @@ export default {
       ],
       components: [
         {
+          type: ComponentType.MediaGallery,
+          items: [
+            {
+              media: {
+                url: "attachment://server.png",
+              },
+            },
+          ],
+        },
+        {
           type: ComponentType.Container,
           components: [
-            {
-              type: ComponentType.MediaGallery,
-              items: [
-                {
-                  media: {
-                    url: "attachment://server.png",
-                  },
-                },
-              ],
-            },
             {
               type: ComponentType.TextDisplay,
               content:

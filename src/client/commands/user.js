@@ -148,18 +148,18 @@ export default {
       ],
       components: [
         {
+          type: ComponentType.MediaGallery,
+          items: [
+            {
+              media: {
+                url: "attachment://user.png",
+              },
+            },
+          ],
+        },
+        {
           type: ComponentType.Container,
           components: [
-            {
-              type: ComponentType.MediaGallery,
-              items: [
-                {
-                  media: {
-                    url: "attachment://user.png",
-                  },
-                },
-              ],
-            },
             {
               type: ComponentType.TextDisplay,
               content:
