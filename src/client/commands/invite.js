@@ -70,10 +70,11 @@ export default {
     await api.interactions.editReply(interaction.application_id, interaction.token, {
       files: server.files,
       components: [
+        ...([server.components[0]]),
         {
           type: ComponentType.Container,
           components: [
-            ...server.components[0].components,
+            ...server.components[1].components,
             {
               type: ComponentType.TextDisplay,
               content:
