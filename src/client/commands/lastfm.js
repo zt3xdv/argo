@@ -99,7 +99,7 @@ export default {
       });
     }
 
-    const [userInfoData, tracksData] = await Promise.all([
+    const [userInfoData, tracks] = await Promise.all([
       moonify.getUserProfile(String(username)),
       subcommand === "recent" ? moonify.getRecentTracks(String(username), 5) : moonify.getCurrentlyPlaying(String(username)),
     ]);
@@ -115,8 +115,6 @@ export default {
         flags: MessageFlags.IsComponentsV2,
       });
     }
-
-    const tracks = subcommand === "recent" ? Array.isArray(tracksData) ? tracksData : [] : tracksData ? [tracksData] : [];
 
     if (!tracks.length) {
       return api.interactions.editReply(interaction.application_id, interaction.token, {
