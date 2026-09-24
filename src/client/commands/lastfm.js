@@ -103,10 +103,8 @@ export default {
     let userInfoData;
 
     try {
-      [tracks, userInfoData] = await Promise.all([
-        moonify.getUserProfile(String(username)),
-        moonify.getRecentTracks(String(username), 5)
-      ]);
+      userInfoData = await moonify.getUserProfile(String(username));
+      tracks = await moonify.getRecentTracks(String(username), 5);
     } catch (e) {
       if (e.status == 404) {
         return api.interactions.editReply(interaction.application_id, interaction.token, {
