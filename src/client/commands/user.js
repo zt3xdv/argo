@@ -157,9 +157,9 @@ export default {
             },
           ],
         },
-        {
+        /*{
           type: ComponentType.Container,
-          components: [
+          components: [*/
             {
               type: ComponentType.TextDisplay,
               content:
@@ -168,8 +168,8 @@ export default {
                 `\n${getEmoji("calendar", client)} **Created at**: ${formatDiscordDate(getSnowflakeDate(resolvedUser.id))}` +
                 (rolesText ? `\n${rolesText}` : "")
             },
-          ],
-        },
+        /*  ],
+        },*/
       ],
       allowed_mentions: {
         parse: []
