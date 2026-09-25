@@ -12,7 +12,7 @@ export const badgePaths = {
   [UserFlags.PremiumEarlySupporter]: "discord-early-supporter.svg",
   [UserFlags.BotHTTPInteractions]: "supports-commands.svg",
   [UserFlags.CertifiedModerator]: "discord-mod.svg",
-  
+
   // Account age
   "account-age-1": "account-age/seed.svg",
   "account-age-2": "account-age/sprout.svg",
@@ -23,15 +23,21 @@ export const badgePaths = {
   "account-age-7": "account-age/sequoia.svg",
   "account-age-8": "account-age/bristlecone.svg",
   "account-age-9": "account-age/primordial.svg",
-  
+
   // Premium
   "nitro": "discord-nitro.svg",
   "nitro-basic": "discord-nitro-basic.svg",
-  
+
   boost(type) {
     return `boosts/discord-boost-${type}.svg`;
-  }
+  },
 };
+
+const publicFlagPaths = Object.fromEntries(
+  Object.entries(badgePaths).filter(([flag, path]) =>
+    /^\d+$/.test(flag) && typeof path === "string",
+  ),
+);
 
 export function getPremiumBadge(resolvedUser) {
   switch (resolvedUser?.premium_type) {
@@ -73,9 +79,9 @@ export function getAccountAgeBadge(resolvedUser) {
 export function getPublicFlagBadges(resolvedUser) {
   const publicFlags = resolvedUser?.public_flags ?? 0;
 
-  return Object.entries(badgePaths)
+  return Object.entries(publicFlagPaths)
     .filter(([flag]) =>
-      typeof flag === "object" && hasFlag(publicFlags, Number(flag)),
+      hasFlag(publicFlags, Number(flag)),
     )
     .map(([, path]) => path);
 }
@@ -89,7 +95,12 @@ export function getUserBadges(resolvedUser, resolvedMember) {
   }
 
   badges.push(...getPublicFlagBadges(resolvedUser));
-  badges.push(getAccountAgeBadge(resolvedUser));
+
+  const accountAgeBadge = getAccountAgeBadge(resolvedUser);
+
+  if (accountAgeBadge) {
+    badges.push(accountAgeBadge);
+  }
 
   if (resolvedMember?.premium_since) {
     badges.push(badgePaths.boost("1"));
