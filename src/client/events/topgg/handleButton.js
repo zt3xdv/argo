@@ -25,10 +25,12 @@ export default {
       return;
     }
 
-    const [data, reminders] = await Promise.all([
+    const [data, storedReminders] = await Promise.all([
       getVoteData(userId),
-      database.getItem(remindersKey) ?? {}
+      database.getItem(remindersKey)
     ]);
+
+    const reminders = storedReminders ?? {};
 
     const newData = {
       ...data,
@@ -49,7 +51,7 @@ export default {
     await client.rest.post(Routes.interactionCallback(interaction.data.id, interaction.data.token), {
       body: {
         type: InteractionResponseType.UpdateMessage,
-        data: buildVoteMessage(userId, newData)
+        data: buildVoteMessage(userId, newData, client)
       }
     });
   }

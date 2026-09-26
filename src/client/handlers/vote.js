@@ -4,7 +4,7 @@ import config from "../../../config.json" with { type: "json" };
 import database from '../../utils/database.js';
 
 export const remindersKey = 'topgg.reminders';
-export const twelveHours = 30 * 1000; //12 * 60 * 60 * 1000;
+export const twelveHours = 12 * 60 * 60 * 1000;
 export const reminderDelay = 1500;
 
 let processing = false;
