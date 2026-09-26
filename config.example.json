@@ -2,5 +2,6 @@
   "token": "discord-token",
   "clientId": "discord-client-id",
   "lastFmKey": "last-fm-api-key",
+  "topggWebhookKey": "topgg-vote-webhook-key",
   "port": "api-server-port"
 }

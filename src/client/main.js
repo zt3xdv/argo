@@ -33,7 +33,7 @@ client.emojis = await rest.get(Routes.applicationEmojis(config.clientId));
 client.fontBuffers = [
   new Uint8Array(await getAsset(path.join("fonts", "geist.ttf")))
 ];
-client.api = createApiServer(client);
+client.api = await createApiServer(client);
 
 for (const event of client.events) {
   const target = event.type === "gateway" ? client.gateway : client;

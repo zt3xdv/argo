@@ -1,6 +1,7 @@
 import { ComponentType, MessageFlags, Routes } from '@discordjs/core';
 import fs from "fs/promises";
 import path from "path";
+import crypto from "crypto";
 
 export const assetsDir = path.resolve(import.meta.dirname, "../assets");
 
@@ -141,4 +142,41 @@ export async function getRestLatency(rest) {
   const start = performance.now()
   await rest.get(Routes.gateway())
   return Math.round(performance.now() - start)
+}
+
+export function verifyWebhook(rawBody, signatureHeader, secret) {
+  if (!signatureHeader || typeof signatureHeader !== "string") {
+    return false;
+  }
+
+  const timestampMatch = signatureHeader.match(/(?:^|,)t=([^,]+)/);
+  const signatureMatch = signatureHeader.match(/(?:^|,)v1=([^,]+)/);
+
+  if (!timestampMatch || !signatureMatch) {
+    return false;
+  }
+
+  const timestamp = timestampMatch[1];
+  const receivedSignature = signatureMatch[1];
+
+  if (
+    !/^\d+$/.test(timestamp) ||
+    !/^[a-f0-9]{64}$/i.test(receivedSignature)
+  ) {
+    return false;
+  }
+
+  const expectedSignature = crypto
+    .createHmac("sha256", secret)
+    .update(`${timestamp}.${rawBody}`, "utf8")
+    .digest("hex");
+
+  const expectedBuffer = Buffer.from(expectedSignature, "hex");
+  const receivedBuffer = Buffer.from(receivedSignature, "hex");
+
+  if (expectedBuffer.length !== receivedBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
 }
