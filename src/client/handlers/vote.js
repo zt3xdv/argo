@@ -33,7 +33,7 @@ export function buildVoteMessage(userId, data, client) {
       {
         type: ComponentType.TextDisplay,
         content:
-          '${getEmoji("topgg", client)} Thanks for voting for our bot on [Top.gg](https://top.gg/bot/${config.clientId})!\n\n' +
+          `${getEmoji("topgg", client)} Thanks for voting for our bot on [Top.gg](https://top.gg/bot/${config.clientId})!\n\n` +
           `Total votes: **${data.totalVotes}**\n` +
           lastVote
       },
