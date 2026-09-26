@@ -84,9 +84,11 @@ export async function handleVote(payload, client) {
     }
   });
 
-  await client.rest.post(Routes.channelMessages(channel.id), {
-    body: buildVoteMessage(userId, data, client)
-  });
+  try {
+    await client.rest.post(Routes.channelMessages(channel.id), {
+      body: buildVoteMessage(userId, data, client)
+    });
+  } catch { /* closed dm or others */ }
 }
 
 export async function processReminders(client) {
@@ -126,12 +128,13 @@ export async function processReminders(client) {
             flags: MessageFlags.IsComponentsV2
           }
         });
-
-        sentUsers.push(userId);
       } catch (error) {
         console.error(`Failed to notify ${userId}:`, error);
       }
-
+      
+      // prevent loops
+      sentUsers.push(userId);
+      
       if (i < dueUsers.length - 1) {
         await delay(reminderDelay);
       }

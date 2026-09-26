@@ -1,6 +1,6 @@
 import { GatewayDispatchEvents, InteractionType, Routes, InteractionResponseType } from '@discordjs/core';
-import database from '../../utils/database.js';
-import { buildVoteMessage, getVoteData, twelveHours, remindersKey } from '../handlers/vote.js';
+import database from '../../../utils/database.js';
+import { buildVoteMessage, getVoteData, twelveHours, remindersKey } from '../../handlers/vote.js';
 
 export default {
   name: GatewayDispatchEvents.InteractionCreate,
