@@ -1,4 +1,6 @@
 {
   "token": "discord-token",
-  "clientId": "discord-client-id"
+  "clientId": "discord-client-id",
+  "lastFmKey": "last-fm-api-key",
+  "port": "api-server-port"
 }

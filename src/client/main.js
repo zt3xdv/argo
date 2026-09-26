@@ -7,6 +7,7 @@ import { load } from '../utils/loaders.js';
 import { getAsset } from "../utils/utils.js";
 import { transformCommand } from '../builders/command.js';
 import { initWasm } from "@resvg/resvg-wasm";
+import { create as createApiServer } from "../builders/api.js";
 import config from '../../config.json' with { type: 'json' };
 
 // init resvg wasm
@@ -32,6 +33,7 @@ client.emojis = await rest.get(Routes.applicationEmojis(config.clientId));
 client.fontBuffers = [
   new Uint8Array(await getAsset(path.join("fonts", "geist.ttf")))
 ];
+client.api = createApiServer(client);
 
 for (const event of client.events) {
   const target = event.type === "gateway" ? client.gateway : client;
@@ -81,4 +83,6 @@ await rest.put(Routes.applicationCommands(config.clientId), {
     ];
   }),
 });
+
 await gateway.connect();
+client.api.listen({ port: config.port, host: "0.0.0.0" });

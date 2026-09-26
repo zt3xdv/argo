@@ -24,6 +24,7 @@
     "@mwyeow/moonify.js": "^1.1.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "discord-api-types": "^0.38.55",
+    "fastify": "^5.12.5",
     "unstorage": "^1.17.5"
   }
 }
