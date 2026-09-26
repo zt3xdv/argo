@@ -1,5 +1,5 @@
 import { Routes, ComponentType, MessageFlags, ButtonStyle } from '@discordjs/core';
-import { delay } from "../../utils/utils.js";
+import { delay, getEmoji } from "../../utils/utils.js";
 import config from "../../../config.json" with { type: "json" };
 import database from '../../utils/database.js';
 
