@@ -26,7 +26,7 @@ export default {
 
     const data = await getVoteData(userId);
 
-    await database.setItem(key, {
+    await database.setItem(`topgg.${userId}`, {
       lastVoteTime: data.lastVoteTime,
       totalVotes: data.totalVotes,
       shouldRemindThem: !data.shouldRemindThem
