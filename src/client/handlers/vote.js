@@ -1,5 +1,17 @@
 import { Routes, ComponentType, MessageFlags, ButtonStyle } from '@discordjs/core';
+import { delay } from "../../utils/utils.js";
+import config from "../../../config.json" with { type: "json" };
 import database from '../../utils/database.js';
+
+export const remindersKey = 'topgg.reminders';
+export const twelveHours = 30 * 1000; //12 * 60 * 60 * 1000;
+export const reminderDelay = 1500;
+
+let processing = false;
+
+async function getReminders() {
+  return (await database.getItem(remindersKey)) ?? {};
+}
 
 export async function getVoteData(userId) {
   const data = await database.getItem(`topgg.${userId}`);
@@ -11,17 +23,19 @@ export async function getVoteData(userId) {
   };
 }
 
-export async function buildVoteMessage(userId) {
-  const data = await getVoteData(userId);
+export function buildVoteMessage(userId, data, client) {
+  const lastVote = data.lastVoteTime
+    ? `Last vote: <t:${Math.floor(new Date(data.lastVoteTime).getTime() / 1000)}:R>`
+    : 'This is your first recorded vote.';
 
   return {
     components: [
       {
         type: ComponentType.TextDisplay,
         content:
-          "Thanks for voting for our bot on top.gg!\n\n" +
-          `Total votes: **${data.totalVotes}**\n` + 
-          data.lastVoteTime ? `Last vote: <t:${Math.floor(new Date(data.lastVoteTime).getTime() / 1000)}:R>` : "This is your first recorded vote."
+          '${getEmoji("topgg", client} Thanks for voting for our bot on [Top.gg](https://top.gg/bot/${config.clientId})!\n\n' +
+          `Total votes: **${data.totalVotes}**\n` +
+          lastVote
       },
       {
         type: ComponentType.ActionRow,
@@ -41,13 +55,28 @@ export async function buildVoteMessage(userId) {
 
 export async function handleVote(payload, client) {
   const userId = payload.data.user.platform_id;
-  const currentData = await getVoteData(userId);
+  const [oldData, reminders] = await Promise.all([
+    getVoteData(userId),
+    getReminders()
+  ]);
 
-  await database.setItem(`topgg.${userId}`, {
-    lastVoteTime: new Date().toISOString(),
-    totalVotes: currentData.totalVotes + 1,
-    shouldRemindThem: currentData.shouldRemindThem
-  });
+  const lastVoteTime = new Date().toISOString();
+
+  const data = {
+    ...oldData,
+    lastVoteTime,
+    totalVotes: oldData.totalVotes + 1
+  };
+
+  reminders[userId] = {
+    lastVoteTime,
+    remindAt: Date.now() + twelveHours
+  };
+
+  await Promise.all([
+    database.setItem(`topgg.${userId}`, data),
+    database.setItem(remindersKey, reminders)
+  ]);
 
   const channel = await client.rest.post(Routes.userChannels(), {
     body: {
@@ -56,6 +85,81 @@ export async function handleVote(payload, client) {
   });
 
   await client.rest.post(Routes.channelMessages(channel.id), {
-    body: await buildVoteMessage(userId)
+    body: buildVoteMessage(userId, data, client)
   });
+}
+
+export async function processReminders(client) {
+  if (processing) return;
+
+  processing = true;
+
+  try {
+    const reminders = await getReminders();
+
+    const dueUsers = Object.entries(reminders).filter(
+      ([, reminder]) => reminder.remindAt <= Date.now()
+    );
+
+    if (!dueUsers.length) return;
+
+    const sentUsers = [];
+
+    for (let i = 0; i < dueUsers.length; i++) {
+      const [userId] = dueUsers[i];
+
+      try {
+        const channel = await client.rest.post(Routes.userChannels(), {
+          body: {
+            recipient_id: userId
+          }
+        });
+
+        await client.rest.post(Routes.channelMessages(channel.id), {
+          body: {
+            components: [
+              {
+                type: ComponentType.TextDisplay,
+                content: `${getEmoji("topgg", client} You can vote for our bot again on [Top.gg](https://top.gg/bot/${config.clientId})!`
+              }
+            ],
+            flags: MessageFlags.IsComponentsV2
+          }
+        });
+
+        sentUsers.push(userId);
+      } catch (error) {
+        console.error(`Failed to notify ${userId}:`, error);
+      }
+
+      if (i < dueUsers.length - 1) {
+        await delay(reminderDelay);
+      }
+    }
+
+    if (!sentUsers.length) return;
+
+    const latestReminders = await getReminders();
+
+    for (const userId of sentUsers) {
+      if (
+        latestReminders[userId]?.lastVoteTime ===
+        reminders[userId].lastVoteTime
+      ) {
+        delete latestReminders[userId];
+      }
+    }
+
+    await database.setItem(remindersKey, latestReminders);
+  } finally {
+    processing = false;
+  }
+}
+
+export function startReminderWorker(client) {
+  processReminders(client).catch(console.error);
+
+  return setInterval(() => {
+    processReminders(client).catch(console.error);
+  }, 30000);
 }

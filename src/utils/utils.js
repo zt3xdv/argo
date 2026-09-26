@@ -180,3 +180,7 @@ export function verifyWebhook(rawBody, signatureHeader, secret) {
 
   return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
 }
+
+export function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

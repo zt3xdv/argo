@@ -1,6 +1,6 @@
 import { GatewayDispatchEvents, InteractionType, Routes, InteractionResponseType } from '@discordjs/core';
 import database from '../../utils/database.js';
-import { buildVoteMessage, getVoteData } from '../handlers/vote.js';
+import { buildVoteMessage, getVoteData, twelveHours, remindersKey } from '../handlers/vote.js';
 
 export default {
   name: GatewayDispatchEvents.InteractionCreate,
@@ -18,24 +18,38 @@ export default {
     }
 
     const userId = interaction.data.user?.id || interaction.data.member?.user?.id;
-    const buttonUserId = customId.split(':').pop();
+
+    const buttonUserId = customId.split(':').at(-1);
 
     if (!userId || userId !== buttonUserId) {
       return;
     }
 
-    const data = await getVoteData(userId);
+    const [data, reminders] = await Promise.all([
+      getVoteData(userId),
+      database.getItem(remindersKey) ?? {}
+    ]);
 
-    await database.setItem(`topgg.${userId}`, {
-      lastVoteTime: data.lastVoteTime,
-      totalVotes: data.totalVotes,
+    const newData = {
+      ...data,
       shouldRemindThem: !data.shouldRemindThem
-    });
+    };
+
+    if (newData.shouldRemindThem && data.lastVoteTime) {
+      reminders[userId] = {
+        lastVoteTime: data.lastVoteTime,
+        remindAt: Date.now() + twelveHours
+      };
+    } else {
+      delete reminders[userId];
+    }
+
+    await Promise.all([database.setItem(`topgg.${userId}`, newData), database.setItem(remindersKey, reminders)]);
 
     await client.rest.post(Routes.interactionCallback(interaction.data.id, interaction.data.token), {
       body: {
         type: InteractionResponseType.UpdateMessage,
-        data: await buildVoteMessage(userId)
+        data: buildVoteMessage(userId, newData)
       }
     });
   }

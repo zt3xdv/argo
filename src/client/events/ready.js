@@ -1,4 +1,5 @@
 import { GatewayDispatchEvents } from '@discordjs/core';
+import { startReminderWorker } from "../handlers/vote.js";
 
 export default {
   name: GatewayDispatchEvents.Ready,
@@ -6,5 +7,7 @@ export default {
   
   async execute({ data }, client) {
     console.log(`Logged in as ${data.user.username}.`);
+    
+    startReminderWorker(client);
   }
 };
