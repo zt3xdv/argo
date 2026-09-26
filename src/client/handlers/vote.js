@@ -1,7 +1,7 @@
 import { Routes, ComponentType, MessageFlags, ButtonStyle } from '@discordjs/core';
 import database from '../../utils/database.js';
 
-async function getVoteData(userId) {
+export async function getVoteData(userId) {
   const data = await database.getItem(`topgg.${userId}`);
 
   return {
