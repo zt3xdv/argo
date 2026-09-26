@@ -3,7 +3,7 @@ import { Routes } from "@discordjs/core";
 export async function handleVote(payload, client) {
   const channel = await client.rest.post(Routes.userChannels(), {
     body: {
-      recipient_id: payload.platform_id,
+      recipient_id: payload.data.user.platform_id,
     },
   });
 
