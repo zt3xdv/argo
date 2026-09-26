@@ -33,7 +33,7 @@ export function buildVoteMessage(userId, data, client) {
       {
         type: ComponentType.TextDisplay,
         content:
-          '${getEmoji("topgg", client} Thanks for voting for our bot on [Top.gg](https://top.gg/bot/${config.clientId})!\n\n' +
+          '${getEmoji("topgg", client)} Thanks for voting for our bot on [Top.gg](https://top.gg/bot/${config.clientId})!\n\n' +
           `Total votes: **${data.totalVotes}**\n` +
           lastVote
       },
@@ -120,7 +120,7 @@ export async function processReminders(client) {
             components: [
               {
                 type: ComponentType.TextDisplay,
-                content: `${getEmoji("topgg", client} You can vote for our bot again on [Top.gg](https://top.gg/bot/${config.clientId})!`
+                content: `${getEmoji("topgg", client)} You can vote for our bot again on [Top.gg](https://top.gg/bot/${config.clientId})!`
               }
             ],
             flags: MessageFlags.IsComponentsV2
