@@ -1,8 +1,8 @@
 import Fastify from "fastify";
 import fastifyRawBody from "fastify-raw-body";
-import { verifyWebhook } from "../../utils/utils.js";
-import { handleVote } from "../../utils/handlers/vote.js";
-import config from "../../../config.json" with { type: "json" };
+import { verifyWebhook } from "../utils/utils.js";
+import { handleVote } from "../client/handlers/vote.js";
+import config from '../../config.json' with { type: 'json' };
 
 export async function create(client) {
   const app = Fastify({

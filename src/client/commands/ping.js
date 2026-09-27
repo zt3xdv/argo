@@ -2,8 +2,8 @@ import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextT
 import { getEmoji, getRestLatency } from "../../utils/utils.js";
 
 export default {
-  name: "ping",
-  description: "Pong!",
+  name: 'ping',
+  description: 'Pong!',
   integrationTypes: [
     ApplicationIntegrationType.GuildInstall,
     ApplicationIntegrationType.UserInstall

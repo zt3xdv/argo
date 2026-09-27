@@ -1,7 +1,7 @@
 import { Routes, ComponentType, MessageFlags, ButtonStyle } from '@discordjs/core';
-import { delay, getEmoji } from "../utils.js";
+import { delay, getEmoji } from "../../utils/utils.js";
 import config from "../../../config.json" with { type: "json" };
-import database from '../instances/database.js';
+import database from '../../utils/database.js';
 
 export const remindersKey = 'topgg.reminders';
 export const twelveHours = 12 * 60 * 60 * 1000;

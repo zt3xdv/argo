@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import { getEmoji, formatRate, getOptions } from "../../utils/utils.js";
-import { currencies } from "../../utils/external/currencies.js";
+import { currencies } from "../../utils/currencies.js";
 
 export default {
   name: "convert",

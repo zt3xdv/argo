@@ -1,7 +1,7 @@
-import { GatewayDispatchEvents, InteractionType, Routes, InteractionResponseType } from "@discordjs/core";
-import database from "../../utils/instances/database.js";
-import { buildVoteMessage, getVoteData, twelveHours, remindersKey } from "../../utils/handlers/vote.js";
-import { getEmoji, addMessage } from "../../utils/utils.js";
+import { GatewayDispatchEvents, InteractionType, Routes, InteractionResponseType } from '@discordjs/core';
+import database from '../../utils/database.js';
+import { buildVoteMessage, getVoteData, twelveHours, remindersKey } from '../handlers/vote.js';
+import { getEmoji, addMessage } from '../../utils/utils.js';
 import config from "../../../config.json" with { type: "json" };
 
 export default {

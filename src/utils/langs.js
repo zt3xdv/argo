@@ -1,4 +1,6 @@
-const response = await fetch("https://translate.googleapis.com/translate_a/l?client=webapp&format=html");
+const response = await fetch(
+  "https://translate.googleapis.com/translate_a/l?client=webapp&format=html",
+);
 
 if (!response.ok) {
   throw new Error(`Failed to fetch languages: ${response.status}`);

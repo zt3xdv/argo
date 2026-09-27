@@ -2,8 +2,8 @@ import { ApplicationCommandType, ApplicationIntegrationType, InteractionContextT
 import { getEmoji } from "../../utils/utils.js";
 
 export default {
-  name: "application",
-  description: "View this application details",
+  name: 'application',
+  description: 'View this application details',
   integrationTypes: [
     ApplicationIntegrationType.GuildInstall,
     ApplicationIntegrationType.UserInstall
