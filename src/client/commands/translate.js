@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ComponentType, MessageFlags } from "@discordjs/core";
+import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import { getEmoji, escapeMarkdown, getOptions } from "../../utils/utils.js";
 import { languages } from "../../utils/langs.js";
 

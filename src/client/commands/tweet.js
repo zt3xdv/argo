@@ -1,5 +1,5 @@
 import { Resvg } from "@resvg/resvg-wasm";
-import { ApplicationCommandOptionType, ApplicationCommandType, ComponentType, MessageFlags } from "@discordjs/core";
+import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import { getEmoji, getOptions, escapeXml, fetchImage } from "../../utils/utils.js";
 
 export default {
