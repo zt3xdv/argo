@@ -5,6 +5,15 @@ import { currencies } from "../../utils/currencies.js";
 export default {
   name: "convert",
   description: "Convert an amount from one currency to another",
+  integrationTypes: [
+    ApplicationIntegrationType.GuildInstall,
+    ApplicationIntegrationType.UserInstall,
+  ],
+  contexts: [
+    InteractionContextType.BotDM,
+    InteractionContextType.Guild,
+    InteractionContextType.PrivateChannel,
+  ],
   type: ApplicationCommandType.ChatInput,
   defer: true,
   options: [

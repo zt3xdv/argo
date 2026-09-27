@@ -5,6 +5,15 @@ import { getEmoji, getOptions, escapeXml, fetchImage } from "../../utils/utils.j
 export default {
   name: "tweet",
   description: "Get information about a tweet",
+  integrationTypes: [
+    ApplicationIntegrationType.GuildInstall,
+    ApplicationIntegrationType.UserInstall,
+  ],
+  contexts: [
+    InteractionContextType.BotDM,
+    InteractionContextType.Guild,
+    InteractionContextType.PrivateChannel,
+  ],
   type: ApplicationCommandType.ChatInput,
   defer: true,
   options: [

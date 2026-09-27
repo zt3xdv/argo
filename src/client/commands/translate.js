@@ -5,6 +5,15 @@ import { languages } from "../../utils/langs.js";
 export default {
   name: "translate",
   description: "Translate text from one language to another",
+  integrationTypes: [
+    ApplicationIntegrationType.GuildInstall,
+    ApplicationIntegrationType.UserInstall,
+  ],
+  contexts: [
+    InteractionContextType.BotDM,
+    InteractionContextType.Guild,
+    InteractionContextType.PrivateChannel,
+  ],
   type: ApplicationCommandType.ChatInput,
   defer: true,
   options: [
