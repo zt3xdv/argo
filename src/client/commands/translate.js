@@ -73,6 +73,9 @@ export default {
       });
       return;
     }
+    
+    const fromLanguage = normalizedFrom === "auto" ? "Auto-detect" : languages.find(({ value }) => value.toLowerCase() === normalizedFrom)?.name ?? normalizedFrom;
+    const toLanguage = languages.find(({ value }) => value.toLowerCase() === normalizedTo)?.name ?? normalizedTo;
 
     if (normalizedFrom !== "auto" && normalizedFrom === normalizedTo) {
       await api.interactions.editReply(interaction.application_id, interaction.token, {
@@ -109,7 +112,7 @@ export default {
     if (!translatedText) {
       throw new Error("No translated text returned.");
     }
-
+    
     await api.interactions.editReply(interaction.application_id, interaction.token, {
       components: [
         {
@@ -118,7 +121,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("translate", client)} from **${normalizedFrom.toUpperCase()}** to **${normalizedTo.toUpperCase()}**\n\n` +
+                `-# ${getEmoji("translate", client)} from **${fromLanguage}** to **${toLanguage}**\n\n` +
                 escapeMarkdown(translatedText),
             },
           ],
