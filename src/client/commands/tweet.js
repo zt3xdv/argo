@@ -1,6 +1,6 @@
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, getOptions, escapeXml, fetchImage } from "../../utils/utils.js";
+import { getEmoji, getOptions, escapeXml, fetchImage, formatDate } from "../../utils/utils.js";
 
 export default {
   name: "tweet",
@@ -124,7 +124,7 @@ export default {
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="${height}" viewBox="0 0 900 ${height}">
         <defs>
           <clipPath id="avatarClip">
-            <circle cx="78" cy="78" r="48"/>
+            <circle cx="78" cy="78" r="16"/>
           </clipPath>
 
           <clipPath id="tweetImageClip">
@@ -152,7 +152,7 @@ export default {
         ` : ""}
 
         <text x="30" y="${height - 42}" fill="#8b98a5" font-family="Geist" font-size="20">
-          ${escapeXml(String(tweet.created_at ?? ""))}
+          ${escapeXml(formatDate(tweet.created_at ?? ""))}
         </text>
       </svg>
     `, {

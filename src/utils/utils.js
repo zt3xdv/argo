@@ -16,6 +16,18 @@ export function getEmoji(name, client) {
   return emoji ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>` : ":e:";
 }
 
+export function formatDate(date) {
+  if (!date) return null;
+
+  const parsedDate = new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) return null;
+
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(parsedDate);
+}
+
 export function formatDiscordDate(date) {
   if (!date) return null;
   const timestamp = Math.floor(Date.parse(date) / 1000);
