@@ -35,7 +35,7 @@ export default {
   async autocomplete({ data: interaction, api }) {
     const value = String(interaction.data.options?.find((option) => option.focused)?.value ?? "").toLowerCase();
 
-    await api.interactions.createAutocomplete(interaction.id, interaction.token, {
+    await api.interactions.createAutocompleteResponse(interaction.id, interaction.token, {
       choices: languages.filter(({ name, value: code }) => `${name} ${code}`.toLowerCase().includes(value)).slice(0, 25)
     });
   },
