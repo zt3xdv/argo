@@ -124,7 +124,7 @@ export default {
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="${height}" viewBox="0 0 900 ${height}">
         <defs>
           <clipPath id="avatarClip">
-            <circle cx="78" cy="78" r="48"/>
+            <circle cx="78" cy="78" r="16"/>
           </clipPath>
 
           <clipPath id="tweetImageClip">
