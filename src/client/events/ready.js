@@ -1,5 +1,5 @@
-import { GatewayDispatchEvents } from '@discordjs/core';
-import { startReminderWorker } from "../handlers/vote.js";
+import { GatewayDispatchEvents } from "@discordjs/core";
+import { startReminderWorker } from "../../utils/handlers/vote.js";
 
 export default {
   name: GatewayDispatchEvents.Ready,

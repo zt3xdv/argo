@@ -1,7 +1,7 @@
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import database from "../../utils/database.js";
-import moonify from "../../utils/moonify.js";
+import database from "../../utils/instances/database.js";
+import moonify from "../../utils/instances/moonify.js";
 import { getEmoji, escapeXml, escapeMarkdown, fetchImage, truncate } from "../../utils/utils.js";
 
 export default {

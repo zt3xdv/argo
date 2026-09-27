@@ -2,15 +2,15 @@ import { ApplicationCommandOptionType } from "@discordjs/core";
 
 // from discord.js/src/structures/ApplicationCommand
 export function transformOption(option, received) {
-  const channelTypesKey = received ? 'channelTypes' : 'channel_types';
-  const minValueKey = received ? 'minValue' : 'min_value';
-  const maxValueKey = received ? 'maxValue' : 'max_value';
-  const minLengthKey = received ? 'minLength' : 'min_length';
-  const maxLengthKey = received ? 'maxLength' : 'max_length';
-  const nameLocalizationsKey = received ? 'nameLocalizations' : 'name_localizations';
-  const nameLocalizedKey = received ? 'nameLocalized' : 'name_localized';
-  const descriptionLocalizationsKey = received ? 'descriptionLocalizations' : 'description_localizations';
-  const descriptionLocalizedKey = received ? 'descriptionLocalized' : 'description_localized';
+  const channelTypesKey = received ? "channelTypes" : "channel_types";
+  const minValueKey = received ? "minValue" : "min_value";
+  const maxValueKey = received ? "maxValue" : "max_value";
+  const minLengthKey = received ? "minLength" : "min_length";
+  const maxLengthKey = received ? "maxLength" : "max_length";
+  const nameLocalizationsKey = received ? "nameLocalizations" : "name_localizations";
+  const nameLocalizedKey = received ? "nameLocalized" : "name_localized";
+  const descriptionLocalizationsKey = received ? "descriptionLocalizations" : "description_localizations";
+  const descriptionLocalizedKey = received ? "descriptionLocalized" : "description_localized";
   return {
     type: option.type,
     name: option.name,

@@ -1,4 +1,4 @@
-import { GatewayDispatchEvents } from '@discordjs/core';
+import { GatewayDispatchEvents } from "@discordjs/core";
 
 export default {
   name: GatewayDispatchEvents.GuildCreate,

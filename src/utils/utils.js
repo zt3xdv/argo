@@ -1,4 +1,4 @@
-import { ComponentType, MessageFlags, ApplicationCommandOptionType, ApplicationCommandType, Routes } from '@discordjs/core';
+import { ComponentType, MessageFlags, ApplicationCommandOptionType, ApplicationCommandType, Routes } from "@discordjs/core";
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
@@ -137,7 +137,7 @@ export function addMessage(api, message) {
 
     return {
       ...data,
-      content: `${data.content ?? ''}\n\n${message}`.trim()
+      content: `${data.content ?? ""}\n\n${message}`.trim()
     };
   };
   

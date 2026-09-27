@@ -3,7 +3,7 @@ import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, getSnowflakeDate, truncate, getOptions } from "../../utils/utils.js";
 import { buildSvgBadges, getUserBadges } from "../../utils/badges.js";
-import { UserFlags } from 'discord-api-types/v10';
+import { UserFlags } from "discord-api-types/v10";
 
 export default {
   name: "user",

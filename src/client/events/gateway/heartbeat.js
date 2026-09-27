@@ -1,4 +1,4 @@
-import { WebSocketShardEvents } from '@discordjs/ws';
+import { WebSocketShardEvents } from "@discordjs/ws";
 
 export default {
   name: WebSocketShardEvents.HeartbeatComplete,

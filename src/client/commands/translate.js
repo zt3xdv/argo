@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
 import { getEmoji, escapeMarkdown, getOptions } from "../../utils/utils.js";
-import { languages } from "../../utils/langs.js";
+import { languages } from "../../utils/external/langs.js";
 
 export default {
   name: "translate",

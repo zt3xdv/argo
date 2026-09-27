@@ -1,6 +1,6 @@
-import { readdir } from 'node:fs/promises';
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { readdir } from "fs/promises";
+import path from "path";
+import { pathToFileURL } from "url";
 
 async function getFiles(directory) {
   const entries = await readdir(directory, {
@@ -15,7 +15,7 @@ async function getFiles(directory) {
         return getFiles(fullPath);
       }
 
-      if (entry.isFile() && entry.name.endsWith('.js')) {
+      if (entry.isFile() && entry.name.endsWith(".js")) {
         return [fullPath];
       }
 
@@ -41,13 +41,13 @@ async function importModules(directory) {
 export async function load(directory, type) {
   const modules = await importModules(directory);
 
-  if (type === 'command') {
+  if (type === "command") {
     return new Map(
       modules.map((command) => [command.name, command])
     );
   }
 
-  if (type === 'event') {
+  if (type === "event") {
     return modules;
   }
 
