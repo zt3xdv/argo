@@ -44,7 +44,7 @@ export default {
     const { text, from, to } = getOptions(interaction);
 
     if (!text || !from || !to) {
-      await client.api.interactions.editReply(interaction.application_id, interaction.token, {
+      await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
             type: ComponentType.TextDisplay,
@@ -56,8 +56,26 @@ export default {
       return;
     }
 
-    if (from !== "auto" && from === to) {
-      await client.api.interactions.editReply(interaction.application_id, interaction.token, {
+    const validLanguageCodes = new Set(languages.map(({ value }) => value.toLowerCase()));
+
+    const normalizedFrom = String(from).toLowerCase();
+    const normalizedTo = String(to).toLowerCase();
+
+    if ((normalizedFrom !== "auto" && !validLanguageCodes.has(normalizedFrom)) || !validLanguageCodes.has(normalizedTo)) {
+      await api.interactions.editReply(interaction.application_id, interaction.token, {
+        components: [
+          {
+            type: ComponentType.TextDisplay,
+            content: `-# ${getEmoji("exclamation", client)} The selected source or target language is invalid.`,
+          },
+        ],
+        flags: MessageFlags.IsComponentsV2,
+      });
+      return;
+    }
+
+    if (normalizedFrom !== "auto" && normalizedFrom === normalizedTo) {
+      await api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
             type: ComponentType.TextDisplay,
@@ -73,8 +91,8 @@ export default {
 
     url.search = new URLSearchParams({
       client: "gtx",
-      sl: from,
-      tl: to,
+      sl: normalizedFrom,
+      tl: normalizedTo,
       dt: "t",
       q: String(text),
     });
@@ -82,7 +100,7 @@ export default {
     const res = await fetch(url);
 
     if (!res.ok) {
-      throw new Error(`Google Translate returned ${re.status}`);
+      throw new Error(`Google Translate returned ${res.status}`);
     }
 
     const data = await res.json();
@@ -100,7 +118,7 @@ export default {
             {
               type: ComponentType.TextDisplay,
               content:
-                `-# ${getEmoji("translate", client)} from **${from.toUpperCase()}** to **${to.toUpperCase()}**\n\n` +
+                `-# ${getEmoji("translate", client)} from **${normalizedFrom.toUpperCase()}** to **${normalizedTo.toUpperCase()}**\n\n` +
                 escapeMarkdown(translatedText),
             },
           ],
