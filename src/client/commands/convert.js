@@ -36,7 +36,9 @@ export default {
     const focusedOption = interaction.data.options?.find((option) => option.focused);
     const focusedValue = String(focusedOption?.value ?? "").toLowerCase();
 
-    const choices = currencies.filter((currency) => `${currency.name} ${currency.value}`.toLowerCase().includes(focusedValue)).slice(0, 25);
+    const choices = currencies
+      .filter((currency) => `${currency.name} ${currency.value}`.toLowerCase().includes(focusedValue))
+      .slice(0, 25);
 
     await api.interactions.createAutocompleteResponse(interaction.id, interaction.token, { choices });
   },
@@ -46,14 +48,16 @@ export default {
 
     const amount = Number(amountOption);
     const from = String(fromOption ?? "").toUpperCase();
-    const to = String(toOption?? "").toUpperCase();
+    const to = String(toOption ?? "").toUpperCase();
 
-    if (!Number.isFinite(amount) || amount <= 0 || !from || !to) {
+    const validCurrencyCodes = new Set(currencies.map(({ value }) => value.toUpperCase()));
+
+    if (!Number.isFinite(amount) || amount <= 0 || !from || !to || !validCurrencyCodes.has(from) || !validCurrencyCodes.has(to)) {
       await client.api.interactions.editReply(interaction.application_id, interaction.token, {
         components: [
           {
             type: ComponentType.TextDisplay,
-            content: `-# ${getEmoji("exclamation", client)} You must provide a valid amount and two currencies.`,
+            content: `-# ${getEmoji("exclamation", client)} You must provide a valid amount and two valid currencies.`,
           },
         ],
         flags: MessageFlags.IsComponentsV2,
@@ -93,7 +97,7 @@ export default {
               type: ComponentType.TextDisplay,
               content:
                 `-# ${getEmoji("loop", client)} from **${amount.toFixed(2)} ${from}** to **${convertedAmount.toFixed(2)} ${to}**\n` +
-                `**Covertion rate**: 1 ${from} = ${formatRate(rate)} ${to}`,
+                `**Conversion rate**: 1 ${from} = ${formatRate(rate)} ${to}`,
             },
           ],
         },
