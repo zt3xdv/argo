@@ -40,7 +40,7 @@ export default {
     });
   },
 
-  async execute({ data: interaction, api }) {
+  async execute({ data: interaction, api }, client) {
     const { text, from, to } = getOptions(interaction);
 
     if (!text || !from || !to) {
