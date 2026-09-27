@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ComponentType, MessageFlags } from "@discordjs/core";
-import { escapeMarkdown, getOptions } from "../../utils/utils.js";
+import { getEmoji, escapeMarkdown, getOptions } from "../../utils/utils.js";
 import { languages } from "../../utils/langs.js";
 
 export default {
