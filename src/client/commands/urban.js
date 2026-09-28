@@ -29,7 +29,7 @@ export default {
   async execute({ data: interaction, api }, client) {
     const { term } = getOptions(interaction, {
       term: (v) => String(v ?? "").trim()
-    };
+    });
 
     if (!term) {
       return api.interactions.editReply(interaction.application_id, interaction.token, {
