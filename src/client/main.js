@@ -19,7 +19,6 @@ await initWasm((
 ));
 
 const rest = new REST({ version: '10' }).setToken(config.token);
-
 const gateway = new WebSocketManager({
   token: config.token,
   rest,
@@ -30,10 +29,12 @@ gateway.shards = new Map();
 const client = new Client({ rest, gateway });
 client.commands = await load(path.join(import.meta.dirname, "commands"), "command");
 client.events = await load(path.join(import.meta.dirname, "events"), "event");
+
 client.emojis = await rest.get(Routes.applicationEmojis(config.clientId));
 client.fontBuffers = [
   new Uint8Array(await getAsset(path.join("fonts", "geist.ttf")))
 ];
+
 client.apiServer = await createApiServer(client);
 client.collector = await createCollectorsHandler(client);
 
@@ -88,3 +89,5 @@ await rest.put(Routes.applicationCommands(config.clientId), {
 
 await gateway.connect();
 client.apiServer.listen({ port: config.port, host: "0.0.0.0" });
+
+export default client;

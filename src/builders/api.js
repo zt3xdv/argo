@@ -29,6 +29,10 @@ export async function create(client) {
     await handleVote(request.body, client);
     return reply.send({ success: true });
   });
-
+  
+  app.get("/", async (request, reply) => {
+    return reply.send("perhaps there isnt nothing yet, but yeah ig");
+  });
+  
   return app;
 }
