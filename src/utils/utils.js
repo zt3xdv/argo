@@ -11,9 +11,9 @@ export const mimeTypes = {
   ".ttf": "font/ttf",
 };
 
-export function getEmoji(name, client) {
+export function getEmoji(name, client, raw) {
   const emoji = client.emojis.items.find(e => e.name == name);
-  return emoji ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>` : ":e:";
+  return raw ? emoji : emoji ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>` : ":e:";
 }
 
 export function formatDate(date) {
@@ -207,6 +207,7 @@ export function getOptions(interaction, normalizers = {}) {
   const { data } = interaction;
   const resolved = data.resolved ?? {};
   const user = id => resolved.users?.[id] ? { user: resolved.users[id], member: resolved.members?.[id] } : id;
+  const message = reference => resolved.messages?.[reference?.message_id] ?? reference;
   const resolve = option => {
     const id = option.value;
     switch (option.type) {
@@ -215,7 +216,7 @@ export function getOptions(interaction, normalizers = {}) {
       case ApplicationCommandOptionType.Role: return resolved.roles?.[id] ?? id;
       case ApplicationCommandOptionType.Mentionable: return resolved.users?.[id] ? user(id) : resolved.roles?.[id] ?? id;
       case ApplicationCommandOptionType.Attachment: return resolved.attachments?.[id] ?? id;
-      default: return option.value;
+      default: return option.value?.message_id ? message(option.value) : option.value;
     }
   };
   const options = (data.options ?? []).flatMap(o => o.options?.length ? getOptions({ data: { ...data, options: o.options } }, normalizers) : [o]);
@@ -226,5 +227,10 @@ export function getOptions(interaction, normalizers = {}) {
     result.target = data.type === ApplicationCommandType.User ? user(id) : data.type === ApplicationCommandType.Message ? resolved.messages?.[id] ?? id : user(id) !== id ? user(id) : resolved.messages?.[id] ?? resolved.roles?.[id] ?? id;
   }
 
+  if (data.message_reference) {
+    result.message_reference = message(data.message_reference);
+  }
+
   return result;
 }
+

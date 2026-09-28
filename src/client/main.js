@@ -8,6 +8,7 @@ import { getAsset } from "../utils/utils.js";
 import { transformCommand } from '../builders/command.js';
 import { initWasm } from "@resvg/resvg-wasm";
 import { create as createApiServer } from "../builders/api.js";
+import { create as createCollectorsHandler } from "../builders/collectors.js";
 import config from '../../config.json' with { type: 'json' };
 
 // init resvg wasm
@@ -34,6 +35,7 @@ client.fontBuffers = [
   new Uint8Array(await getAsset(path.join("fonts", "geist.ttf")))
 ];
 client.apiServer = await createApiServer(client);
+client.collector = await createCollectorsHandler(client);
 
 for (const event of client.events) {
   const target = event.type === "gateway" ? client.gateway : client;
