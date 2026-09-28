@@ -27,7 +27,7 @@ export async function create(client) {
   await app.register(fastifyStatic, {
     root: path.join(import.meta.dirname, "..", "..", "dist"),
     prefix: "/",
-    decorateReply: true
+    decorateReply: false
   });
 
   app.post("/webhooks/topgg", { config: { rawBody: true } }, async (request, reply) => {
