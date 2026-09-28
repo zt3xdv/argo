@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import fastifyRawBody from "fastify-raw-body";
+import fastifyStatic from "@fastify/static";
 import { verifyWebhook } from "../utils/utils.js";
 import { handleVote } from "../client/handlers/vote.js";
 import config from '../../config.json' with { type: 'json' };
@@ -14,6 +15,18 @@ export async function create(client) {
     global: false,
     encoding: "utf8",
     runFirst: true,
+  });
+  
+  await app.register(fastifyStatic, {
+    root: path.join(import.meta.dirname, "..", "assets"),
+    prefix: "/assets/",
+    decorateReply: true
+  });
+  
+  await app.register(fastifyStatic, {
+    root: path.join(import.meta.dirname, "..", "..", "dist"),
+    prefix: "/",
+    decorateReply: true
   });
 
   app.post("/webhooks/topgg", { config: { rawBody: true } }, async (request, reply) => {

@@ -21,6 +21,7 @@
     "@discordjs/core": "^2.6.0",
     "@discordjs/rest": "^2.6.3",
     "@discordjs/ws": "^2.0.4",
+    "@fastify/static": "^10.1.5",
     "@mwyeow/moonify.js": "^1.1.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "aws4fetch": "^1.0.20",
