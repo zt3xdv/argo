@@ -1,10 +1,9 @@
 import { createStorage } from "unstorage";
-import fsDriver from "unstorage/drivers/fs";
+import s3Driver from "unstorage/drivers/s3";
+import config from "../../config.json" with { type: "json" };
 
 const database = createStorage({
-  driver: fsDriver({
-    base: "./db"
-  })
+  driver: s3Driver(config.databaseS3),
 });
 
 export default database;

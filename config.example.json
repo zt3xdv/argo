@@ -1,7 +1,14 @@
 {
-  "token": "discord-token",
+  "token": "discord-bot-token",
   "clientId": "discord-client-id",
-  "lastFmKey": "last-fm-api-key",
+  "lastFmKey": "lastfm-api-key",
   "topggWebhookKey": "topgg-vote-webhook-key",
-  "port": "api-server-port"
+  "port": "api-server-port",
+  "databaseS3": {
+    "accessKeyId": "s3-access-key-id",
+    "secretAccessKey": "s3-secret-access-key",
+    "endpoint": "s3-endpoint-url",
+    "bucket": "s3-bucket-name",
+    "region": "s3-region"
+  }
 }
