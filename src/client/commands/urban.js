@@ -84,7 +84,7 @@ export default {
 
     const getComponents = () => {
       const definition = definitions[page];
-      const writtenOn = definition.written_on ? new Date(definition.written_on).toLocaleDateString("en-US") : "Unknown";
+      const writtenOn = definition.written_on ? formatDate(definition.written_on) : "Unknown";
 
       const content = [
         `-# **${escapeMarkdown(definition.word || term)}**`,
