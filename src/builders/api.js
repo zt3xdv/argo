@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 import fastifyRawBody from "fastify-raw-body";
 import fastifyStatic from "@fastify/static";
+import path from "path";
 import { verifyWebhook } from "../utils/utils.js";
 import { handleVote } from "../client/handlers/vote.js";
 import config from '../../config.json' with { type: 'json' };
