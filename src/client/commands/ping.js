@@ -18,7 +18,13 @@ export default {
   async execute({ data: interaction, api, shardId }, client) {
     const rest = await getRestLatency(client.rest);
     await api.interactions.reply(interaction.id, interaction.token, {
-      content: `${getEmoji("pings", client)} Pong!\n-# Websocket (Shard #${shardId}) **${client.gateway.shards.get(shardId)?.ping}ms** • REST **${rest}ms**`,
+      components: [
+        {
+          type: ComponentType.TextDisplay,
+          content: `${getEmoji("pings", client)} Pong!\n-# Websocket (Shard #${shardId}) **${client.gateway.shards.get(shardId)?.ping}ms** • REST **${rest}ms**`,
+        },
+      ],
+      flags: MessageFlags.IsComponentsV2,
     });
   }
 };
